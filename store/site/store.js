@@ -53,7 +53,9 @@ const PLAYED = "rg-ds-plus";
 /** Applets with a still of the player's first screen in /shots (store/shots.ts). */
 const SHOTS = new Set(["dev.pocket-nexus.discord", "dev.pocket-nexus.github", "dev.pocket-nexus.hn", "dev.pocket-nexus.homeassistant", "dev.pocket-nexus.maps", "dev.pocket-nexus.podcasts", "dev.pocket-nexus.weather", "dev.pocket-nexus.x", "dev.pocket-nexus.youtube"]);
 const deviceName = (target) => DEVICES[target]?.name ?? target;
-const devicesOf = (app) => (app.targets?.length ? app.targets : [app.target]).filter(Boolean);
+const ORDER = Object.keys(DEVICES);
+const rank = (target) => (ORDER.includes(target) ? ORDER.indexOf(target) : ORDER.length);
+const devicesOf = (app) => (app.targets?.length ? app.targets : [app.target]).filter(Boolean).sort((a, b) => rank(a) - rank(b));
 const chips = (app) => h("div", { class: "devices" }, devicesOf(app).map((target) => h("span", { class: "device" }, deviceName(target))));
 const SERVICES = {
   store: "keeps its own settings on the device",
@@ -86,7 +88,7 @@ const CAPABILITIES = {
   "system.agent": "the device's coding agent can operate it",
 };
 const capability = (id) => CAPABILITIES[id] ?? (id.startsWith("camera.") ? "the camera" : "a capability this page does not describe yet");
-const SECTIONS = { js: "bundle", pak: "assets", plan: "build plan", identity: "identity", cover: "cover", workerJs: "worker bundle", hostInputs: "host inputs" };
+const SECTIONS = { js: "bundle", pak: "assets", plan: "build plan", identity: "identity", cover: "cover", bytecode: "bytecode", workerJs: "worker bundle", workerBytecode: "worker bytecode", hostInputs: "host inputs" };
 const size = (bytes) => (bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`);
 const day = (ms) => new Date(ms).toLocaleDateString("en", { year: "numeric", month: "short", day: "numeric" });
 const iconOf = (app, label = "") => h("img", { src: `/v1/icons/${app.icon}`, alt: label, width: 128, height: 128, loading: "lazy" });

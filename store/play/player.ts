@@ -140,32 +140,47 @@ async function boot(message: Boot) {
     if (contact) Object.assign(contact, at(e));
   });
   for (const end of ["pointerup", "pointercancel"] as const) canvas.addEventListener(end, (e) => contacts.delete(e.pointerId));
-  // A wheel, or two fingers on a trackpad, is one finger dragging: it goes
-  // down where the wheel turns, follows the deltas, and lifts once the wheel
-  // rests. Near an edge it lifts and goes down again where it started, so a
-  // long scroll keeps going.
+  // A wheel, or two fingers on a trackpad, is one finger dragging. Its deltas
+  // add up until they pass a tap's slop, then the finger goes down where the
+  // wheel turns and moves at once, so a scroll never reads as a tap; it follows
+  // the deltas and lifts once the wheel rests. Near an edge it lifts and the
+  // next deltas start again where it first went down.
   const WHEEL = -1;
+  const SLOP = 12;
   let wheelRest: ReturnType<typeof setTimeout> | undefined;
   let wheelStart = { x: 0, y: 0 };
+  let owedX = 0, owedY = 0;
   canvas.addEventListener("wheel", (e) => {
     e.preventDefault();
     const scale = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? h : 1;
     const dx = (-e.deltaX * scale) / 2, dy = (-e.deltaY * scale) / 2;
+    clearTimeout(wheelRest);
+    wheelRest = setTimeout(() => {
+      contacts.delete(WHEEL);
+      owedX = owedY = 0;
+    }, WHEEL_REST_MS);
     let finger = contacts.get(WHEEL);
     if (!finger) {
+      if (owedX === 0 && owedY === 0) wheelStart = at(e);
+      owedX += dx;
+      owedY += dy;
+      if (Math.hypot(owedX, owedY) < SLOP) return;
       const id = freeId();
       if (id < 0 || contacts.size >= MAX_CONTACTS) return;
-      wheelStart = at(e);
       finger = { id, ...wheelStart };
       contacts.set(WHEEL, finger);
+      // down this frame, moved by what the wheel owed by the next
+      const moved = { x: wheelStart.x + owedX, y: wheelStart.y + owedY };
+      owedX = owedY = 0;
+      requestAnimationFrame(() => {
+        const held = contacts.get(WHEEL);
+        if (held) Object.assign(held, { x: Math.max(0, Math.min(w - 1, moved.x)), y: Math.max(0, Math.min(h - 1, moved.y)) });
+      });
+      return;
     }
     const x = finger.x + dx, y = finger.y + dy;
-    if (x < 0 || x > w - 1 || y < 0 || y > h - 1) {
-      // past the edge: lift now, and the next delta goes down at the start again
-      contacts.delete(WHEEL);
-    } else Object.assign(finger, { x, y });
-    clearTimeout(wheelRest);
-    wheelRest = setTimeout(() => contacts.delete(WHEEL), WHEEL_REST_MS);
+    if (x < 0 || x > w - 1 || y < 0 || y > h - 1) contacts.delete(WHEEL);
+    else Object.assign(finger, { x, y });
   }, { passive: false });
   addEventListener("keydown", (e) => {
     const button = KEYS[e.key];

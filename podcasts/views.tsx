@@ -772,7 +772,7 @@ export function playerPage(env: PodcastEnv, stack: NavStack): PageSpec {
           )}
         </For>
         <Show when={!playback.available}>
-          <Text class="absolute text-xs text-[#ff9b9b] text-center" style={{ insetL: 20, insetT: g.showY + 16, width: W - 40 }}>This host has no media player.</Text>
+          <Text class="absolute text-xs text-[#ff9b9b] text-center" style={{ insetL: 20, insetT: g.showY + 16, width: W - 40 }}>Playback needs a device with a media player; this runtime has none.</Text>
         </Show>
       </>
     ),

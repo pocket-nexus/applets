@@ -60,7 +60,7 @@ export interface PackageFacts {
 const strings = (value: unknown): string[] => (Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : []);
 
 /** Section kinds by name (PocketJS contracts/spec/pocket-package.ts POCKET_SECTION). */
-export const SECTION_NAMES: Record<number, string> = { 1: "identity", 2: "plan", 3: "js", 4: "pak", 5: "cover", 7: "hostInputs", 8: "workerJs" };
+export const SECTION_NAMES: Record<number, string> = { 1: "identity", 2: "plan", 3: "js", 4: "pak", 5: "cover", 6: "bytecode", 7: "hostInputs", 8: "workerJs", 9: "workerBytecode" };
 
 export interface PackageVariant {
   target: string;
