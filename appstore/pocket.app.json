@@ -3,7 +3,7 @@
   "pocket": 2,
   "id": "dev.pocket-nexus.store",
   "title": "Store",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "applet": {
     "version": 1,
     "summary": "Applets for this device, from applets.pocket.nexus.",
