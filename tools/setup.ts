@@ -26,21 +26,22 @@ if (Bun.version !== bun) {
   throw new Error(`applets setup: this checkout runs on Bun ${bun} (.bun-version); this is Bun ${Bun.version}`);
 }
 
+// sources are inside the PocketJS checkout VENDOR names (tools/paths.ts)
 const links = new Map<string, string>([
-  ["node_modules/@pocketjs/framework", "vendor/pocketjs"],
-  ["node_modules/solid-js", "vendor/pocketjs/node_modules/solid-js"],
-  ["node_modules/@napi-rs/canvas", "vendor/pocketjs/node_modules/@napi-rs/canvas"],
-  ["node_modules/bun-types", "vendor/pocketjs/node_modules/bun-types"],
-  ["node_modules/typescript", "vendor/pocketjs/node_modules/typescript"],
-  ["node_modules/@types/bun", "vendor/pocketjs/node_modules/@types/bun"],
-  ["node_modules/@types/opentype.js", "vendor/pocketjs/node_modules/@types/opentype.js"],
-  ["node_modules/opentype.js", "vendor/pocketjs/node_modules/opentype.js"],
+  ["node_modules/@pocketjs/framework", "."],
+  ["node_modules/solid-js", "node_modules/solid-js"],
+  ["node_modules/@napi-rs/canvas", "node_modules/@napi-rs/canvas"],
+  ["node_modules/bun-types", "node_modules/bun-types"],
+  ["node_modules/typescript", "node_modules/typescript"],
+  ["node_modules/@types/bun", "node_modules/@types/bun"],
+  ["node_modules/@types/opentype.js", "node_modules/@types/opentype.js"],
+  ["node_modules/opentype.js", "node_modules/opentype.js"],
 ]);
 
 for (const [destination, source] of links) {
-  const target = resolve(ROOT, source);
+  const target = resolve(VENDOR, source);
   if (!existsSync(target)) {
-    throw new Error(`applets setup: missing ${source}; run bun install in vendor/pocketjs`);
+    throw new Error(`applets setup: missing ${target}; run bun install in ${VENDOR}`);
   }
   const link = resolve(ROOT, destination);
   mkdirSync(dirname(link), { recursive: true });
