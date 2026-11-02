@@ -13,7 +13,7 @@
 import { createWasmUi } from "../../vendor/pocketjs/platforms/web/wasm-ops.js";
 import { canvasRasterizer, installRuntimeGlyphs } from "../../vendor/pocketjs/platforms/web/runtime-glyphs.js";
 import { decodePocketPackage, findSection, POCKET_SECTION } from "../../vendor/pocketjs/contracts/spec/pocket-package.ts";
-import { createMockWorker, type MockData } from "../../lib/mock.ts";
+import { createMockWorker, FLOOR_DEVICE, planDevice, type MockData } from "../../lib/mock.ts";
 
 const BTN = { SELECT: 0x0001, START: 0x0008, UP: 0x0010, RIGHT: 0x0020, DOWN: 0x0040, LEFT: 0x0080, TRIANGLE: 0x1000, CIRCLE: 0x2000, CROSS: 0x4000, SQUARE: 0x8000 };
 /** keys of a computer's keyboard as the gamepad's buttons */
@@ -76,16 +76,19 @@ async function boot(message: Boot) {
   if (!variant) throw new Error("the package has no build");
   const js = findSection(variant, POCKET_SECTION.js);
   const pak = findSection(variant, POCKET_SECTION.pak);
+  const plan = findSection(variant, POCKET_SECTION.plan);
   if (!js) throw new Error("the package has no bundle");
   // the bundle is NUL-terminated for QuickJS
   const source = new TextDecoder().decode(js[js.length - 1] === 0 ? js.subarray(0, -1) : js);
   const manifest = JSON.parse(new TextDecoder().decode(pkg.manifest)) as { id?: string; title?: string };
   const [w, h] = message.size ?? [512, 384];
 
+  // the response ring and limit the variant was built for
+  const device = plan ? planDevice(JSON.parse(new TextDecoder().decode(plan))) : FLOOR_DEVICE;
   const worker = createMockWorker(message.mock ?? { mock: 1, routes: [] }, {
     request: (note) => tell({ type: "request", ...note }),
     picture: (bytes, type, pw, ph, round) => picture(bytes, type, pw, ph, round),
-  });
+  }, device);
   const g = globalThis as Record<string, unknown>;
   g.__simHz = 60;
   g.__pocketApp = manifest.id ?? "applet";

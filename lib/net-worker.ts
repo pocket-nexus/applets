@@ -11,34 +11,71 @@
 // the response ring, which retries every 15 ms while the ring is full, so a
 // page the UI has not drained yet holds the next records instead of losing
 // them.
+//
+// The response ring's records are as large as the device's host contract
+// makes them (NET_WORKER declares it "host"), and the node's facts carry at
+// most 1 KiB each. While the ring is full, a head or body fact joins the
+// queued record of the same request and kind until that record is full, so
+// a large channel moves its full size per frame.
 
 import { FactKind, io, ResourceStatus, type HttpRequest } from "@pocketjs/framework/io";
 import { settle, sleep } from "@pocketjs/framework/worker";
-import { Answer, ANSWER_BYTES, decodeRequest, encodeAnswer, encodeEnd, NODE_REQUESTS, requestId, text } from "./net-wire.ts";
+import { Answer, answerBytes, decodeRequest, encodeAnswer, encodeEnd, NODE_REQUESTS, requestId, text } from "./net-wire.ts";
 
 const RETRY_MICROS = 15_000;
 
 const responses = io.channel("response");
-const unsent: Uint8Array[] = [];
+/** What one response record carries after its header. */
+const ANSWER = answerBytes(responses.recordBytes);
+
+/** A record waiting for the ring: its payload in parts. */
+interface Unsent {
+  id: number;
+  kind: number;
+  parts: Uint8Array[];
+  length: number;
+}
+const unsent: Unsent[] = [];
 let flushing = false;
+
+function encoded(entry: Unsent): Uint8Array {
+  if (entry.parts.length === 1) return encodeAnswer(entry.id, entry.kind, entry.parts[0]!);
+  const payload = new Uint8Array(entry.length);
+  let at = 0;
+  for (const part of entry.parts) {
+    payload.set(part, at);
+    at += part.length;
+  }
+  return encodeAnswer(entry.id, entry.kind, payload);
+}
 
 async function flush(): Promise<void> {
   if (flushing) return;
   flushing = true;
   while (unsent.length > 0) {
-    if (responses.publish(unsent[0]!)) unsent.shift();
+    if (responses.publish(encoded(unsent[0]!))) unsent.shift();
     else await sleep(RETRY_MICROS);
   }
   flushing = false;
 }
 
-/** `payload` in records of at most ANSWER_BYTES; an empty one is one record. */
+/** `payload` in records of at most ANSWER bytes; an empty one is one record.
+ *  A head or body first fills the last queued record of its request and
+ *  kind. An end is a record of its own. */
 function send(id: number, kind: number, payload: Uint8Array): void {
   let at = 0;
-  do {
-    unsent.push(encodeAnswer(id, kind, payload.subarray(at, at + ANSWER_BYTES)));
-    at += ANSWER_BYTES;
-  } while (at < payload.length);
+  const last = unsent[unsent.length - 1];
+  if (kind !== Answer.end && last && last.id === id && last.kind === kind && last.length < ANSWER && payload.length > 0) {
+    const part = payload.subarray(0, ANSWER - last.length);
+    last.parts.push(part);
+    last.length += part.length;
+    at = part.length;
+  }
+  if (payload.length === 0) unsent.push({ id, kind, parts: [payload], length: 0 });
+  for (; at < payload.length; at += ANSWER) {
+    const part = payload.subarray(at, at + ANSWER);
+    unsent.push({ id, kind, parts: [part], length: part.length });
+  }
   void flush();
 }
 

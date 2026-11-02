@@ -59,7 +59,7 @@ export interface MockRequestNote {
   status: number;
 }
 
-import { Answer, ANSWER_BYTES, decodeRequest, encodeAnswer, encodeEnd, NET_WORKER, NODE_REQUESTS, Status, text, utf8 } from "./net-wire.ts";
+import { Answer, answerBytes, decodeRequest, encodeAnswer, encodeEnd, FLOOR_CHANNEL, NET_WORKER, NODE_REQUESTS, Status, text, utf8 } from "./net-wire.ts";
 
 export interface MockHooks {
   /** Every request, when it settles. */
@@ -69,11 +69,31 @@ export interface MockHooks {
   picture?(source: Uint8Array, type: string, w: number, h: number, round: boolean, alpha: boolean): Promise<Uint8Array | null>;
 }
 
+/** The device a package's variant was built for, as its plan records it:
+ *  the response ring's size and what one response carries. */
+export interface MockDevice {
+  response: { recordBytes: number; capacity: number };
+  responseBytes: number;
+}
+
+/** A host contract that states no worker table (PocketJS contracts/spec). */
+export const FLOOR_DEVICE: MockDevice = { response: FLOOR_CHANNEL, responseBytes: 256 * 1024 };
+
+/** The device a variant's plan (package section 2) names. */
+export function planDevice(plan: {
+  profile?: { worker?: { http?: { responseBytes?: number } } };
+  domains?: { worker?: { channels?: readonly { name: string; recordBytes: number; capacity: number }[] } };
+}): MockDevice {
+  const response = plan.domains?.worker?.channels?.find((channel) => channel.name === "response");
+  return {
+    response: response ? { recordBytes: response.recordBytes, capacity: response.capacity } : FLOOR_DEVICE.response,
+    responseBytes: plan.profile?.worker?.http?.responseBytes ?? FLOOR_DEVICE.responseBytes,
+  };
+}
+
 export const MOCK_MAX_BYTES = 4 * 1024 * 1024;
 const METHODS = ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"];
 const DEFAULT_DELAY = 60;
-/** contracts/spec/net.ts: what one response carries. */
-const MAX_RESPONSE = 256 * 1024;
 const COMPANION = "https://companion.pocket/";
 
 /** The reasons `value` is not packed sample data; empty when it is. */
@@ -136,7 +156,6 @@ interface Reply {
 
 const REQUEST_ID = 1 + NET_WORKER.channels.findIndex((channel) => channel.name === "request");
 const RESPONSE_ID = 1 + NET_WORKER.channels.findIndex((channel) => channel.name === "response");
-const RESPONSE_CAPACITY = NET_WORKER.channels[RESPONSE_ID - 1]!.capacity;
 
 /** The worker channel bridge (PocketJS framework/src/worker-channels.ts). */
 export interface ChannelBridge {
@@ -146,8 +165,11 @@ export interface ChannelBridge {
 }
 
 /** An applet's worker over sample data: `bridge` goes on the realm's
- *  globalThis as `__pocketWorkerChannels` before the bundle evaluates. */
-export function createMockWorker(data: MockData, hooks: MockHooks = {}) {
+ *  globalThis as `__pocketWorkerChannels` before the bundle evaluates.
+ *  `device` sizes the response ring and the response limit as the variant
+ *  was built for (planDevice). */
+export function createMockWorker(data: MockData, hooks: MockHooks = {}, device: MockDevice = FLOOR_DEVICE) {
+  const answerSize = answerBytes(device.response.recordBytes);
   const encoder = new TextEncoder();
   const store = new Map<string, unknown>(Object.entries(data.store ?? {}));
   const waiting: { id: number; method: string; url: string; body: Uint8Array; maxBytes: number }[] = [];
@@ -202,8 +224,8 @@ export function createMockWorker(data: MockData, hooks: MockHooks = {}) {
   const queue = (id: number, kind: number, payload: Uint8Array) => {
     let at = 0;
     do {
-      outgoing.push(encodeAnswer(id, kind, payload.subarray(at, at + ANSWER_BYTES)));
-      at += ANSWER_BYTES;
+      outgoing.push(encodeAnswer(id, kind, payload.subarray(at, at + answerSize)));
+      at += answerSize;
     } while (at < payload.length);
   };
   const end = (id: number, status: number, failure = "") => queue(id, Answer.end, encodeEnd(status, failure));
@@ -244,14 +266,14 @@ export function createMockWorker(data: MockData, hooks: MockHooks = {}) {
         end(id, Status.invalid, "invalid_request: url must be absolute HTTP(S) and the method one of " + METHODS.join(", "));
         return Status.ok;
       }
-      const maxBytes = Math.min(descriptor.maxBytes ?? 128 * 1024, MAX_RESPONSE);
+      const maxBytes = Math.min(descriptor.maxBytes ?? 128 * 1024, device.responseBytes);
       waiting.push({ id, method, url: descriptor.url, body: utf8(descriptor.body ?? ""), maxBytes });
       start();
       return Status.ok;
     },
     observe(channel) {
       if (channel !== RESPONSE_ID) return [];
-      return outgoing.splice(0, RESPONSE_CAPACITY);
+      return outgoing.splice(0, device.response.capacity);
     },
   };
   return {

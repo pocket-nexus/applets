@@ -86,8 +86,8 @@
           "name": "response",
           "kind": "ring",
           "direction": "worker-to-ui",
-          "recordBytes": 1024,
-          "capacity": 8
+          "recordBytes": "host",
+          "capacity": "host"
         }
       ]
     }
