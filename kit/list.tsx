@@ -10,6 +10,7 @@ import { getOps } from "@pocketjs/framework/host";
 import { onFrame } from "@pocketjs/framework/lifecycle";
 import type { NodeMirror } from "@pocketjs/framework/renderer";
 import type { LayerContext, PageContent } from "../ui/nav.tsx";
+import { lazyBars, SkeletonBars } from "../ui/skeleton.tsx";
 import { createSlotPool, paintText, type SlotPool } from "../ui/slots.ts";
 import { FONT, measure } from "../ui/text.ts";
 import type { Press, Target } from "../ui/touch.ts";
@@ -159,6 +160,8 @@ function Slot(props: { pool: SlotPool<Row>; slot: number; images: Images; press:
   const [hasPills, setHasPills] = createSignal(false);
   const [hasAvatar, setHasAvatar] = createSignal(false);
   const [hasStrip, setHasStrip] = createSignal(false);
+  const [hasBars, setHasBars] = createSignal(false);
+  const bars = lazyBars(() => setHasBars(true));
   let y = -1;
   let h = -1;
   const show = (node: NodeMirror, on: boolean) => jump(node, "opacity", on ? 1 : 0);
@@ -250,6 +253,7 @@ function Slot(props: { pool: SlotPool<Row>; slot: number; images: Images; press:
         setId("");
         setStrip(null);
         setAvatar(null);
+        bars.paint([]);
         return;
       }
       if (y < 0) jump(box, "opacity", 1);
@@ -259,6 +263,7 @@ function Slot(props: { pool: SlotPool<Row>; slot: number; images: Images; press:
         jump(wash, "height", h);
       }
       if (moved) return;
+      bars.paint(row.bars);
       setId(row.kind === "strip" ? "" : row.id ?? "");
       if (row.kind === "cell") {
         show(back, false);
@@ -295,6 +300,9 @@ function Slot(props: { pool: SlotPool<Row>; slot: number; images: Images; press:
       <Text ref={detail} class="absolute text-xs" style={{ textColor: T.muted }}>{" "}</Text>
       <Text ref={trailing} class="absolute text-xs" style={{ textColor: T.muted }}>{" "}</Text>
       <Image ref={chevron} class="absolute w-[16] h-[16] opacity-0" src={ICONS.chevron.faint} style={{ insetL: props.width - S.pad - 12 }} />
+      <Show when={hasBars()}>
+        <SkeletonBars color={T.raised} ready={bars.ready} />
+      </Show>
       <Show when={hasPills()}>
         <Index each={[0, 1, 2, 3]}>
           {(_, index) => <PillSlot pill={() => pills()?.pills[index] ?? null} y={() => pills()?.pillsY ?? 0} />}

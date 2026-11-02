@@ -232,6 +232,10 @@ export interface Glyphs {
   /** The first codepoint of `text` the loaded atlas lacks (0 before any
    *  atlas loads), or -1. */
   missing(text: string): number;
+  /** `text` needs glyphs the loaded atlas lacks and the last request for an
+   *  atlas did not fail: they are on their way. It draws as skeleton bars
+   *  meanwhile (ui/skeleton.tsx); after a failure it folds to ASCII. */
+  pending(text: string): boolean;
   /** `cp` is in the loaded atlas; 0 (missing() before any atlas) once one
    *  has loaded. */
   holds(cp: number): boolean;
@@ -384,10 +388,17 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
   };
 
   let pending: { bytes: Uint8Array; holds: Set<number> } | null = null;
+  /** The last request failed, or the host loads no atlas: texts fold. */
+  let failed = false;
   const apply = (bytes: Uint8Array, holds: Set<number>) => {
     // The 3DS host answers false for a blob it cannot parse.
     const load = getOps().loadFontAtlas as ((buf: Uint8Array) => unknown) | undefined;
-    if (!load || load(bytes) === false) return;
+    if (!load || load(bytes) === false) {
+      failed = true;
+      setRevision(revision() + 1);
+      return;
+    }
+    failed = false;
     let dropped = false;
     if (loaded) for (const cp of loaded) if (!holds.has(cp)) dropped = true;
     if (dropped) {
@@ -419,14 +430,23 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
           },
           () => {
             inFlight = false;
-            // A lost request is not retried by itself; the next want() asks again.
+            // A lost request is not retried by itself; the next want() asks
+            // again. Its texts fold to ASCII until an atlas loads.
             dirty = true;
+            if (!failed) {
+              failed = true;
+              setRevision(revision() + 1);
+            }
           },
         );
         return;
       }
       inFlight = false;
       const bytes = mergeAtlases(parts);
+      if (!bytes && !failed) {
+        failed = true;
+        setRevision(revision() + 1);
+      }
       if (bytes) {
         if (options.when && !options.when()) pending = { bytes, holds: sending };
         else {
@@ -467,6 +487,7 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
       return -1;
     },
     holds: (cp) => loaded !== null && (cp === 0 || loaded.has(cp)),
+    pending: (text) => !failed && neededBy(text).length > 0 && glyphs.missing(text) >= 0,
     want(texts) {
       const fresh = new Set<number>();
       for (const text of texts) {

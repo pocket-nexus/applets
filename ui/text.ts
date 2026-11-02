@@ -46,7 +46,8 @@ const FOLD = new Map<number, string>([
 ]);
 
 /** Fold a runtime string to printable ASCII: punctuation to its ASCII
- *  spelling, accented Latin to its base letter, anything else to "?". */
+ *  spelling, accented Latin to its base letter, anything else to a word
+ *  break. */
 export function toAscii(text: string): string {
   let out = "";
   let decomposed = text;
@@ -67,8 +68,9 @@ export function toAscii(text: string): string {
     // "evan的MacBook Pro" reads "evan MacBook Pro", not "evan?MacBook Pro".
     else if (!out.endsWith(" ")) out += " ";
   }
-  const folded = out.replace(/ {2,}/g, " ").trim();
-  return folded === "" && text.trim() !== "" ? "?" : folded;
+  // A text with nothing to fold to draws nothing, never a "?": where glyphs
+  // can arrive, it shows as skeleton bars until they do (ui/skeleton.tsx).
+  return out.replace(/ {2,}/g, " ").trim();
 }
 
 const widths = new Map<string, number>();

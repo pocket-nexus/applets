@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // kit/text.ts — text from the network in any script. ASCII draws from
 // the baked faces at their sizes; anything else draws from the glyph atlases
-// (ui/glyphs.ts) once they cover it, and folded to ASCII until then. Whoever
-// builds rows reads `faces.revision()`, so a row is laid out again as glyphs arrive.
+// (ui/glyphs.ts) once they cover it, as skeleton bars while they are on their
+// way (ui/skeleton.tsx), and folded to ASCII when the glyphs service failed.
+// Whoever builds rows reads `faces.revision()`, so a row is laid out again as
+// glyphs arrive.
 import { createGlyphs, GLYPH_BOLD, GLYPH_TEXT, richText, type Glyphs } from "../ui/glyphs.ts";
+import { skeletonLines } from "../ui/skeleton.tsx";
 import { ellipsize, measure, toAscii, wrap } from "../ui/text.ts";
 import { F } from "./theme.ts";
 
@@ -33,6 +36,9 @@ export interface Fitted {
   lines: string[];
   /** The font slot to draw it from. */
   slot: number;
+  /** While the text's glyphs are on their way: the width of each line, for
+   *  skeleton bars (ui/skeleton.tsx); `lines` are empty strings as many. */
+  skeleton?: number[];
 }
 
 /** `value` wrapped to `width` in `slot`, at most `maxLines` lines, in the face that can draw it. */
@@ -43,9 +49,19 @@ export function fit(faces: Faces, value: string, slot: number, width: number, ma
   const rich = richText(clean);
   face.want([rich]);
   if (face.covers(rich)) return { lines: maxLines === 1 ? [face.ellipsize(rich.replace(/\n/g, " "), width)] : face.wrap(rich, width, maxLines), slot: isBold(slot) ? F.richBold : F.richBody };
+  if (face.pending(rich)) {
+    const skeleton = skeletonLines(maxLines === 1 ? rich.replace(/\n/g, " ") : rich, slot, face.face.px, width, maxLines);
+    return { lines: skeleton.map(() => ""), slot, skeleton };
+  }
   const folded = toAscii(clean);
   return { lines: maxLines === 1 ? [ellipsize(folded.replace(/\n/g, " "), slot, width)] : wrap(folded, slot, width, maxLines), slot };
 }
 
-export const textWidth = (faces: Faces, value: string, slot: number) =>
-  isPlain(value) ? measure(value, slot) : (isBold(slot) ? faces.bold : faces.text).covers(richText(value)) ? (isBold(slot) ? faces.bold : faces.text).measure(richText(value)) : measure(toAscii(value), slot);
+export function textWidth(faces: Faces, value: string, slot: number): number {
+  if (isPlain(value)) return measure(value, slot);
+  const face = isBold(slot) ? faces.bold : faces.text;
+  const rich = richText(value);
+  if (face.covers(rich)) return face.measure(rich);
+  if (face.pending(rich)) return skeletonLines(rich.replace(/\n/g, " "), slot, face.face.px, Infinity, 1)[0]!;
+  return measure(toAscii(value), slot);
+}
