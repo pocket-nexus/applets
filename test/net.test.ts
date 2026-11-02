@@ -10,7 +10,12 @@ import { bindWorker, FactKind, ResourceStatus, type HostFact, type WorkerHost } 
 import { atlasFont, packAtlas, tofuCell, TOFU_CODEPOINT, type GlyphCell } from "../vendor/pocketjs/tools/companion/glyphs.ts";
 import { atlasBodies, GLYPH_ATLAS_URL, GLYPH_TEXT, mergeAtlases } from "../ui/glyphs.ts";
 import { DESCRIPTOR_BYTES, requestBytes } from "../lib/net.ts";
-import { Answer, ANSWER_BYTES, decodeAnswer, decodeEnd, encodeRequest, NET_WORKER, text, utf8 } from "../lib/net-wire.ts";
+import { resolveWorkerChannels } from "../vendor/pocketjs/contracts/spec/worker.ts";
+import { Answer, answerBytes, decodeAnswer, decodeEnd, encodeRequest, NET_WORKER, text, utf8 } from "../lib/net-wire.ts";
+
+/** The response ring of a host whose contract states 4 KiB records. */
+const CHANNELS = { recordBytes: 4096, capacity: 16 };
+const ANSWER_BYTES = answerBytes(CHANNELS.recordBytes);
 
 const global = globalThis as Record<string, unknown>;
 const opened: { handle: number; config: string }[] = [];
@@ -61,7 +66,7 @@ const answers = () => published.splice(0).map(decodeAnswer);
 
 beforeAll(async () => {
   global.__pocketWorker = host;
-  bindWorker(NET_WORKER as never);
+  bindWorker(resolveWorkerChannels(NET_WORKER as never, CHANNELS));
   await import("../lib/net-worker.ts");
   await turn();
 });
@@ -138,6 +143,27 @@ describe("the applets' worker", () => {
     expect(answers().map((r) => r.kind)).toEqual([Answer.head, Answer.end]);
     await turn([fact({ kind: FactKind.complete, handle, request: 100 + handle })]);
     expect(closed).toContain(handle);
+  });
+
+  test("while the ring is full, a request's body facts join one record up to the channel's size", async () => {
+    ringFull = true;
+    await turn([ask(31, { url: "https://example.com/large" })]);
+    const handle = opened.at(-1)!.handle;
+    const body = Uint8Array.from({ length: 10_000 }, (_, i) => (i * 7) & 0xff);
+    const facts = [fact({ kind: FactKind.headers, handle, data: utf8('{"status":200,"url":"https://example.com/large","headers":{}}') })];
+    for (let at = 0; at < body.length; at += 1024) facts.push(fact({ kind: FactKind.data, handle, offset: at, data: body.subarray(at, at + 1024) }));
+    facts.push(fact({ kind: FactKind.end, handle, status: 0 }));
+    await turn(facts);
+    expect(published).toHaveLength(0);
+    ringFull = false;
+    await turn([fact({ kind: FactKind.timer, timer: 1 })], 20_000);
+    const records = answers();
+    // ten 1 KiB facts in records of ANSWER_BYTES: three, the last one short
+    expect(records.map((r) => [r.kind, r.payload.length])).toEqual([
+      [Answer.head, 61], [Answer.body, ANSWER_BYTES], [Answer.body, ANSWER_BYTES], [Answer.body, 10_000 - 2 * ANSWER_BYTES], [Answer.end, 4],
+    ]);
+    expect(Uint8Array.from(records.filter((r) => r.kind === Answer.body).flatMap((r) => [...r.payload]))).toEqual(body);
+    await turn([fact({ kind: FactKind.complete, handle, request: 100 + handle })]);
   });
 });
 

@@ -13,7 +13,7 @@
 // Every route answers `delayTicks` ticks (default 1) after it starts.
 
 import { bootConsole3ds, type Console3ds, type Console3dsOptions } from "../vendor/pocketjs/programs/sim/console-3ds.ts";
-import { Answer, ANSWER_BYTES, decodeRequest, encodeAnswer, encodeEnd, NET_WORKER, NODE_REQUESTS, Status, utf8 } from "../lib/net-wire.ts";
+import { Answer, answerBytes, decodeRequest, encodeAnswer, encodeEnd, FLOOR_CHANNEL, NET_WORKER, NODE_REQUESTS, Status, utf8 } from "../lib/net-wire.ts";
 
 export interface NetRequest {
   readonly url: string;
@@ -40,7 +40,9 @@ export type NetRoutes = Readonly<Record<string, NetRoute>>;
 
 const REQUEST_ID = 1 + NET_WORKER.channels.findIndex((channel) => channel.name === "request");
 const RESPONSE_ID = 1 + NET_WORKER.channels.findIndex((channel) => channel.name === "response");
-const RESPONSE_CAPACITY = NET_WORKER.channels[RESPONSE_ID - 1]!.capacity;
+/** The sims' hosts state no channel table: the floor every host holds. */
+const RESPONSE_CAPACITY = FLOOR_CHANNEL.capacity;
+const ANSWER_BYTES = answerBytes(FLOOR_CHANNEL.recordBytes);
 
 export interface NetFake {
   /** "send <id> <METHOD> <url> <body bytes>" as a request record arrives,

@@ -3,7 +3,7 @@
   "pocket": 2,
   "id": "dev.pocket-nexus.hn",
   "title": "Hacker News",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "icon": "./icon.png",
   "applet": {
     "version": 1,
@@ -82,8 +82,8 @@
           "name": "response",
           "kind": "ring",
           "direction": "worker-to-ui",
-          "recordBytes": 1024,
-          "capacity": 8
+          "recordBytes": "host",
+          "capacity": "host"
         }
       ]
     }

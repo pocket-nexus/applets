@@ -10,8 +10,9 @@
 //   rows.message({ title, detail, action })                    empty, failed, signed out
 //
 // `h` and every place come from here; `y` is filled in by the list.
+import { barsFor, type Bar } from "../ui/skeleton.tsx";
 import { ICONS, type IconSrc } from "./icons.ts";
-import { fit, textWidth, type Faces } from "./text.ts";
+import { fit, textWidth, type Faces, type Fitted } from "./text.ts";
 import { F, pillColors, S, T } from "./theme.ts";
 
 interface Base {
@@ -21,6 +22,8 @@ interface Base {
   /** What a tap on the row does. */
   id?: string;
   run?: () => void;
+  /** Skeleton bars for its texts whose glyphs are on their way. */
+  bars: Bar[];
 }
 
 export interface Pill {
@@ -170,9 +173,16 @@ export interface Rows {
 
 const ITEM_H: Record<Tone, number> = { chip: S.chipH, chipOn: S.chipH, button: S.buttonH, primary: S.buttonH, danger: S.buttonH, stat: 20 };
 
+/** The glyph faces' em (ui/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
+const SKELETON_EM = 13;
+
+/** Bars for a fitted text drawn from (x, y), when its glyphs are on their way. */
+const barsOf = (fitted: Fitted | null, x: number, y: number, leading: number): Bar[] =>
+  fitted?.skeleton ? barsFor(fitted.skeleton, x, y, leading, SKELETON_EM) : [];
+
 export function createRows(faces: Faces, width: number): Rows {
   const blank = (key: string): TextRow => ({
-    kind: "text", key, y: 0, h: 0, text: "", slot: F.body, color: T.text, leading: 20, x: S.pad, top: 0, block: false, bar: false, rule: false, band: false, bullet: "", bulletX: 0,
+    kind: "text", key, y: 0, h: 0, bars: [], text: "", slot: F.body, color: T.text, leading: 20, x: S.pad, top: 0, block: false, bar: false, rule: false, band: false, bullet: "", bulletX: 0,
   });
   const api: Rows = {
     width,
@@ -207,8 +217,9 @@ export function createRows(faces: Faces, width: number): Rows {
       }
       if (pills.length) y += 5 + 20;
       const h = Math.max(y + S.rowPad, size ? size + S.rowPad * 2 : 0, 40);
+      const bars = [...barsOf(eyebrow, textX, S.rowPad, 16), ...barsOf(title, textX, titleY, titleLeading), ...barsOf(detail, textX, detailY, 16)];
       return {
-        kind: "cell", key: o.key, y: 0, h, id: o.run ? `row.${o.key}` : undefined, run: o.run,
+        kind: "cell", key: o.key, y: 0, h, id: o.run ? `row.${o.key}` : undefined, run: o.run, bars,
         eyebrow: eyebrow?.lines[0] ?? "", eyebrowSlot: eyebrow?.slot ?? F.small,
         title: title.lines.join("\n"), titleSlot: title.slot, titleColor: T.text, titleY, titleLeading,
         detail: detail?.lines.join("\n") ?? "", detailSlot: detail?.slot ?? F.small, detailColor: T.muted, detailY,
@@ -217,7 +228,7 @@ export function createRows(faces: Faces, width: number): Rows {
     },
     section(label, key = `section.${label}`) {
       const fitted = fit(faces, label, F.smallBold, width - S.pad * 2, 1);
-      return { ...blank(key), h: 30, text: fitted.lines[0] ?? "", slot: fitted.slot, color: T.muted, leading: 16, top: 9, band: true };
+      return { ...blank(key), h: 30, text: fitted.lines[0] ?? "", slot: fitted.slot, color: T.muted, leading: 16, top: 9, band: true, bars: barsOf(fitted, S.pad, 9, 16) };
     },
     text(value, style = "body", key = `text.${style}.${value.slice(0, 24)}`, options = {}) {
       const s = STYLES[style];
@@ -233,6 +244,7 @@ export function createRows(faces: Faces, width: number): Rows {
         const top = first ? s.top : 0;
         out.push({
           ...blank(`${key}.${part}`),
+          bars: fitted.skeleton ? barsFor(fitted.skeleton.slice(at, at + LINES_PER_ROW), x, top, s.leading, SKELETON_EM) : [],
           h: top + lines.length * s.leading + (last ? s.bottom : 0),
           text: lines.join("\n"), slot: fitted.slot, color: s.color, leading: s.leading, x, top,
           block: style === "code", bar: style === "quote", rule: (style === "h1" || style === "h2") && last,
@@ -251,7 +263,7 @@ export function createRows(faces: Faces, width: number): Rows {
         if (!items.length) return;
         const h = Math.max(...items.map((item) => item.h));
         for (const item of items) item.y = 7 + (h - item.h) / 2;
-        out.push({ kind: "strip", key: `${key}.${out.length}`, y: 0, h: h + 14, items });
+        out.push({ kind: "strip", key: `${key}.${out.length}`, y: 0, h: h + 14, items, bars: [] });
         items = [];
         x = S.pad;
       };

@@ -24,6 +24,7 @@ import { viewHeight, type LayerContext, type NavStack, type PageContent, type Pa
 import { COMPACT, SCREEN_W } from "../ui/screen.ts";
 import { ellipsize, FONT, measure, toAscii, wrap } from "../ui/text.ts";
 import { richText, type Glyphs } from "../ui/glyphs.ts";
+import { barsFor, lazyBars, skeletonLines, SkeletonBars, type Bar } from "../ui/skeleton.tsx";
 import { createSlotPool, paintText, type SlotPool } from "../ui/slots.ts";
 import type { Press, Target } from "../ui/touch.ts";
 import { KINDS, MEDIA_W, type Post } from "./api.ts";
@@ -171,6 +172,8 @@ export interface PostRow {
   extra: string;
   /** Names and text draw from the glyph atlases (else the baked face). */
   rich: boolean;
+  /** Skeleton bars for the name and texts whose glyphs are on their way. */
+  bars: Bar[];
   initials: string;
   color: string;
   /** Kept while everything but the place stays: the slot pool only moves a
@@ -224,6 +227,19 @@ function richRow(post: Post, glyphs: GlyphPair | null): boolean {
   return face === null;
 }
 
+/** The face a row draws in: rich when the atlases cover it, waiting while
+ *  the glyphs it needs are on their way, else baked. */
+function rowFace(post: Post, glyphs: GlyphPair | null): Face {
+  if (richRow(post, glyphs)) return "rich";
+  if (!glyphs) return "baked";
+  for (const text of postTexts(post)) if (glyphs.text.pending(text)) return "waiting";
+  if (glyphs.bold.pending(post.name) || (post.repostedBy && glyphs.bold.pending(post.repostedBy))) return "waiting";
+  return "baked";
+}
+
+/** The glyph faces' em (ui/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
+const GLYPH_EM = 13;
+
 /** Tell the app when the list scrolls: glyph atlases wait for it to rest
  *  (ui/glyphs.ts when). A post that changes face changes height and
  *  moves every row below it, which under a moving list reads as a jump. */
@@ -243,6 +259,7 @@ function reportMotion(env: XEnv, offset: () => number) {
  *  the shape keeps the row it last made. */
 interface RowShape {
   rich: boolean;
+  bars: Bar[];
   h: number;
   footY: number;
   /** the first photo's url, drawn MEDIA_H tall under the body */
@@ -271,7 +288,13 @@ interface RowShape {
 interface Faces {
   baked?: RowShape;
   rich?: RowShape;
+  /** While the row's glyphs are on their way: skeleton bars. */
+  waiting?: RowShape;
 }
+
+/** Which shape a row takes: drawn from the atlases, waiting for them, or
+ *  folded to ASCII in the baked faces when the glyphs service failed. */
+type Face = "rich" | "waiting" | "baked";
 const shapes = new WeakMap<Post, Faces>();
 const focalShapes = new WeakMap<Post, Faces>();
 
@@ -282,13 +305,23 @@ function facesOf(post: Post, focal: boolean): Faces {
   return faces;
 }
 
-function rowShape(post: Post, focal: boolean, glyphs: GlyphPair | null, rich: boolean): RowShape {
+function rowShape(post: Post, focal: boolean, glyphs: GlyphPair | null, face: Face): RowShape {
   const faces = facesOf(post, focal);
-  const known = rich ? faces.rich : faces.baked;
+  const rich = face === "rich";
+  const known = faces[face];
   if (known) return known;
   let lines: string[];
   let quote: string[];
-  if (rich && glyphs) {
+  /** Line widths standing in for the body, the quote and the name. */
+  let waiting: { body: number[]; quote: number[]; head: number } | null = null;
+  if (face === "waiting") {
+    const reply = post.replyTo ? `Replying to @${post.replyTo}\n` : "";
+    const body = skeletonLines(reply + richText(post.text || " "), FONT.sm, GLYPH_EM, TEXT_W, focal ? Infinity : ROW_LINES);
+    const quoted = post.quote ? skeletonLines(richText(`${post.quote.name} @${post.quote.handle}: ${post.quote.text}`), FONT.xs, GLYPH_EM, TEXT_W - 14, focal ? 6 : 2) : [];
+    waiting = { body, quote: quoted, head: skeletonLines(richText(post.name || post.handle), FONT.smBold, GLYPH_EM, 150, 1)[0]! };
+    lines = body.map(() => "");
+    quote = quoted.map(() => "");
+  } else if (rich && glyphs) {
     const reply = post.replyTo ? `Replying to @${post.replyTo}\n` : "";
     lines = glyphs.text.wrap(reply + richText(post.text || " "), TEXT_W, focal ? Infinity : ROW_LINES);
     quote = post.quote ? glyphs.text.wrap(richText(`${post.quote.name} @${post.quote.handle}: ${post.quote.text}`), TEXT_W - 14, focal ? 6 : 2) : [];
@@ -302,15 +335,26 @@ function rowShape(post: Post, focal: boolean, glyphs: GlyphPair | null, rich: bo
   const photoH = photo ? 4 + photoH_() : 0;
   const quoteH = quote.length ? 4 + 12 + quote.length * QUOTE_LINE : 0;
   const footY = PAD + (repost ? REPOST_H : 0) + HEAD_H + lines.length * BODY_LINE + photoH + quoteH + 4;
-  const head = rich && glyphs ? glyphs.bold.ellipsize(richText(post.name || post.handle), 150) : ellipsize(toAscii(post.name || post.handle), FONT.smBold, 150);
+  // A waiting name is spaces as wide as its bar, so the meta line starts
+  // where it will.
+  const head = waiting ? " ".repeat(Math.max(1, Math.round(waiting.head / measure(" ", FONT.smBold)))) : rich && glyphs ? glyphs.bold.ellipsize(richText(post.name || post.handle), 150) : ellipsize(toAscii(post.name || post.handle), FONT.smBold, 150);
+  const top = PAD + (repost ? REPOST_H : 0);
+  const bars = waiting
+    ? [
+        ...barsFor([waiting.head], TEXT_X, top, HEAD_H, GLYPH_EM),
+        ...barsFor(waiting.body, TEXT_X, top + HEAD_H, BODY_LINE, GLYPH_EM),
+        ...barsFor(waiting.quote, TEXT_X + 7, top + HEAD_H + lines.length * BODY_LINE + 4 + (photo ? photoH_() + 4 : 0) + 5, QUOTE_LINE, GLYPH_EM),
+      ]
+    : [];
   const shape: RowShape = {
     rich,
+    bars,
     h: footY + FOOT_H + PAD,
     footY,
     photo,
     repost,
     head,
-    nameW: rich && glyphs ? glyphs.bold.measure(head) : measure(head, FONT.smBold),
+    nameW: waiting ? waiting.head : rich && glyphs ? glyphs.bold.measure(head) : measure(head, FONT.smBold),
     body: lines.join("\n"),
     bodyLines: lines.length,
     quote: quote.join("\n"),
@@ -326,15 +370,14 @@ function rowShape(post: Post, focal: boolean, glyphs: GlyphPair | null, rich: bo
     meta: "",
     row: null,
   };
-  if (rich) faces.rich = shape;
-  else faces.baked = shape;
+  faces[face] = shape;
   return shape;
 }
 
 /** Posts a layout left to be shaped later: shaping one costs QuickJS 6-30 ms
  *  on an Old 3DS, and a timeline brings a hundred at once. */
 export interface ShapeQueue {
-  waiting: Map<Post, { focal: boolean; rich: boolean }>;
+  waiting: Map<Post, { focal: boolean; face: Face }>;
 }
 
 const SHAPE_BUDGET_MS = 6;
@@ -347,7 +390,7 @@ function shapeQueued(queue: ShapeQueue, glyphs: GlyphPair): boolean {
   const deadline = Date.now() + SHAPE_BUDGET_MS;
   for (const [post, want] of queue.waiting) {
     queue.waiting.delete(post);
-    rowShape(post, want.focal, glyphs, want.rich);
+    rowShape(post, want.focal, glyphs, want.face);
     if (Date.now() >= deadline) break;
   }
   return true;
@@ -376,25 +419,25 @@ export function layoutPosts(
   const rows: PostRow[] = [];
   let complete = true;
   for (const { post, focal } of posts) {
-    const rich = richRow(post, glyphs);
+    const face = rowFace(post, glyphs);
     const faces = facesOf(post, focal);
-    let shape = rich ? faces.rich : faces.baked;
+    let shape = faces[face];
     if (!complete) {
       // Past the end of the list: queue what still needs shaping.
-      if (!shape && queue) queue.waiting.set(post, { focal, rich });
+      if (!shape && queue) queue.waiting.set(post, { focal, face });
       continue;
     }
     if (!shape) {
-      const other = rich ? faces.baked : faces.rich;
+      const other = faces.rich ?? faces.waiting ?? faces.baked;
       if (queue && (other || y >= top + shapeAbove)) {
-        queue.waiting.set(post, { focal, rich });
+        queue.waiting.set(post, { focal, face });
         if (!other) {
           complete = false;
           continue;
         }
         shape = other;
       } else {
-        shape = rowShape(post, focal, glyphs, rich);
+        shape = rowShape(post, focal, glyphs, face);
       }
     }
     const n = seen.get(post.id) ?? 0;
@@ -429,6 +472,7 @@ export function layoutPosts(
       reposted: !!post.reposted,
       extra: shape.extra,
       rich: shape.rich,
+      bars: shape.bars,
       initials: shape.initials,
       color: shape.color,
       content: before && before.key === key && before.post === post && before.focal === focal ? before.content : {},
@@ -496,6 +540,8 @@ function PostSlot(props: { pool: SlotPool<PostRow>; slot: number; lit: (key: str
   let h = -1;
   let focal = false;
   let rich: boolean | null = null;
+  const [hasBars, setHasBars] = createSignal(false);
+  const bars = lazyBars(() => setHasBars(true));
   const setSlots = (slots: Record<keyof typeof BAKED_SLOTS, number>) => {
     const ops = getOps();
     ops.setProp(head.id, PROP_FONT_SLOT, slots.head);
@@ -519,6 +565,7 @@ function PostSlot(props: { pool: SlotPool<PostRow>; slot: number; lit: (key: str
         setKey("");
         setAvatarUrl(undefined);
         setPhotoUrl(undefined);
+        bars.paint([]);
         shown = null;
         return;
       }
@@ -554,6 +601,7 @@ function PostSlot(props: { pool: SlotPool<PostRow>; slot: number; lit: (key: str
       paintText(counts.repost!, row.reposts);
       paintText(counts.like!, row.likes);
       paintText(extra, row.extra);
+      bars.paint(row.bars);
       setLiked(row.liked);
       setReposted(row.reposted);
       setAvatarUrl(row.post.avatar);
@@ -594,6 +642,9 @@ function PostSlot(props: { pool: SlotPool<PostRow>; slot: number; lit: (key: str
       <View ref={quoteBox} class="absolute left-[50] h-0 opacity-0 rounded-[8] border border-[#cfd9de] bg-white" style={{ width: TEXT_W }}>
         <Text ref={quote} class="absolute left-[7] top-[5] text-xs text-[#0f1419] leading-[15]">{" "}</Text>
       </View>
+      <Show when={hasBars()}>
+        <SkeletonBars color="#eff3f4" ready={bars.ready} />
+      </Show>
       <View ref={bar} class="absolute left-0 top-0 h-[18]" style={{ width: W }}>
         <For each={ACTS}>
           {(act, index) => (

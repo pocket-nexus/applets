@@ -23,6 +23,7 @@ import type { NavButton } from "../ui/bar.tsx";
 import { viewHeight, type LayerContext, type NavStack, type PageContent, type PageSpec } from "../ui/nav.tsx";
 import { COMPACT, SCREEN_H, SCREEN_W } from "../ui/screen.ts";
 import { ellipsize, FONT, measure, toAscii, wrap } from "../ui/text.ts";
+import { barsFor, lazyBars, skeletonLines, SkeletonBars, type Bar } from "../ui/skeleton.tsx";
 import { richText, type Glyphs } from "../ui/glyphs.ts";
 import { createSlotPool, paintText, type SlotPool } from "../ui/slots.ts";
 import type { Press, Target } from "../ui/touch.ts";
@@ -100,13 +101,13 @@ function initialColor(id: string): string {
 }
 
 /** A name's first Latin letter or digit; else, when the bold atlas holds it,
- *  its first character. */
+ *  its first character; else nothing, a plain disc, until it does. */
 function initialOf(name: string, bold: Glyphs | null): { text: string; rich: boolean } {
   const latin = toAscii(name).replace(/[^A-Za-z0-9]/g, "")[0];
   if (latin) return { text: latin.toUpperCase(), rich: false };
   const first = [...richText(name).trim()][0];
   if (first && bold?.covers(first)) return { text: first, rich: true };
-  return { text: "?", rich: false };
+  return { text: "", rich: false };
 }
 
 /** Whether row `id` is lit: pressed, or focused by the d-pad. */
@@ -543,7 +544,13 @@ export interface MessageRow {
   avatar: Avatar;
   /** Name, reply and body draw from the glyph atlases. */
   rich: boolean;
+  /** Skeleton bars for the name, reply and body while their glyphs are on
+   *  their way. */
+  bars: Bar[];
 }
+
+/** The glyph faces' em (ui/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
+const GLYPH_EM = 13;
 
 const bodyCache = new Map<string, { content: string; stamp: number; lines: string[] }>();
 
@@ -577,16 +584,33 @@ export function messageRows(chat: ChatState, glyphs: { text: Glyphs; bold: Glyph
     previous = message;
     const texts = messageTexts(message);
     const rich = !!glyphs && glyphs.text.ready() && texts.text.every((text) => glyphs.text.covers(text)) && texts.bold.every((text) => glyphs.bold.covers(text));
-    const lines = bodyLines(message, rich ? glyphs!.text : null);
+    // Texts whose glyphs are on their way show as skeleton bars.
+    const waiting = !rich && !!glyphs && (texts.text.some((text) => glyphs.text.pending(text)) || texts.bold.some((text) => glyphs.bold.pending(text)));
+    const edited = message.edited ? " (edited)" : "";
+    const bodyBars = waiting ? skeletonLines(richText(message.content) + edited || " ", FONT.sm, GLYPH_EM, BODY_W) : [];
+    const lines = waiting ? bodyBars.map(() => "") : bodyLines(message, rich ? glyphs!.text : null);
+    const replyBar = waiting && message.replyTo ? skeletonLines(richText(`@${message.replyTo.author} ${message.replyTo.content}`), FONT.xxs, GLYPH_EM, BODY_W, 1) : [];
     const reply = !message.replyTo
       ? ""
-      : rich
-        ? glyphs!.text.ellipsize(richText(`@${message.replyTo.author} ${message.replyTo.content}`), BODY_W)
-        : ellipsize(`@${toAscii(message.replyTo.author)} ${toAscii(message.replyTo.content)}`, FONT.xxs, BODY_W);
-    const name = message.system ? "" : rich ? glyphs!.bold.ellipsize(richText(message.author.name), 150) : ellipsize(toAscii(message.author.name), FONT.xsBold, 150);
+      : waiting
+        ? " "
+        : rich
+          ? glyphs!.text.ellipsize(richText(`@${message.replyTo.author} ${message.replyTo.content}`), BODY_W)
+          : ellipsize(`@${toAscii(message.replyTo.author)} ${toAscii(message.replyTo.content)}`, FONT.xxs, BODY_W);
+    const nameBar = waiting && !message.system ? skeletonLines(richText(message.author.name), FONT.xsBold, GLYPH_EM, 150, 1)[0]! : 0;
+    // A waiting name is spaces as wide as its bar, so the time starts where it will.
+    const name = message.system ? "" : waiting ? " ".repeat(Math.max(1, Math.round(nameBar / measure(" ", FONT.xsBold)))) : rich ? glyphs!.bold.ellipsize(richText(message.author.name), 150) : ellipsize(toAscii(message.author.name), FONT.xsBold, 150);
     const offset = (head ? 6 : 1) + (reply ? REPLY_H : 0);
     const bodyY = offset + (head && !message.system ? HEADER_H : 0);
     const h = bodyY + lines.length * BODY_LINE + 3;
+    const nameTop = (reply ? REPLY_H : 0) + 5;
+    const bars = waiting
+      ? [
+          ...barsFor(replyBar, BODY_X, 4, REPLY_H, GLYPH_EM),
+          ...(head && nameBar ? barsFor([nameBar], BODY_X, nameTop, 16, GLYPH_EM) : []),
+          ...barsFor(bodyBars, BODY_X, bodyY, BODY_LINE, GLYPH_EM),
+        ]
+      : [];
     const row: MessageRow = {
       key: `message.${message.id}`,
       id: message.id,
@@ -595,13 +619,14 @@ export function messageRows(chat: ChatState, glyphs: { text: Glyphs; bold: Glyph
       head,
       system: message.system,
       name,
-      nameW: name ? (rich ? glyphs!.bold.measure(name) : measure(name, FONT.xsBold)) : 0,
+      nameW: name ? (waiting ? nameBar : rich ? glyphs!.bold.measure(name) : measure(name, FONT.xsBold)) : 0,
       when: message.when,
       reply,
       body: lines.join("\n"),
       bodyY,
       avatar: { kind: "avatar", owner: message.author.id, hash: message.author.avatar, name: message.author.name },
       rich,
+      bars,
     };
     y += h;
     return row;
@@ -625,6 +650,8 @@ function MessageSlot(props: { env: DiscordEnv; pool: SlotPool<MessageRow>; slot:
   let bodyY = -1;
   let tone = "";
   let rich = false;
+  const [hasBars, setHasBars] = createSignal(false);
+  const bars = lazyBars(() => setHasBars(true));
   onMount(() => {
     const picture = createPicturePainter(props.env.model, () => refs.image!, () => refs.disc!, () => refs.letter!, props.env.bold);
     createEffect(() => jump(wash, "opacity", lit() ? 1 : 0));
@@ -634,6 +661,7 @@ function MessageSlot(props: { env: DiscordEnv; pool: SlotPool<MessageRow>; slot:
         y = -1;
         for (const text of [name, when, reply, body]) paintText(text, "");
         picture(null);
+        bars.paint([]);
         setId("");
         return;
       }
@@ -662,6 +690,7 @@ function MessageSlot(props: { env: DiscordEnv; pool: SlotPool<MessageRow>; slot:
       const nextTone = row.system ? THEME.muted : THEME.text;
       if (nextTone !== tone) jump(body, "textColor", (tone = nextTone));
       picture(header ? row.avatar : null);
+      bars.paint(row.bars);
       setId(row.key);
     }));
   });
@@ -673,6 +702,9 @@ function MessageSlot(props: { env: DiscordEnv; pool: SlotPool<MessageRow>; slot:
       <Text ref={name} class="absolute left-[46] top-[5] text-xs text-white font-bold">{" "}</Text>
       <Text ref={when} class="absolute left-[96] top-[6] text-2xs text-[#a3a6aa]">{" "}</Text>
       <Text ref={body} class="absolute left-[46] top-[25] text-sm text-[#dcddde] leading-[16]">{" "}</Text>
+      <Show when={hasBars()}>
+        <SkeletonBars color="#40444b" ready={bars.ready} />
+      </Show>
     </View>
   );
 }

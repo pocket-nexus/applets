@@ -13,14 +13,16 @@
 
 import { createRoot } from "solid-js";
 import { onFrame } from "@pocketjs/framework/lifecycle";
+import { platform } from "@pocketjs/framework/platform";
 import { worker } from "@pocketjs/framework/worker/channels";
 import { Answer, decodeAnswer, decodeEnd, DESCRIPTOR_BYTES, encodeRequest, Status, text, utf8, type Descriptor } from "./net-wire.ts";
 
 export { DESCRIPTOR_BYTES };
 export { companionNow } from "@pocketjs/framework/link";
 
-/** A response's limit (PocketJS contracts/spec/net.ts). */
-export const NET_MAX_RESPONSE_BYTES = 256 * 1024;
+/** A response's limit on this device: its host contract's
+ *  `worker.http.responseBytes`, 256 KiB where it states none. */
+export const NET_MAX_RESPONSE_BYTES = platform.httpResponseBytes;
 
 /** Where the paired companion answers its services (PocketJS
  *  contracts/spec/link.ts LINK_SERVICES_ORIGIN). */
@@ -39,7 +41,7 @@ export interface FetchOptions {
   body?: string;
   /** Default 30000; the host's limit is 120000. */
   timeoutMs?: number;
-  /** The whole body's cap; default 128 KiB, at most 256 KiB. */
+  /** The whole body's cap; default 128 KiB, at most NET_MAX_RESPONSE_BYTES. */
   maxBytes?: number;
 }
 

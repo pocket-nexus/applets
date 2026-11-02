@@ -30,6 +30,7 @@
 import { createSignal, type Accessor } from "solid-js";
 import { getOps } from "@pocketjs/framework/host";
 import { onFrame } from "@pocketjs/framework/lifecycle";
+import { platform } from "@pocketjs/framework/platform";
 import { companionService, DESCRIPTOR_BYTES, fetch, NET_MAX_RESPONSE_BYTES, requestBytes } from "../lib/net.ts";
 
 export interface GlyphFace {
@@ -43,15 +44,19 @@ export interface GlyphFace {
 export const GLYPH_TEXT: GlyphFace = { slot: 21, px: 13, bold: false };
 export const GLYPH_BOLD: GlyphFace = { slot: 22, px: 13, bold: true };
 
-/** A response's limit (lib/net.ts NET_MAX_RESPONSE_BYTES): 256 KiB. */
-const RESPONSE_MAX = NET_MAX_RESPONSE_BYTES;
-/** Raster samples per logical pixel in the atlases asked for. One on every
- *  device: an atlas reaches the UI through the worker's response ring, eight
- *  1 KiB records a frame, and a density-2 atlas of the same glyphs is four
- *  times the bytes. A density-2 surface draws the cells scaled. */
-const DENSITY = 1;
+/** The bytes an atlas of the glyphs a page shows takes at density 1. */
+const ATLAS_BYTES = 256 * 1024;
+/** Raster samples per logical pixel in the atlases asked for: the surface's
+ *  (platform.pixelRatio) where one response carries an atlas of as many
+ *  glyphs at that density, which is density squared times the bytes; else 1,
+ *  and the surface draws the cells scaled. The atlas reaches the UI through
+ *  the worker's response ring, which moves the host's channel per frame
+ *  (lib/net-worker.ts). */
+export const DENSITY = platform.pixelRatio > 1 && NET_MAX_RESPONSE_BYTES >= ATLAS_BYTES * platform.pixelRatio ** 2 ? platform.pixelRatio : 1;
+/** What one atlas response may take. */
+const RESPONSE_MAX = ATLAS_BYTES * DENSITY * DENSITY;
 
-/** Glyphs one atlas of `px` holds within a response: the 16-byte header,
+/** Glyphs one atlas of `px` holds within RESPONSE_MAX: the 16-byte header,
  *  then an 8-byte cmap entry and a cell per glyph at DENSITY, with 1 KB to
  *  spare. The device's baker (PocketJS bake-font.ts) sizes every cell to the
  *  widest glyph of the set, and an icon or a wide symbol is two ems: the
@@ -227,6 +232,10 @@ export interface Glyphs {
   /** The first codepoint of `text` the loaded atlas lacks (0 before any
    *  atlas loads), or -1. */
   missing(text: string): number;
+  /** `text` needs glyphs the loaded atlas lacks and the last request for an
+   *  atlas did not fail: they are on their way. It draws as skeleton bars
+   *  meanwhile (ui/skeleton.tsx); after a failure it folds to ASCII. */
+  pending(text: string): boolean;
   /** `cp` is in the loaded atlas; 0 (missing() before any atlas) once one
    *  has loaded. */
   holds(cp: number): boolean;
@@ -379,10 +388,17 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
   };
 
   let pending: { bytes: Uint8Array; holds: Set<number> } | null = null;
+  /** The last request failed, or the host loads no atlas: texts fold. */
+  let failed = false;
   const apply = (bytes: Uint8Array, holds: Set<number>) => {
     // The 3DS host answers false for a blob it cannot parse.
     const load = getOps().loadFontAtlas as ((buf: Uint8Array) => unknown) | undefined;
-    if (!load || load(bytes) === false) return;
+    if (!load || load(bytes) === false) {
+      failed = true;
+      setRevision(revision() + 1);
+      return;
+    }
+    failed = false;
     let dropped = false;
     if (loaded) for (const cp of loaded) if (!holds.has(cp)) dropped = true;
     if (dropped) {
@@ -414,14 +430,23 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
           },
           () => {
             inFlight = false;
-            // A lost request is not retried by itself; the next want() asks again.
+            // A lost request is not retried by itself; the next want() asks
+            // again. Its texts fold to ASCII until an atlas loads.
             dirty = true;
+            if (!failed) {
+              failed = true;
+              setRevision(revision() + 1);
+            }
           },
         );
         return;
       }
       inFlight = false;
       const bytes = mergeAtlases(parts);
+      if (!bytes && !failed) {
+        failed = true;
+        setRevision(revision() + 1);
+      }
       if (bytes) {
         if (options.when && !options.when()) pending = { bytes, holds: sending };
         else {
@@ -462,6 +487,7 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
       return -1;
     },
     holds: (cp) => loaded !== null && (cp === 0 || loaded.has(cp)),
+    pending: (text) => !failed && neededBy(text).length > 0 && glyphs.missing(text) >= 0,
     want(texts) {
       const fresh = new Set<number>();
       for (const text of texts) {

@@ -3,7 +3,7 @@
   "pocket": 2,
   "id": "dev.pocket-nexus.youtube",
   "title": "YouTube",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "icon": "./icon.png",
   "applet": {
     "version": 1,
@@ -83,8 +83,8 @@
           "name": "response",
           "kind": "ring",
           "direction": "worker-to-ui",
-          "recordBytes": 1024,
-          "capacity": 8
+          "recordBytes": "host",
+          "capacity": "host"
         }
       ]
     }

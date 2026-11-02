@@ -24,7 +24,7 @@ bun store/play/serve.ts dist/omarchy-pocket/<output>.pocket <name>   # the app i
 
 An applet's directory holds `pocket.app.json` (copy `template/pocket.app.template.json`: the viewport list and the worker domain are the same for every applet), `main.tsx`, `art -> ../ui/art` and `images.json -> ../ui/images.json`.
 
-**The network is `fetch` from `../lib/net.ts`.** A request goes to the applet's worker: its descriptor (URL, method, headers, body) is at most 1020 bytes and a response at most 256 KiB, on every device.
+**The network is `fetch` from `../lib/net.ts`.** A request goes to the applet's worker: its descriptor (URL, method, headers, body) is at most 1020 bytes on every device, and a response at most `NET_MAX_RESPONSE_BYTES`, the device's (4 MiB on Omarchy Pocket, 256 KiB on the Tab5 and the 3DS).
 
 Sample data for the store's player goes in `<name>/mock/mock.json` (format in `tools/mock.ts`; `weather/mock` and `github/mock` are complete). Make it up: no real accounts, no owner's data, no third-party pictures.
 
