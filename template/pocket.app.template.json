@@ -4,7 +4,6 @@
   "id": "__ID__",
   "title": "__TITLE__",
   "version": "0.1.0",
-  "icon": "./icon.png",
   "applet": {
     "version": 1,
     "summary": "__SUMMARY__",

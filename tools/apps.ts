@@ -4,9 +4,7 @@
 // the build's project root.
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { readPocketManifest } from "../vendor/pocketjs/framework/src/manifest/load.ts";
-import { resolve3dsBuildPlan } from "../vendor/pocketjs/tools/3ds-profile.ts";
-import { PLANS, ROOT } from "./paths.ts";
+import { PLANS, ROOT, VENDOR } from "./paths.ts";
 
 /** `app`'s app contract. */
 export function appContract(app: string): string {
@@ -44,7 +42,9 @@ export function readContract(app: string): AppContract {
 
 /** Resolve `app`'s app contract against the 3ds-dev host contract and write
  *  the plan the 3DS toolchain reads (the sims build with it). */
-export function writePlan(app: string): { path: string; output: string } {
+export async function writePlan(app: string): Promise<{ path: string; output: string }> {
+  const { readPocketManifest } = await import(resolve(VENDOR, "framework/src/manifest/load.ts"));
+  const { resolve3dsBuildPlan } = await import(resolve(VENDOR, "tools/3ds-profile.ts"));
   const plan = resolve3dsBuildPlan(readPocketManifest(appContract(app)).manifest);
   const dir = resolve(PLANS, "3ds");
   mkdirSync(dir, { recursive: true });

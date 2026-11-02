@@ -23,8 +23,8 @@ const SHOTS = process.env.POCKET_CAMERA_SHOTS;
 const GLOBALS = ["ui", "__pak", "__simHz", "frame", "link", "wifi", "camera", "net", "agent", "__pocketApp"] as const;
 const saved = new Map(GLOBALS.map((key) => [key, (globalThis as Record<string, unknown>)[key]]));
 
-beforeAll(() => {
-  GUEST = buildGuest("camera", OUT);
+beforeAll(async () => {
+  GUEST = await buildGuest("camera", OUT);
   if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 }, 120_000);
 

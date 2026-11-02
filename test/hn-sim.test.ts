@@ -25,8 +25,8 @@ const SHOTS = process.env.POCKET_SHELL_SHOTS;
 const GLOBALS = ["ui", "__pak", "__simHz", "frame", "link", "wifi", "camera", "net", "__pocketWorkerChannels", "__pocketApp"] as const;
 const saved = new Map(GLOBALS.map((key) => [key, (globalThis as Record<string, unknown>)[key]]));
 
-beforeAll(() => {
-  GUEST = buildGuest("hn", OUT);
+beforeAll(async () => {
+  GUEST = await buildGuest("hn", OUT);
   if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 }, 120_000);
 

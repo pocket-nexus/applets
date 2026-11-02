@@ -16,11 +16,14 @@
 // applet (Camera needs a camera) is left out of that applet's package.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { admissionHost, describeRejection, selectVariant } from "../vendor/pocketjs/contracts/spec/admission.ts";
-import { decodePocketPackage, encodePocketPackage, type PocketPackageVariant } from "../vendor/pocketjs/contracts/spec/pocket-package.ts";
-import { hashPocketProfile, readPocketProfile } from "../vendor/pocketjs/framework/src/profile.ts";
+import type { PocketPackageVariant } from "../vendor/pocketjs/contracts/spec/pocket-package.ts";
 import { APPS, appContract, ONLY, readContract } from "./apps.ts";
 import { DIST, PLANS, ROOT, VENDOR } from "./paths.ts";
+
+// PocketJS's package and admission code, from the checkout VENDOR names
+const { admissionHost, describeRejection, selectVariant } = await import(resolve(VENDOR, "contracts/spec/admission.ts"));
+const { decodePocketPackage, encodePocketPackage } = await import(resolve(VENDOR, "contracts/spec/pocket-package.ts"));
+const { hashPocketProfile, readPocketProfile } = await import(resolve(VENDOR, "framework/src/profile.ts"));
 
 export interface Device {
   /** The name used here, in dist/ and on the store's pages. */

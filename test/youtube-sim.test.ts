@@ -29,8 +29,8 @@ const GLOBALS = ["ui", "__pak", "__simHz", "frame", "link", "wifi", "camera", "n
 const saved = new Map(GLOBALS.map((key) => [key, (globalThis as Record<string, unknown>)[key]]));
 const SERVICE = "https://companion.pocket/youtube";
 
-beforeAll(() => {
-  GUEST = buildGuest("youtube", OUT);
+beforeAll(async () => {
+  GUEST = await buildGuest("youtube", OUT);
   if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 }, 120_000);
 

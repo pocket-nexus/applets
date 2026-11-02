@@ -25,8 +25,8 @@ const SHOTS = process.env.POCKET_DISCORD_SHOTS;
 const GLOBALS = ["ui", "__pak", "__simHz", "frame", "link", "wifi", "camera", "net", "__pocketWorkerChannels", "__pocketApp"] as const;
 const saved = new Map(GLOBALS.map((key) => [key, (globalThis as Record<string, unknown>)[key]]));
 
-beforeAll(() => {
-  GUEST = buildGuest("discord", OUT);
+beforeAll(async () => {
+  GUEST = await buildGuest("discord", OUT);
   if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 }, 120_000);
 

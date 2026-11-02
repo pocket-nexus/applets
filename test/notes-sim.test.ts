@@ -25,8 +25,8 @@ const GLOBALS = ["ui", "__pak", "__simHz", "frame", "link", "wifi", "camera", "n
 const saved = new Map(GLOBALS.map((key) => [key, (globalThis as Record<string, unknown>)[key]]));
 let fs: MemoryFs = createMemoryFs();
 
-beforeAll(() => {
-  GUEST = buildGuest("notes", OUT);
+beforeAll(async () => {
+  GUEST = await buildGuest("notes", OUT);
   if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 }, 120_000);
 

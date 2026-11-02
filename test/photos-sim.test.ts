@@ -29,8 +29,8 @@ const LIBRARY = [
   ...Array.from({ length: 4 }, (_, i) => `100NIN03/HNI_${String(i + 1).padStart(4, "0")}.JPG`),
 ];
 
-beforeAll(() => {
-  GUEST = buildGuest("photos", OUT);
+beforeAll(async () => {
+  GUEST = await buildGuest("photos", OUT);
   if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 }, 120_000);
 

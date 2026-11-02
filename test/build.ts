@@ -7,8 +7,8 @@ import { writePlan } from "../tools/apps.ts";
 import { ROOT, VENDOR } from "../tools/paths.ts";
 
 /** Build `app` into `out`; returns the guest's path without extension. */
-export function buildGuest(app: string, out: string): string {
-  const plan = writePlan(app);
+export async function buildGuest(app: string, out: string): Promise<string> {
+  const plan = await writePlan(app);
   const build = Bun.spawnSync(
     [
       process.execPath,
