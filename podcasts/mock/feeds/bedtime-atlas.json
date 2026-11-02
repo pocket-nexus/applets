@@ -1,0 +1,55 @@
+{
+ "title": "Bedtime Atlas",
+ "author": "Juniper Lane",
+ "artwork": "https://art.example.org/covers/bedtime-atlas.jpg",
+ "episodes": [
+  {
+   "guid": "bedtime-atlas-6",
+   "title": "The lighthouse cat",
+   "published": 1793264400000,
+   "durationS": 856,
+   "audioUrl": "https://media.example.org/bedtime-atlas/6-the-lighthouse-cat.mp3",
+   "description": "A cat who keeps watch over the boats. Gentle stories about faraway places, for children and tired grown-ups. Hosted by Juniper Lane."
+  },
+  {
+   "guid": "bedtime-atlas-5",
+   "title": "Snow on the desert",
+   "published": 1792656000000,
+   "durationS": 867,
+   "audioUrl": "https://media.example.org/bedtime-atlas/5-snow-on-the-desert.mp3",
+   "description": "One morning when the dunes turned white. Gentle stories about faraway places, for children and tired grown-ups. Hosted by Juniper Lane."
+  },
+  {
+   "guid": "bedtime-atlas-4",
+   "title": "The night train to the mountains",
+   "published": 1792040400000,
+   "durationS": 968,
+   "audioUrl": "https://media.example.org/bedtime-atlas/4-the-night-train-to-the-mountains.mp3",
+   "description": "Bunk beds, tunnels and a sunrise. Gentle stories about faraway places, for children and tired grown-ups. Hosted by Juniper Lane."
+  },
+  {
+   "guid": "bedtime-atlas-3",
+   "title": "The island of a thousand kites",
+   "published": 1791439200000,
+   "durationS": 1028,
+   "audioUrl": "https://media.example.org/bedtime-atlas/3-the-island-of-a-thousand-kites.mp3",
+   "description": "A festival on a windy day. Gentle stories about faraway places, for children and tired grown-ups. Hosted by Juniper Lane."
+  },
+  {
+   "guid": "bedtime-atlas-2",
+   "title": "The library that floats",
+   "published": 1790845200000,
+   "durationS": 840,
+   "audioUrl": "https://media.example.org/bedtime-atlas/2-the-library-that-floats.mp3",
+   "description": "A boat full of books visits every village on the river. Gentle stories about faraway places, for children and tired grown-ups. Hosted by Juniper Lane."
+  },
+  {
+   "guid": "bedtime-atlas-1",
+   "title": "Fireflies in the rice fields",
+   "published": 1790222400000,
+   "durationS": 817,
+   "audioUrl": "https://media.example.org/bedtime-atlas/1-fireflies-in-the-rice-fields.mp3",
+   "description": "A summer evening walk. Gentle stories about faraway places, for children and tired grown-ups. Hosted by Juniper Lane."
+  }
+ ]
+}

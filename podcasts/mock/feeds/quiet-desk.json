@@ -1,0 +1,47 @@
+{
+ "title": "The Quiet Desk",
+ "author": "Nell Harrow",
+ "artwork": "https://art.example.org/covers/quiet-desk.jpg",
+ "episodes": [
+  {
+   "guid": "quiet-desk-5",
+   "title": "A notebook for every project",
+   "published": 1792904400000,
+   "durationS": 955,
+   "audioUrl": "https://media.example.org/quiet-desk/5-a-notebook-for-every-project.mp3",
+   "description": "Paper trails and the index at the back. Short episodes about writing, focus and finishing things. Hosted by Nell Harrow."
+  },
+  {
+   "guid": "quiet-desk-4",
+   "title": "Writing badly on purpose",
+   "published": 1791698400000,
+   "durationS": 1302,
+   "audioUrl": "https://media.example.org/quiet-desk/4-writing-badly-on-purpose.mp3",
+   "description": "First drafts that are allowed to be awful. Short episodes about writing, focus and finishing things. Hosted by Nell Harrow."
+  },
+  {
+   "guid": "quiet-desk-3",
+   "title": "The two-hour morning",
+   "published": 1790496000000,
+   "durationS": 1378,
+   "audioUrl": "https://media.example.org/quiet-desk/3-the-two-hour-morning.mp3",
+   "description": "Phones in drawers and the kettle as a timer. Short episodes about writing, focus and finishing things. Hosted by Nell Harrow."
+  },
+  {
+   "guid": "quiet-desk-2",
+   "title": "Finishing is a skill",
+   "published": 1789282800000,
+   "durationS": 1041,
+   "audioUrl": "https://media.example.org/quiet-desk/2-finishing-is-a-skill.mp3",
+   "description": "The last ten percent and how to get through it. Short episodes about writing, focus and finishing things. Hosted by Nell Harrow."
+  },
+  {
+   "guid": "quiet-desk-1",
+   "title": "Letters to a younger writer",
+   "published": 1788080400000,
+   "durationS": 1043,
+   "audioUrl": "https://media.example.org/quiet-desk/1-letters-to-a-younger-writer.mp3",
+   "description": "Advice from listeners, read aloud. Short episodes about writing, focus and finishing things. Hosted by Nell Harrow."
+  }
+ ]
+}

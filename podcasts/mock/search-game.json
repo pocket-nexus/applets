@@ -1,0 +1,25 @@
+{
+ "items": [
+  {
+   "id": "1700412208",
+   "title": "Midnight Arcade",
+   "author": "Two Controllers",
+   "feedUrl": "https://feeds.example.org/midnight-arcade.xml",
+   "artwork": "https://art.example.org/covers/midnight-arcade.jpg"
+  },
+  {
+   "id": "1700412202",
+   "title": "Small Machines",
+   "author": "Teodor Lind and Ama Mensah",
+   "feedUrl": "https://feeds.example.org/small-machines.xml",
+   "artwork": "https://art.example.org/covers/small-machines.jpg"
+  },
+  {
+   "id": "1700412213",
+   "title": "Code and Coffee",
+   "author": "Lowlevel Lena",
+   "feedUrl": "https://feeds.example.org/code-and-coffee.xml",
+   "artwork": "https://art.example.org/covers/code-and-coffee.jpg"
+  }
+ ]
+}

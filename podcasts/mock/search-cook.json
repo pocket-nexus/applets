@@ -1,0 +1,25 @@
+{
+ "items": [
+  {
+   "id": "1700412205",
+   "title": "Slow Cooking, Fast Talking",
+   "author": "Okafor Kitchen Collective",
+   "feedUrl": "https://feeds.example.org/slow-cooking.xml",
+   "artwork": "https://art.example.org/covers/slow-cooking.jpg"
+  },
+  {
+   "id": "1700412211",
+   "title": "Kitchen Table Money",
+   "author": "Priya Raman",
+   "feedUrl": "https://feeds.example.org/kitchen-table-money.xml",
+   "artwork": "https://art.example.org/covers/kitchen-table-money.jpg"
+  },
+  {
+   "id": "1700412204",
+   "title": "Field Notes from the Garden",
+   "author": "Rosa Delmar",
+   "feedUrl": "https://feeds.example.org/field-notes-garden.xml",
+   "artwork": "https://art.example.org/covers/field-notes-garden.jpg"
+  }
+ ]
+}

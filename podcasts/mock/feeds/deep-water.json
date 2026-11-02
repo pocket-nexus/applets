@@ -1,0 +1,55 @@
+{
+ "title": "Deep Water Mysteries",
+ "author": "Marlow Audio",
+ "artwork": "https://art.example.org/covers/deep-water.jpg",
+ "episodes": [
+  {
+   "guid": "deep-water-41",
+   "title": "41: Fish that make their own light",
+   "published": 1793419200000,
+   "durationS": 2297,
+   "audioUrl": "https://media.example.org/deep-water/41-fish-that-make-their-own-light.mp3",
+   "description": "Lanterns, lures and counterillumination. Ocean science from the surface to the trenches. Hosted by Marlow Audio."
+  },
+  {
+   "guid": "deep-water-40",
+   "title": "40: Whale songs change every year",
+   "published": 1792216800000,
+   "durationS": 3579,
+   "audioUrl": "https://media.example.org/deep-water/40-whale-songs-change-every-year.mp3",
+   "description": "Who starts the new tune and how it spreads. Ocean science from the surface to the trenches. Hosted by Marlow Audio."
+  },
+  {
+   "guid": "deep-water-39",
+   "title": "39: The trench that swallowed a camera",
+   "published": 1791014400000,
+   "durationS": 2337,
+   "audioUrl": "https://media.example.org/deep-water/39-the-trench-that-swallowed-a-camera.mp3",
+   "description": "Pressure, cold and a long wait for data. Ocean science from the surface to the trenches. Hosted by Marlow Audio."
+  },
+  {
+   "guid": "deep-water-38",
+   "title": "38: Kelp forests come back",
+   "published": 1789790400000,
+   "durationS": 3425,
+   "audioUrl": "https://media.example.org/deep-water/38-kelp-forests-come-back.mp3",
+   "description": "Urchins, otters and divers with hammers. Ocean science from the surface to the trenches. Hosted by Marlow Audio."
+  },
+  {
+   "guid": "deep-water-37",
+   "title": "37: Mapping the sea floor by sound",
+   "published": 1788591600000,
+   "durationS": 2514,
+   "audioUrl": "https://media.example.org/deep-water/37-mapping-the-sea-floor-by-sound.mp3",
+   "description": "Sonar, ships and the gaps still left. Ocean science from the surface to the trenches. Hosted by Marlow Audio."
+  },
+  {
+   "guid": "deep-water-36",
+   "title": "36: Mailbag: is the ocean getting louder",
+   "published": 1787371200000,
+   "durationS": 3237,
+   "audioUrl": "https://media.example.org/deep-water/36-mailbag-is-the-ocean-getting-louder.mp3",
+   "description": "Ships, storms and listening stations. Ocean science from the surface to the trenches. Hosted by Marlow Audio."
+  }
+ ]
+}

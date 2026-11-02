@@ -1,0 +1,19 @@
+{
+ "items": [
+  {
+   "name": "Tidewater Cafe, Quay Street, Old Town",
+   "lat": 44.05279,
+   "lon": -31.34645
+  },
+  {
+   "name": "Kettle and Crumb, Park Row, Port Lumen",
+   "lat": 44.05957,
+   "lon": -31.33895
+  },
+  {
+   "name": "Lookout Coffee, Hill Road, Port Lumen",
+   "lat": 44.06391,
+   "lon": -31.35645
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+ "items": [
+  {
+   "name": "Port Lumen, Lumen Island",
+   "lat": 44.05803,
+   "lon": -31.34745
+  },
+  {
+   "name": "Harbor Market, Quay Street, Old Town, Port Lumen",
+   "lat": 44.05234,
+   "lon": -31.3442
+  },
+  {
+   "name": "Gull Rock Lighthouse, Gull Rock, Lumen Island",
+   "lat": 44.07223,
+   "lon": -31.31782
+  },
+  {
+   "name": "Lantern Park, Port Lumen",
+   "lat": 44.06138,
+   "lon": -31.34095
+  },
+  {
+   "name": "Museum of the Sea, Quay Street, Old Town",
+   "lat": 44.05351,
+   "lon": -31.34807
+  },
+  {
+   "name": "West Sands Beach, Lumen Island",
+   "lat": 44.05894,
+   "lon": -31.37308
+  }
+ ]
+}

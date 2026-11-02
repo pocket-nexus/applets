@@ -1,0 +1,25 @@
+{
+ "items": [
+  {
+   "id": "1700412212",
+   "title": "Deep Water Mysteries",
+   "author": "Marlow Audio",
+   "feedUrl": "https://feeds.example.org/deep-water.xml",
+   "artwork": "https://art.example.org/covers/deep-water.jpg"
+  },
+  {
+   "id": "1700412203",
+   "title": "Harbor Town Stories",
+   "author": "Harbor Daily",
+   "feedUrl": "https://feeds.example.org/harbor-town-stories.xml",
+   "artwork": "https://art.example.org/covers/harbor-town-stories.jpg"
+  },
+  {
+   "id": "1700412209",
+   "title": "Trail and Tarp",
+   "author": "Kofi Asante",
+   "feedUrl": "https://feeds.example.org/trail-and-tarp.xml",
+   "artwork": "https://art.example.org/covers/trail-and-tarp.jpg"
+  }
+ ]
+}

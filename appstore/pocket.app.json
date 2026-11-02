@@ -1,0 +1,90 @@
+{
+  "$schema": "https://pocketjs.dev/schema/pocket-2.json",
+  "pocket": 2,
+  "id": "dev.pocket-nexus.store",
+  "title": "Store",
+  "version": "0.2.0",
+  "applet": {
+    "version": 1,
+    "summary": "Applets for this device, from applets.pocket.nexus.",
+    "services": [
+      "appstore"
+    ]
+  },
+  "engine": {
+    "capabilities": {
+      "requires": [
+        "text.glyphs.baked",
+        "input.buttons",
+        "display.auxiliary",
+        "input.touch.auxiliary",
+        "net.http"
+      ],
+      "enhances": [
+        "input.analog.left",
+        "system.agent"
+      ]
+    }
+  },
+  "app": {
+    "entry": "appstore/main.tsx",
+    "output": "store-main",
+    "framework": "solid",
+    "surfaces": {
+      "auxiliary": {
+        "adaptive": {
+          "min": [
+            320,
+            240
+          ],
+          "max": [
+            640,
+            720
+          ]
+        }
+      }
+    },
+    "viewport": {
+      "fixed": {
+        "logical": [
+          [
+            400,
+            240
+          ],
+          [
+            512,
+            384
+          ]
+        ],
+        "presentation": "native"
+      }
+    }
+  },
+  "domains": {
+    "worker": {
+      "entry": "lib/net-worker.ts",
+      "nodes": [
+        {
+          "name": "http",
+          "kind": "http"
+        }
+      ],
+      "channels": [
+        {
+          "name": "request",
+          "kind": "ring",
+          "direction": "ui-to-worker",
+          "recordBytes": 1024,
+          "capacity": 4
+        },
+        {
+          "name": "response",
+          "kind": "ring",
+          "direction": "worker-to-ui",
+          "recordBytes": 1024,
+          "capacity": 8
+        }
+      ]
+    }
+  }
+}

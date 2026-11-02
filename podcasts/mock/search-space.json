@@ -1,0 +1,32 @@
+{
+ "items": [
+  {
+   "id": "1700412206",
+   "title": "Orbit Weekly",
+   "author": "Science Minute Network",
+   "feedUrl": "https://feeds.example.org/orbit-weekly.xml",
+   "artwork": "https://art.example.org/covers/orbit-weekly.jpg"
+  },
+  {
+   "id": "1700412212",
+   "title": "Deep Water Mysteries",
+   "author": "Marlow Audio",
+   "feedUrl": "https://feeds.example.org/deep-water.xml",
+   "artwork": "https://art.example.org/covers/deep-water.jpg"
+  },
+  {
+   "id": "1700412202",
+   "title": "Small Machines",
+   "author": "Teodor Lind and Ama Mensah",
+   "feedUrl": "https://feeds.example.org/small-machines.xml",
+   "artwork": "https://art.example.org/covers/small-machines.jpg"
+  },
+  {
+   "id": "1700412214",
+   "title": "Bedtime Atlas",
+   "author": "Juniper Lane",
+   "feedUrl": "https://feeds.example.org/bedtime-atlas.xml",
+   "artwork": "https://art.example.org/covers/bedtime-atlas.jpg"
+  }
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "title": "Field Notes from the Garden",
+ "author": "Rosa Delmar",
+ "artwork": "https://art.example.org/covers/field-notes-garden.jpg",
+ "episodes": [
+  {
+   "guid": "field-notes-garden-203",
+   "title": "203: Putting the beds to sleep for winter",
+   "published": 1793610000000,
+   "durationS": 1580,
+   "audioUrl": "https://media.example.org/field-notes-garden/203-putting-the-beds-to-sleep-for-winter.mp3",
+   "description": "Mulch, garlic and the last green tomatoes. A small garden, one season at a time. Hosted by Rosa Delmar."
+  },
+  {
+   "guid": "field-notes-garden-202",
+   "title": "202: Saving seeds from this year's beans",
+   "published": 1793005200000,
+   "durationS": 1258,
+   "audioUrl": "https://media.example.org/field-notes-garden/202-saving-seeds-from-this-year-s-beans.mp3",
+   "description": "Drying, labeling and the jar that got mixed up. A small garden, one season at a time. Hosted by Rosa Delmar."
+  },
+  {
+   "guid": "field-notes-garden-201",
+   "title": "201: Leaves are not litter",
+   "published": 1792389600000,
+   "durationS": 1735,
+   "audioUrl": "https://media.example.org/field-notes-garden/201-leaves-are-not-litter.mp3",
+   "description": "Why the leaf pile stays and what lives in it. A small garden, one season at a time. Hosted by Rosa Delmar."
+  },
+  {
+   "guid": "field-notes-garden-200",
+   "title": "200: Frost dates and stubborn peppers",
+   "published": 1791781200000,
+   "durationS": 1115,
+   "audioUrl": "https://media.example.org/field-notes-garden/200-frost-dates-and-stubborn-peppers.mp3",
+   "description": "Cloches, fleece and knowing when to let go. A small garden, one season at a time. Hosted by Rosa Delmar."
+  },
+  {
+   "guid": "field-notes-garden-199",
+   "title": "199: A pond the size of a bathtub",
+   "published": 1791176400000,
+   "durationS": 1310,
+   "audioUrl": "https://media.example.org/field-notes-garden/199-a-pond-the-size-of-a-bathtub.mp3",
+   "description": "Frogs arrived in nine days. A small garden, one season at a time. Hosted by Rosa Delmar."
+  },
+  {
+   "guid": "field-notes-garden-198",
+   "title": "198: Compost that does not smell",
+   "published": 1790575200000,
+   "durationS": 1990,
+   "audioUrl": "https://media.example.org/field-notes-garden/198-compost-that-does-not-smell.mp3",
+   "description": "Browns, greens and turning schedules. A small garden, one season at a time. Hosted by Rosa Delmar."
+  },
+  {
+   "guid": "field-notes-garden-197",
+   "title": "197: Listener gardens: balconies",
+   "published": 1789970400000,
+   "durationS": 1270,
+   "audioUrl": "https://media.example.org/field-notes-garden/197-listener-gardens-balconies.mp3",
+   "description": "Three gardens that fit on a ledge. A small garden, one season at a time. Hosted by Rosa Delmar."
+  },
+  {
+   "guid": "field-notes-garden-196",
+   "title": "196: Pruning the apple tree we inherited",
+   "published": 1789365600000,
+   "durationS": 1333,
+   "audioUrl": "https://media.example.org/field-notes-garden/196-pruning-the-apple-tree-we-inherited.mp3",
+   "description": "Water sprouts, crossing branches and courage. A small garden, one season at a time. Hosted by Rosa Delmar."
+  },
+  {
+   "guid": "field-notes-garden-195",
+   "title": "195: The bees came back",
+   "published": 1788760800000,
+   "durationS": 1305,
+   "audioUrl": "https://media.example.org/field-notes-garden/195-the-bees-came-back.mp3",
+   "description": "A quiet spring and a loud summer. A small garden, one season at a time. Hosted by Rosa Delmar."
+  }
+ ]
+}

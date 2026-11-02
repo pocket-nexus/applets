@@ -1,0 +1,87 @@
+{
+ "title": "Lantern Hours",
+ "author": "Ines Varga",
+ "artwork": "https://art.example.org/covers/lantern-hours.jpg",
+ "episodes": [
+  {
+   "guid": "lantern-hours-112",
+   "title": "112: The bookbinder who repairs dictionaries",
+   "published": 1793509200000,
+   "durationS": 4010,
+   "audioUrl": "https://media.example.org/lantern-hours/112-the-bookbinder-who-repairs-dictionaries.mp3",
+   "description": "A conversation about thread, glue and the words people look up most. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-111",
+   "title": "111: Glass, heat and patience",
+   "published": 1792918800000,
+   "durationS": 3924,
+   "audioUrl": "https://media.example.org/lantern-hours/111-glass-heat-and-patience.mp3",
+   "description": "A glassblower on the first hundred bowls that cracked. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-110",
+   "title": "110: Building a boat in a city apartment",
+   "published": 1792306800000,
+   "durationS": 4100,
+   "audioUrl": "https://media.example.org/lantern-hours/110-building-a-boat-in-a-city-apartment.mp3",
+   "description": "Twelve years, one hallway and a crane on moving day. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-109",
+   "title": "109: The last typewriter repair shop on the street",
+   "published": 1791694800000,
+   "durationS": 3295,
+   "audioUrl": "https://media.example.org/lantern-hours/109-the-last-typewriter-repair-shop-on-the-s.mp3",
+   "description": "Ribbons, springs and customers who write letters. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-108",
+   "title": "108: Knitting code into sweaters",
+   "published": 1791104400000,
+   "durationS": 3978,
+   "audioUrl": "https://media.example.org/lantern-hours/108-knitting-code-into-sweaters.mp3",
+   "description": "Pattern charts as programs, and the bugs that show up as holes. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-107",
+   "title": "107: Restoring a church organ, pipe by pipe",
+   "published": 1790481600000,
+   "durationS": 3384,
+   "audioUrl": "https://media.example.org/lantern-hours/107-restoring-a-church-organ-pipe-by-pipe.mp3",
+   "description": "Two years inside a machine that breathes. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-106",
+   "title": "106: A potter on throwing the same mug ten thousand times",
+   "published": 1789880400000,
+   "durationS": 4119,
+   "audioUrl": "https://media.example.org/lantern-hours/106-a-potter-on-throwing-the-same-mug-ten-th.mp3",
+   "description": "Repetition, wobble and the mug that finally felt right. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-105",
+   "title": "105: Listener questions: tools we keep",
+   "published": 1789275600000,
+   "durationS": 2923,
+   "audioUrl": "https://media.example.org/lantern-hours/105-listener-questions-tools-we-keep.mp3",
+   "description": "The tools guests could not part with, and why. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-104",
+   "title": "104: Making paper from garden weeds",
+   "published": 1788685200000,
+   "durationS": 3349,
+   "audioUrl": "https://media.example.org/lantern-hours/104-making-paper-from-garden-weeds.mp3",
+   "description": "Nettles, iris leaves and a kitchen blender. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  },
+  {
+   "guid": "lantern-hours-103",
+   "title": "103: The clockmaker's apprentice",
+   "published": 1788076800000,
+   "durationS": 4491,
+   "audioUrl": "https://media.example.org/lantern-hours/103-the-clockmaker-s-apprentice.mp3",
+   "description": "What a first year at the bench looks like. Late conversations with people who make things by hand. Hosted by Ines Varga."
+  }
+ ]
+}

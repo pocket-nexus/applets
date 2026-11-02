@@ -1,0 +1,47 @@
+{
+ "title": "Unfinished Symphony",
+ "author": "Tidewater Strings",
+ "artwork": "https://art.example.org/covers/unfinished-symphony.jpg",
+ "episodes": [
+  {
+   "guid": "unfinished-symphony-5",
+   "title": "Tuning wars",
+   "published": 1792994400000,
+   "durationS": 1874,
+   "audioUrl": "https://media.example.org/unfinished-symphony/5-tuning-wars.mp3",
+   "description": "Four players, one A and twenty minutes. A string quartet rehearses in public and talks between takes. Hosted by Tidewater Strings."
+  },
+  {
+   "guid": "unfinished-symphony-4",
+   "title": "Learning a piece backwards",
+   "published": 1791784800000,
+   "durationS": 2037,
+   "audioUrl": "https://media.example.org/unfinished-symphony/4-learning-a-piece-backwards.mp3",
+   "description": "Starting at the last page and why it works. A string quartet rehearses in public and talks between takes. Hosted by Tidewater Strings."
+  },
+  {
+   "guid": "unfinished-symphony-3",
+   "title": "The cello that came from a barn",
+   "published": 1790582400000,
+   "durationS": 2760,
+   "audioUrl": "https://media.example.org/unfinished-symphony/3-the-cello-that-came-from-a-barn.mp3",
+   "description": "Cracks, cleats and a new bridge. A string quartet rehearses in public and talks between takes. Hosted by Tidewater Strings."
+  },
+  {
+   "guid": "unfinished-symphony-2",
+   "title": "Playing for a room of toddlers",
+   "published": 1789362000000,
+   "durationS": 2784,
+   "audioUrl": "https://media.example.org/unfinished-symphony/2-playing-for-a-room-of-toddlers.mp3",
+   "description": "The quietest audience we ever had, for four minutes. A string quartet rehearses in public and talks between takes. Hosted by Tidewater Strings."
+  },
+  {
+   "guid": "unfinished-symphony-1",
+   "title": "Writing our first piece together",
+   "published": 1788152400000,
+   "durationS": 2092,
+   "audioUrl": "https://media.example.org/unfinished-symphony/1-writing-our-first-piece-together.mp3",
+   "description": "Who gets the melody, and the fight about it. A string quartet rehearses in public and talks between takes. Hosted by Tidewater Strings."
+  }
+ ]
+}

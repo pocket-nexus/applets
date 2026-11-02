@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.pocket/
+.pocket-build/
+.wrangler/
+tools/icons/.render-*.html
+tools/icons/prof-*/

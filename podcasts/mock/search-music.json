@@ -1,0 +1,25 @@
+{
+ "items": [
+  {
+   "id": "1700412210",
+   "title": "Unfinished Symphony",
+   "author": "Tidewater Strings",
+   "feedUrl": "https://feeds.example.org/unfinished-symphony.xml",
+   "artwork": "https://art.example.org/covers/unfinished-symphony.jpg"
+  },
+  {
+   "id": "1700412201",
+   "title": "Lantern Hours",
+   "author": "Ines Varga",
+   "feedUrl": "https://feeds.example.org/lantern-hours.xml",
+   "artwork": "https://art.example.org/covers/lantern-hours.jpg"
+  },
+  {
+   "id": "1700412214",
+   "title": "Bedtime Atlas",
+   "author": "Juniper Lane",
+   "feedUrl": "https://feeds.example.org/bedtime-atlas.xml",
+   "artwork": "https://art.example.org/covers/bedtime-atlas.jpg"
+  }
+ ]
+}

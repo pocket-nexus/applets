@@ -1,0 +1,707 @@
+{
+  "store": {
+    "podcasts": {
+      "subscriptions": [
+        {
+          "id": "1700412201",
+          "title": "Lantern Hours",
+          "author": "Ines Varga",
+          "feedUrl": "https://feeds.example.org/lantern-hours.xml",
+          "artwork": "https://art.example.org/covers/lantern-hours.jpg"
+        },
+        {
+          "id": "1700412206",
+          "title": "Orbit Weekly",
+          "author": "Science Minute Network",
+          "feedUrl": "https://feeds.example.org/orbit-weekly.xml",
+          "artwork": "https://art.example.org/covers/orbit-weekly.jpg"
+        },
+        {
+          "id": "1700412204",
+          "title": "Field Notes from the Garden",
+          "author": "Rosa Delmar",
+          "feedUrl": "https://feeds.example.org/field-notes-garden.xml",
+          "artwork": "https://art.example.org/covers/field-notes-garden.jpg"
+        },
+        {
+          "id": "1700412202",
+          "title": "Small Machines",
+          "author": "Teodor Lind and Ama Mensah",
+          "feedUrl": "https://feeds.example.org/small-machines.xml",
+          "artwork": "https://art.example.org/covers/small-machines.jpg"
+        },
+        {
+          "id": "1700412208",
+          "title": "Midnight Arcade",
+          "author": "Two Controllers",
+          "feedUrl": "https://feeds.example.org/midnight-arcade.xml",
+          "artwork": "https://art.example.org/covers/midnight-arcade.jpg"
+        },
+        {
+          "id": "1700412212",
+          "title": "Deep Water Mysteries",
+          "author": "Marlow Audio",
+          "feedUrl": "https://feeds.example.org/deep-water.xml",
+          "artwork": "https://art.example.org/covers/deep-water.jpg"
+        },
+        {
+          "id": "1700412214",
+          "title": "Bedtime Atlas",
+          "author": "Juniper Lane",
+          "feedUrl": "https://feeds.example.org/bedtime-atlas.xml",
+          "artwork": "https://art.example.org/covers/bedtime-atlas.jpg"
+        }
+      ],
+      "positions": {
+        "https://media.example.org/lantern-hours/112-the-bookbinder-who-repairs-dictionaries.mp3": 1520,
+        "https://media.example.org/orbit-weekly/317-small-satellites-big-pictures.mp3": 642,
+        "https://media.example.org/field-notes-garden/203-putting-the-beds-to-sleep-for-winter.mp3": 305
+      }
+    }
+  },
+  "routes": [
+    {
+      "url": "https://companion.pocket/podcasts/search?q=garden*",
+      "delay": 450,
+      "file": "search-garden.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Garden*",
+      "delay": 450,
+      "file": "search-garden.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=plant*",
+      "delay": 450,
+      "file": "search-garden.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Plant*",
+      "delay": 450,
+      "file": "search-garden.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=grow*",
+      "delay": 450,
+      "file": "search-garden.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Grow*",
+      "delay": 450,
+      "file": "search-garden.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=space*",
+      "delay": 450,
+      "file": "search-space.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Space*",
+      "delay": 450,
+      "file": "search-space.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=orbit*",
+      "delay": 450,
+      "file": "search-space.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Orbit*",
+      "delay": 450,
+      "file": "search-space.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=star*",
+      "delay": 450,
+      "file": "search-space.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Star*",
+      "delay": 450,
+      "file": "search-space.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=science*",
+      "delay": 450,
+      "file": "search-space.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Science*",
+      "delay": 450,
+      "file": "search-space.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=ocean*",
+      "delay": 450,
+      "file": "search-ocean.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Ocean*",
+      "delay": 450,
+      "file": "search-ocean.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=sea*",
+      "delay": 450,
+      "file": "search-ocean.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Sea*",
+      "delay": 450,
+      "file": "search-ocean.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=water*",
+      "delay": 450,
+      "file": "search-ocean.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Water*",
+      "delay": 450,
+      "file": "search-ocean.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=fish*",
+      "delay": 450,
+      "file": "search-ocean.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Fish*",
+      "delay": 450,
+      "file": "search-ocean.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=game*",
+      "delay": 450,
+      "file": "search-game.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Game*",
+      "delay": 450,
+      "file": "search-game.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=play*",
+      "delay": 450,
+      "file": "search-game.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Play*",
+      "delay": 450,
+      "file": "search-game.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=arcade*",
+      "delay": 450,
+      "file": "search-game.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Arcade*",
+      "delay": 450,
+      "file": "search-game.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=cook*",
+      "delay": 450,
+      "file": "search-cook.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Cook*",
+      "delay": 450,
+      "file": "search-cook.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=food*",
+      "delay": 450,
+      "file": "search-cook.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Food*",
+      "delay": 450,
+      "file": "search-cook.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=kitchen*",
+      "delay": 450,
+      "file": "search-cook.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Kitchen*",
+      "delay": 450,
+      "file": "search-cook.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=bread*",
+      "delay": 450,
+      "file": "search-cook.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Bread*",
+      "delay": 450,
+      "file": "search-cook.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=music*",
+      "delay": 450,
+      "file": "search-music.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Music*",
+      "delay": 450,
+      "file": "search-music.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=song*",
+      "delay": 450,
+      "file": "search-music.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Song*",
+      "delay": 450,
+      "file": "search-music.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=string*",
+      "delay": 450,
+      "file": "search-music.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=String*",
+      "delay": 450,
+      "file": "search-music.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=money*",
+      "delay": 450,
+      "file": "search-money.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Money*",
+      "delay": 450,
+      "file": "search-money.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=budget*",
+      "delay": 450,
+      "file": "search-money.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Budget*",
+      "delay": 450,
+      "file": "search-money.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=save*",
+      "delay": 450,
+      "file": "search-money.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Save*",
+      "delay": 450,
+      "file": "search-money.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=code*",
+      "delay": 450,
+      "file": "search-code.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Code*",
+      "delay": 450,
+      "file": "search-code.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=program*",
+      "delay": 450,
+      "file": "search-code.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Program*",
+      "delay": 450,
+      "file": "search-code.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=tech*",
+      "delay": 450,
+      "file": "search-code.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Tech*",
+      "delay": 450,
+      "file": "search-code.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=computer*",
+      "delay": 450,
+      "file": "search-code.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Computer*",
+      "delay": 450,
+      "file": "search-code.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=story*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Story*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=stories*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Stories*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=history*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=History*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=sleep*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Sleep*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=kids*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=Kids*",
+      "delay": 450,
+      "file": "search-story.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/search?q=*",
+      "delay": 450,
+      "file": "search-any.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Flantern-hours.xml",
+      "delay": 300,
+      "file": "feeds/lantern-hours.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fsmall-machines.xml",
+      "delay": 300,
+      "file": "feeds/small-machines.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fharbor-town-stories.xml",
+      "delay": 300,
+      "file": "feeds/harbor-town-stories.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Ffield-notes-garden.xml",
+      "delay": 300,
+      "file": "feeds/field-notes-garden.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fslow-cooking.xml",
+      "delay": 300,
+      "file": "feeds/slow-cooking.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Forbit-weekly.xml",
+      "delay": 300,
+      "file": "feeds/orbit-weekly.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fquiet-desk.xml",
+      "delay": 300,
+      "file": "feeds/quiet-desk.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fmidnight-arcade.xml",
+      "delay": 300,
+      "file": "feeds/midnight-arcade.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Ftrail-and-tarp.xml",
+      "delay": 300,
+      "file": "feeds/trail-and-tarp.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Funfinished-symphony.xml",
+      "delay": 300,
+      "file": "feeds/unfinished-symphony.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fkitchen-table-money.xml",
+      "delay": 300,
+      "file": "feeds/kitchen-table-money.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fdeep-water.xml",
+      "delay": 300,
+      "file": "feeds/deep-water.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fcode-and-coffee.xml",
+      "delay": 300,
+      "file": "feeds/code-and-coffee.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/episodes?feed=*%2Fbedtime-atlas.xml",
+      "delay": 300,
+      "file": "feeds/bedtime-atlas.json"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Flantern-hours.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/lantern-hours-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Flantern-hours.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/lantern-hours-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fsmall-machines.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/small-machines-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fsmall-machines.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/small-machines-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fharbor-town-stories.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/harbor-town-stories-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fharbor-town-stories.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/harbor-town-stories-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Ffield-notes-garden.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/field-notes-garden-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Ffield-notes-garden.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/field-notes-garden-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fslow-cooking.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/slow-cooking-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fslow-cooking.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/slow-cooking-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Forbit-weekly.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/orbit-weekly-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Forbit-weekly.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/orbit-weekly-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fquiet-desk.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/quiet-desk-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fquiet-desk.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/quiet-desk-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fmidnight-arcade.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/midnight-arcade-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fmidnight-arcade.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/midnight-arcade-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Ftrail-and-tarp.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/trail-and-tarp-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Ftrail-and-tarp.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/trail-and-tarp-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Funfinished-symphony.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/unfinished-symphony-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Funfinished-symphony.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/unfinished-symphony-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fkitchen-table-money.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/kitchen-table-money-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fkitchen-table-money.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/kitchen-table-money-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fdeep-water.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/deep-water-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fdeep-water.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/deep-water-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fcode-and-coffee.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/code-and-coffee-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fcode-and-coffee.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/code-and-coffee-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fbedtime-atlas.jpg&size=128",
+      "delay": 80,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/bedtime-atlas-128.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/art?url=*%2Fbedtime-atlas.jpg&size=256",
+      "delay": 120,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "art/bedtime-atlas-256.img"
+    },
+    {
+      "url": "https://companion.pocket/podcasts/play?*",
+      "status": 503,
+      "delay": 300,
+      "json": {
+        "error": "Playback needs a device: this sample data has feeds and artwork but no audio stream."
+      }
+    },
+    {
+      "url": "https://companion.pocket/podcasts/stop",
+      "json": {
+        "stopped": false
+      }
+    }
+  ]
+}

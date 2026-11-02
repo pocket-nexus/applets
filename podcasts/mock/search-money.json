@@ -1,0 +1,18 @@
+{
+ "items": [
+  {
+   "id": "1700412211",
+   "title": "Kitchen Table Money",
+   "author": "Priya Raman",
+   "feedUrl": "https://feeds.example.org/kitchen-table-money.xml",
+   "artwork": "https://art.example.org/covers/kitchen-table-money.jpg"
+  },
+  {
+   "id": "1700412207",
+   "title": "The Quiet Desk",
+   "author": "Nell Harrow",
+   "feedUrl": "https://feeds.example.org/quiet-desk.xml",
+   "artwork": "https://art.example.org/covers/quiet-desk.jpg"
+  }
+ ]
+}

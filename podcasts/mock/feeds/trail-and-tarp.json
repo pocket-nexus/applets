@@ -1,0 +1,47 @@
+{
+ "title": "Trail and Tarp",
+ "author": "Kofi Asante",
+ "artwork": "https://art.example.org/covers/trail-and-tarp.jpg",
+ "episodes": [
+  {
+   "guid": "trail-and-tarp-5",
+   "title": "Three nights on the coast path",
+   "published": 1792652400000,
+   "durationS": 2469,
+   "audioUrl": "https://media.example.org/trail-and-tarp/5-three-nights-on-the-coast-path.mp3",
+   "description": "Fog, cliffs and a stove that would not light. Walking, camping and the gear that matters. Hosted by Kofi Asante."
+  },
+  {
+   "guid": "trail-and-tarp-4",
+   "title": "Packing light without being cold",
+   "published": 1791442800000,
+   "durationS": 2560,
+   "audioUrl": "https://media.example.org/trail-and-tarp/4-packing-light-without-being-cold.mp3",
+   "description": "Layers, quilts and the extra sock rule. Walking, camping and the gear that matters. Hosted by Kofi Asante."
+  },
+  {
+   "guid": "trail-and-tarp-3",
+   "title": "Maps, compasses and dead batteries",
+   "published": 1790240400000,
+   "durationS": 2297,
+   "audioUrl": "https://media.example.org/trail-and-tarp/3-maps-compasses-and-dead-batteries.mp3",
+   "description": "Navigating when the phone gives up. Walking, camping and the gear that matters. Hosted by Kofi Asante."
+  },
+  {
+   "guid": "trail-and-tarp-2",
+   "title": "Rain all week",
+   "published": 1789016400000,
+   "durationS": 2467,
+   "audioUrl": "https://media.example.org/trail-and-tarp/2-rain-all-week.mp3",
+   "description": "Tarps, pitching tricks and morale. Walking, camping and the gear that matters. Hosted by Kofi Asante."
+  },
+  {
+   "guid": "trail-and-tarp-1",
+   "title": "Winter camping for beginners",
+   "published": 1787814000000,
+   "durationS": 2461,
+   "audioUrl": "https://media.example.org/trail-and-tarp/1-winter-camping-for-beginners.mp3",
+   "description": "Short days, long nights and warm water bottles. Walking, camping and the gear that matters. Hosted by Kofi Asante."
+  }
+ ]
+}

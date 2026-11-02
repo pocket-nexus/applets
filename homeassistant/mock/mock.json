@@ -1,0 +1,40 @@
+{
+  "routes": [
+    {
+      "url": "https://companion.pocket/homeassistant/setup",
+      "json": {
+        "url": "http://homeassistant.local:8123",
+        "ready": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://companion.pocket/homeassistant/setup",
+      "delay": 400,
+      "json": {
+        "ok": true,
+        "message": "API running."
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://companion.pocket/homeassistant/forget",
+      "json": {
+        "ok": true
+      }
+    },
+    {
+      "url": "https://companion.pocket/homeassistant/states*",
+      "delay": 120,
+      "file": "states.json"
+    },
+    {
+      "method": "POST",
+      "url": "https://companion.pocket/homeassistant/call",
+      "delay": 150,
+      "json": {
+        "ok": true
+      }
+    }
+  ]
+}

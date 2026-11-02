@@ -1,0 +1,55 @@
+{
+ "title": "Harbor Town Stories",
+ "author": "Harbor Daily",
+ "artwork": "https://art.example.org/covers/harbor-town-stories.jpg",
+ "episodes": [
+  {
+   "guid": "harbor-town-stories-6",
+   "title": "The winter the harbor froze",
+   "published": 1793343600000,
+   "durationS": 2296,
+   "audioUrl": "https://media.example.org/harbor-town-stories/6-the-winter-the-harbor-froze.mp3",
+   "description": "Skating to the lighthouse and the ferry that waited three weeks. Local history told by the people who remember it. Hosted by Harbor Daily."
+  },
+  {
+   "guid": "harbor-town-stories-5",
+   "title": "Who built the night market",
+   "published": 1792742400000,
+   "durationS": 1803,
+   "audioUrl": "https://media.example.org/harbor-town-stories/5-who-built-the-night-market.mp3",
+   "description": "Six families, one parking lot and a lot of lanterns. Local history told by the people who remember it. Hosted by Harbor Daily."
+  },
+  {
+   "guid": "harbor-town-stories-4",
+   "title": "The bakery that never closed",
+   "published": 1792134000000,
+   "durationS": 1856,
+   "audioUrl": "https://media.example.org/harbor-town-stories/4-the-bakery-that-never-closed.mp3",
+   "description": "Ninety years of bread and one flood. Local history told by the people who remember it. Hosted by Harbor Daily."
+  },
+  {
+   "guid": "harbor-town-stories-3",
+   "title": "Lighthouse keepers' logbooks",
+   "published": 1791525600000,
+   "durationS": 1476,
+   "audioUrl": "https://media.example.org/harbor-town-stories/3-lighthouse-keepers-logbooks.mp3",
+   "description": "What the keepers wrote down when nothing happened. Local history told by the people who remember it. Hosted by Harbor Daily."
+  },
+  {
+   "guid": "harbor-town-stories-2",
+   "title": "The tram line under the park",
+   "published": 1790928000000,
+   "durationS": 2121,
+   "audioUrl": "https://media.example.org/harbor-town-stories/2-the-tram-line-under-the-park.mp3",
+   "description": "Tracks that are still there, a meter down. Local history told by the people who remember it. Hosted by Harbor Daily."
+  },
+  {
+   "guid": "harbor-town-stories-1",
+   "title": "Fishing families, three generations",
+   "published": 1790312400000,
+   "durationS": 1682,
+   "audioUrl": "https://media.example.org/harbor-town-stories/1-fishing-families-three-generations.mp3",
+   "description": "Nets, engines and leaving the water. Local history told by the people who remember it. Hosted by Harbor Daily."
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "title": "Small Machines",
+ "author": "Teodor Lind and Ama Mensah",
+ "artwork": "https://art.example.org/covers/small-machines.jpg",
+ "episodes": [
+  {
+   "guid": "small-machines-64",
+   "title": "64: A weather station that runs a year on one cell",
+   "published": 1793246400000,
+   "durationS": 3427,
+   "audioUrl": "https://media.example.org/small-machines/64-a-weather-station-that-runs-a-year-on-on.mp3",
+   "description": "Sleep modes, e-ink and the sensor that drained everything. Tiny computers, odd sensors and the projects that grow around them. Hosted by Teodor Lind and Ama Mensah."
+  },
+  {
+   "guid": "small-machines-63",
+   "title": "63: Why our robot vacuum maps the cat",
+   "published": 1792040400000,
+   "durationS": 2225,
+   "audioUrl": "https://media.example.org/small-machines/63-why-our-robot-vacuum-maps-the-cat.mp3",
+   "description": "Lidar, odometry and a very patient pet. Tiny computers, odd sensors and the projects that grow around them. Hosted by Teodor Lind and Ama Mensah."
+  },
+  {
+   "guid": "small-machines-62",
+   "title": "62: Building a pocket synth from a kit",
+   "published": 1790827200000,
+   "durationS": 2878,
+   "audioUrl": "https://media.example.org/small-machines/62-building-a-pocket-synth-from-a-kit.mp3",
+   "description": "Solder bridges, envelopes and one loud mistake. Tiny computers, odd sensors and the projects that grow around them. Hosted by Teodor Lind and Ama Mensah."
+  },
+  {
+   "guid": "small-machines-61",
+   "title": "61: The smallest web server we could make",
+   "published": 1789624800000,
+   "durationS": 2253,
+   "audioUrl": "https://media.example.org/small-machines/61-the-smallest-web-server-we-could-make.mp3",
+   "description": "Four kilobytes of RAM and a stubborn TCP stack. Tiny computers, odd sensors and the projects that grow around them. Hosted by Teodor Lind and Ama Mensah."
+  },
+  {
+   "guid": "small-machines-60",
+   "title": "60: Soil sensors that tell the truth",
+   "published": 1788408000000,
+   "durationS": 2072,
+   "audioUrl": "https://media.example.org/small-machines/60-soil-sensors-that-tell-the-truth.mp3",
+   "description": "Capacitive versus resistive, and what rust does to both. Tiny computers, odd sensors and the projects that grow around them. Hosted by Teodor Lind and Ama Mensah."
+  },
+  {
+   "guid": "small-machines-59",
+   "title": "59: Mailbag: batteries, enclosures, and glue",
+   "published": 1787198400000,
+   "durationS": 3347,
+   "audioUrl": "https://media.example.org/small-machines/59-mailbag-batteries-enclosures-and-glue.mp3",
+   "description": "Listener questions on making projects survive outdoors. Tiny computers, odd sensors and the projects that grow around them. Hosted by Teodor Lind and Ama Mensah."
+  },
+  {
+   "guid": "small-machines-58",
+   "title": "58: Retro handhelds and new screens",
+   "published": 1785988800000,
+   "durationS": 2446,
+   "audioUrl": "https://media.example.org/small-machines/58-retro-handhelds-and-new-screens.mp3",
+   "description": "Swapping panels, ribbon cables and backlight bleed. Tiny computers, odd sensors and the projects that grow around them. Hosted by Teodor Lind and Ama Mensah."
+  },
+  {
+   "guid": "small-machines-57",
+   "title": "57: A door chime that knows who is home",
+   "published": 1784793600000,
+   "durationS": 2152,
+   "audioUrl": "https://media.example.org/small-machines/57-a-door-chime-that-knows-who-is-home.mp3",
+   "description": "Bluetooth beacons, privacy and false alarms. Tiny computers, odd sensors and the projects that grow around them. Hosted by Teodor Lind and Ama Mensah."
+  }
+ ]
+}

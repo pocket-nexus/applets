@@ -1,0 +1,24 @@
+{
+ "items": [
+  {
+   "name": "Harbor Market, Quay Street, Old Town, Port Lumen",
+   "lat": 44.05234,
+   "lon": -31.3442
+  },
+  {
+   "name": "Ferry Terminal, Pier Road, Port Lumen",
+   "lat": 44.04944,
+   "lon": -31.34245
+  },
+  {
+   "name": "Harbor View Hotel, Pier Road, Port Lumen",
+   "lat": 44.0517,
+   "lon": -31.34095
+  },
+  {
+   "name": "Port Lumen, Lumen Island",
+   "lat": 44.05803,
+   "lon": -31.34745
+  }
+ ]
+}

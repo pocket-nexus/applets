@@ -1,0 +1,25 @@
+{
+ "items": [
+  {
+   "id": "1700412204",
+   "title": "Field Notes from the Garden",
+   "author": "Rosa Delmar",
+   "feedUrl": "https://feeds.example.org/field-notes-garden.xml",
+   "artwork": "https://art.example.org/covers/field-notes-garden.jpg"
+  },
+  {
+   "id": "1700412209",
+   "title": "Trail and Tarp",
+   "author": "Kofi Asante",
+   "feedUrl": "https://feeds.example.org/trail-and-tarp.xml",
+   "artwork": "https://art.example.org/covers/trail-and-tarp.jpg"
+  },
+  {
+   "id": "1700412205",
+   "title": "Slow Cooking, Fast Talking",
+   "author": "Okafor Kitchen Collective",
+   "feedUrl": "https://feeds.example.org/slow-cooking.xml",
+   "artwork": "https://art.example.org/covers/slow-cooking.jpg"
+  }
+ ]
+}

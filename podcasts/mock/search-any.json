@@ -1,0 +1,102 @@
+{
+ "items": [
+  {
+   "id": "1700412201",
+   "title": "Lantern Hours",
+   "author": "Ines Varga",
+   "feedUrl": "https://feeds.example.org/lantern-hours.xml",
+   "artwork": "https://art.example.org/covers/lantern-hours.jpg"
+  },
+  {
+   "id": "1700412206",
+   "title": "Orbit Weekly",
+   "author": "Science Minute Network",
+   "feedUrl": "https://feeds.example.org/orbit-weekly.xml",
+   "artwork": "https://art.example.org/covers/orbit-weekly.jpg"
+  },
+  {
+   "id": "1700412205",
+   "title": "Slow Cooking, Fast Talking",
+   "author": "Okafor Kitchen Collective",
+   "feedUrl": "https://feeds.example.org/slow-cooking.xml",
+   "artwork": "https://art.example.org/covers/slow-cooking.jpg"
+  },
+  {
+   "id": "1700412212",
+   "title": "Deep Water Mysteries",
+   "author": "Marlow Audio",
+   "feedUrl": "https://feeds.example.org/deep-water.xml",
+   "artwork": "https://art.example.org/covers/deep-water.jpg"
+  },
+  {
+   "id": "1700412213",
+   "title": "Code and Coffee",
+   "author": "Lowlevel Lena",
+   "feedUrl": "https://feeds.example.org/code-and-coffee.xml",
+   "artwork": "https://art.example.org/covers/code-and-coffee.jpg"
+  },
+  {
+   "id": "1700412208",
+   "title": "Midnight Arcade",
+   "author": "Two Controllers",
+   "feedUrl": "https://feeds.example.org/midnight-arcade.xml",
+   "artwork": "https://art.example.org/covers/midnight-arcade.jpg"
+  },
+  {
+   "id": "1700412204",
+   "title": "Field Notes from the Garden",
+   "author": "Rosa Delmar",
+   "feedUrl": "https://feeds.example.org/field-notes-garden.xml",
+   "artwork": "https://art.example.org/covers/field-notes-garden.jpg"
+  },
+  {
+   "id": "1700412207",
+   "title": "The Quiet Desk",
+   "author": "Nell Harrow",
+   "feedUrl": "https://feeds.example.org/quiet-desk.xml",
+   "artwork": "https://art.example.org/covers/quiet-desk.jpg"
+  },
+  {
+   "id": "1700412209",
+   "title": "Trail and Tarp",
+   "author": "Kofi Asante",
+   "feedUrl": "https://feeds.example.org/trail-and-tarp.xml",
+   "artwork": "https://art.example.org/covers/trail-and-tarp.jpg"
+  },
+  {
+   "id": "1700412203",
+   "title": "Harbor Town Stories",
+   "author": "Harbor Daily",
+   "feedUrl": "https://feeds.example.org/harbor-town-stories.xml",
+   "artwork": "https://art.example.org/covers/harbor-town-stories.jpg"
+  },
+  {
+   "id": "1700412210",
+   "title": "Unfinished Symphony",
+   "author": "Tidewater Strings",
+   "feedUrl": "https://feeds.example.org/unfinished-symphony.xml",
+   "artwork": "https://art.example.org/covers/unfinished-symphony.jpg"
+  },
+  {
+   "id": "1700412211",
+   "title": "Kitchen Table Money",
+   "author": "Priya Raman",
+   "feedUrl": "https://feeds.example.org/kitchen-table-money.xml",
+   "artwork": "https://art.example.org/covers/kitchen-table-money.jpg"
+  },
+  {
+   "id": "1700412202",
+   "title": "Small Machines",
+   "author": "Teodor Lind and Ama Mensah",
+   "feedUrl": "https://feeds.example.org/small-machines.xml",
+   "artwork": "https://art.example.org/covers/small-machines.jpg"
+  },
+  {
+   "id": "1700412214",
+   "title": "Bedtime Atlas",
+   "author": "Juniper Lane",
+   "feedUrl": "https://feeds.example.org/bedtime-atlas.xml",
+   "artwork": "https://art.example.org/covers/bedtime-atlas.jpg"
+  }
+ ]
+}

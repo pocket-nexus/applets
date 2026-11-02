@@ -1,0 +1,55 @@
+{
+ "title": "Code and Coffee",
+ "author": "Lowlevel Lena",
+ "artwork": "https://art.example.org/covers/code-and-coffee.jpg",
+ "episodes": [
+  {
+   "guid": "code-and-coffee-156",
+   "title": "156: A text editor in 300 lines",
+   "published": 1793592000000,
+   "durationS": 2308,
+   "audioUrl": "https://media.example.org/code-and-coffee/156-a-text-editor-in-300-lines.mp3",
+   "description": "Gap buffers, terminals and the redraw loop. Systems programming without the gatekeeping. Hosted by Lowlevel Lena."
+  },
+  {
+   "guid": "code-and-coffee-155",
+   "title": "155: What a linker does all day",
+   "published": 1792987200000,
+   "durationS": 1943,
+   "audioUrl": "https://media.example.org/code-and-coffee/155-what-a-linker-does-all-day.mp3",
+   "description": "Symbols, sections and one missing underscore. Systems programming without the gatekeeping. Hosted by Lowlevel Lena."
+  },
+  {
+   "guid": "code-and-coffee-154",
+   "title": "154: Memory leaks I have loved",
+   "published": 1792382400000,
+   "durationS": 2208,
+   "audioUrl": "https://media.example.org/code-and-coffee/154-memory-leaks-i-have-loved.mp3",
+   "description": "Four hours with a profiler and a mug of cold coffee. Systems programming without the gatekeeping. Hosted by Lowlevel Lena."
+  },
+  {
+   "guid": "code-and-coffee-153",
+   "title": "153: Writing your first allocator",
+   "published": 1791781200000,
+   "durationS": 2319,
+   "audioUrl": "https://media.example.org/code-and-coffee/153-writing-your-first-allocator.mp3",
+   "description": "Free lists, alignment and why it is slow. Systems programming without the gatekeeping. Hosted by Lowlevel Lena."
+  },
+  {
+   "guid": "code-and-coffee-152",
+   "title": "152: Interrupts for the rest of us",
+   "published": 1791187200000,
+   "durationS": 2600,
+   "audioUrl": "https://media.example.org/code-and-coffee/152-interrupts-for-the-rest-of-us.mp3",
+   "description": "What happens when the timer fires. Systems programming without the gatekeeping. Hosted by Lowlevel Lena."
+  },
+  {
+   "guid": "code-and-coffee-151",
+   "title": "151: Listener code review",
+   "published": 1790582400000,
+   "durationS": 2389,
+   "audioUrl": "https://media.example.org/code-and-coffee/151-listener-code-review.mp3",
+   "description": "Three programs sent in, read gently. Systems programming without the gatekeeping. Hosted by Lowlevel Lena."
+  }
+ ]
+}

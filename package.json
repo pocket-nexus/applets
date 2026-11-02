@@ -1,0 +1,22 @@
+{
+  "name": "pocket-applets",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "description": "Pocket Applets: one source for every device that runs them, and the store at applets.pocket.nexus",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pocket-nexus/applets.git"
+  },
+  "scripts": {
+    "setup": "git submodule update --init vendor/pocketjs && bun install --cwd vendor/pocketjs --frozen-lockfile && bun tools/setup.ts",
+    "build": "bun tools/build.ts",
+    "typecheck": "bun vendor/pocketjs/node_modules/typescript/bin/tsc --noEmit",
+    "test": "bun vendor/pocketjs/tools/wasm.ts && bun test --conditions=browser ./test ./lib ./tools ./store/test",
+    "check": "bun run typecheck && bun run test"
+  },
+  "devDependencies": {
+    "wrangler": "4.156.2"
+  }
+}

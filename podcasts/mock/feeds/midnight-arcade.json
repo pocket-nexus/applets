@@ -1,0 +1,63 @@
+{
+ "title": "Midnight Arcade",
+ "author": "Two Controllers",
+ "artwork": "https://art.example.org/covers/midnight-arcade.jpg",
+ "episodes": [
+  {
+   "guid": "midnight-arcade-87",
+   "title": "87: Moss and Mortar after a hundred days",
+   "published": 1793167200000,
+   "durationS": 3810,
+   "audioUrl": "https://media.example.org/midnight-arcade/87-moss-and-mortar-after-a-hundred-days.mp3",
+   "description": "Hard mode, a flooded cellar and the best farm we built. Games we cannot stop playing, and the ones we gave up on. Hosted by Two Controllers."
+  },
+  {
+   "guid": "midnight-arcade-86",
+   "title": "86: Speedrunners explain their routes",
+   "published": 1792562400000,
+   "durationS": 3671,
+   "audioUrl": "https://media.example.org/midnight-arcade/86-speedrunners-explain-their-routes.mp3",
+   "description": "Frame-perfect jumps and practice saves. Games we cannot stop playing, and the ones we gave up on. Hosted by Two Controllers."
+  },
+  {
+   "guid": "midnight-arcade-85",
+   "title": "85: Puzzle Room 7, no hints",
+   "published": 1791968400000,
+   "durationS": 4089,
+   "audioUrl": "https://media.example.org/midnight-arcade/85-puzzle-room-7-no-hints.mp3",
+   "description": "Two hosts, one controller each and a lot of silence. Games we cannot stop playing, and the ones we gave up on. Hosted by Two Controllers."
+  },
+  {
+   "guid": "midnight-arcade-84",
+   "title": "84: The cozy games pile of shame",
+   "published": 1791356400000,
+   "durationS": 3507,
+   "audioUrl": "https://media.example.org/midnight-arcade/84-the-cozy-games-pile-of-shame.mp3",
+   "description": "Games we bought, started and loved for an hour. Games we cannot stop playing, and the ones we gave up on. Hosted by Two Controllers."
+  },
+  {
+   "guid": "midnight-arcade-83",
+   "title": "83: Restoring handhelds from flea markets",
+   "published": 1790748000000,
+   "durationS": 4960,
+   "audioUrl": "https://media.example.org/midnight-arcade/83-restoring-handhelds-from-flea-markets.mp3",
+   "description": "Corroded contacts and a happy ending. Games we cannot stop playing, and the ones we gave up on. Hosted by Two Controllers."
+  },
+  {
+   "guid": "midnight-arcade-82",
+   "title": "82: Lumen Caverns secrets",
+   "published": 1790139600000,
+   "durationS": 3314,
+   "audioUrl": "https://media.example.org/midnight-arcade/82-lumen-caverns-secrets.mp3",
+   "description": "Every hidden room we found, and the one we missed. Games we cannot stop playing, and the ones we gave up on. Hosted by Two Controllers."
+  },
+  {
+   "guid": "midnight-arcade-81",
+   "title": "81: Game jams: 48 hours, 3 people",
+   "published": 1789538400000,
+   "durationS": 4415,
+   "audioUrl": "https://media.example.org/midnight-arcade/81-game-jams-48-hours-3-people.mp3",
+   "description": "Scope, sleep and the bug in the final build. Games we cannot stop playing, and the ones we gave up on. Hosted by Two Controllers."
+  }
+ ]
+}

@@ -1,0 +1,719 @@
+{
+ "entities": [
+  {
+   "id": "automation.leak_alert",
+   "domain": "automation",
+   "name": "Leak Alert to Phones",
+   "state": "on",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "automation.morning_blinds",
+   "domain": "automation",
+   "name": "Open Blinds at 7:30",
+   "state": "on",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "automation.porch_light_sunset",
+   "domain": "automation",
+   "name": "Porch Light at Sunset",
+   "state": "on",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "automation.eco_when_away",
+   "domain": "automation",
+   "name": "Thermostat Eco When Away",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "binary_sensor.back_door",
+   "domain": "binary_sensor",
+   "name": "Back Door",
+   "state": "off",
+   "unit": "",
+   "attributes": {
+    "device_class": "door"
+   }
+  },
+  {
+   "id": "binary_sensor.basement_leak",
+   "domain": "binary_sensor",
+   "name": "Basement Leak",
+   "state": "off",
+   "unit": "",
+   "attributes": {
+    "device_class": "moisture"
+   }
+  },
+  {
+   "id": "binary_sensor.front_door",
+   "domain": "binary_sensor",
+   "name": "Front Door",
+   "state": "off",
+   "unit": "",
+   "attributes": {
+    "device_class": "door"
+   }
+  },
+  {
+   "id": "binary_sensor.hallway_motion",
+   "domain": "binary_sensor",
+   "name": "Hallway Motion",
+   "state": "on",
+   "unit": "",
+   "attributes": {
+    "device_class": "motion"
+   }
+  },
+  {
+   "id": "binary_sensor.kitchen_smoke",
+   "domain": "binary_sensor",
+   "name": "Kitchen Smoke",
+   "state": "off",
+   "unit": "",
+   "attributes": {
+    "device_class": "smoke"
+   }
+  },
+  {
+   "id": "binary_sensor.kitchen_window",
+   "domain": "binary_sensor",
+   "name": "Kitchen Window",
+   "state": "on",
+   "unit": "",
+   "attributes": {
+    "device_class": "window"
+   }
+  },
+  {
+   "id": "binary_sensor.mailbox",
+   "domain": "binary_sensor",
+   "name": "Mailbox",
+   "state": "on",
+   "unit": "",
+   "attributes": {
+    "device_class": "opening"
+   }
+  },
+  {
+   "id": "climate.bathroom_floor",
+   "domain": "climate",
+   "name": "Bathroom Floor Heating",
+   "state": "off",
+   "unit": "",
+   "attributes": {
+    "temperature": 24,
+    "current_temperature": 18.2,
+    "hvac_modes": [
+     "off",
+     "heat"
+    ],
+    "hvac_mode": "off"
+   }
+  },
+  {
+   "id": "climate.bedroom",
+   "domain": "climate",
+   "name": "Bedroom",
+   "state": "auto",
+   "unit": "",
+   "attributes": {
+    "temperature": 19,
+    "current_temperature": 19.4,
+    "hvac_modes": [
+     "off",
+     "heat",
+     "auto"
+    ],
+    "hvac_mode": "auto"
+   }
+  },
+  {
+   "id": "climate.greenhouse",
+   "domain": "climate",
+   "name": "Greenhouse Heater",
+   "state": "heat",
+   "unit": "",
+   "attributes": {
+    "temperature": 12,
+    "current_temperature": 11.6,
+    "hvac_modes": [
+     "off",
+     "heat"
+    ],
+    "hvac_mode": "heat"
+   }
+  },
+  {
+   "id": "climate.living_room",
+   "domain": "climate",
+   "name": "Living Room Thermostat",
+   "state": "heat",
+   "unit": "",
+   "attributes": {
+    "temperature": 21,
+    "current_temperature": 20.5,
+    "hvac_modes": [
+     "off",
+     "heat",
+     "cool",
+     "auto"
+    ],
+    "hvac_mode": "heat"
+   }
+  },
+  {
+   "id": "climate.office_heat_pump",
+   "domain": "climate",
+   "name": "Office Heat Pump",
+   "state": "cool",
+   "unit": "",
+   "attributes": {
+    "temperature": 23,
+    "current_temperature": 24.1,
+    "hvac_modes": [
+     "off",
+     "cool",
+     "heat",
+     "dry",
+     "fan_only"
+    ],
+    "hvac_mode": "cool"
+   }
+  },
+  {
+   "id": "cover.bedroom_curtains",
+   "domain": "cover",
+   "name": "Bedroom Curtains",
+   "state": "closed",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "cover.garage_door",
+   "domain": "cover",
+   "name": "Garage Door",
+   "state": "closed",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "cover.living_room_blinds",
+   "domain": "cover",
+   "name": "Living Room Blinds",
+   "state": "open",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "fan.bathroom_extractor",
+   "domain": "fan",
+   "name": "Bathroom Extractor",
+   "state": "on",
+   "unit": "",
+   "attributes": {
+    "percentage": 60
+   }
+  },
+  {
+   "id": "fan.bedroom_ceiling",
+   "domain": "fan",
+   "name": "Bedroom Ceiling Fan",
+   "state": "off",
+   "unit": "",
+   "attributes": {
+    "percentage": 0
+   }
+  },
+  {
+   "id": "input_boolean.guest_mode",
+   "domain": "input_boolean",
+   "name": "Guest Mode",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "input_boolean.quiet_hours",
+   "domain": "input_boolean",
+   "name": "Quiet Hours",
+   "state": "on",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "input_boolean.vacation_mode",
+   "domain": "input_boolean",
+   "name": "Vacation Mode",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "light.bathroom_mirror",
+   "domain": "light",
+   "name": "Bathroom Mirror",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "light.bedroom_main",
+   "domain": "light",
+   "name": "Bedroom",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "light.bedside_left",
+   "domain": "light",
+   "name": "Bedside Left",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "light.bedside_right",
+   "domain": "light",
+   "name": "Bedside Right",
+   "state": "on",
+   "unit": "",
+   "attributes": {
+    "brightness": 89
+   }
+  },
+  {
+   "id": "light.dining_table",
+   "domain": "light",
+   "name": "Dining Table",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "light.porch",
+   "domain": "light",
+   "name": "Front Porch",
+   "state": "off",
+   "unit": "",
+   "icon": "mdi:outdoor-lamp",
+   "attributes": {}
+  },
+  {
+   "id": "light.garden_path",
+   "domain": "light",
+   "name": "Garden Path",
+   "state": "unavailable",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "light.hallway",
+   "domain": "light",
+   "name": "Hallway",
+   "state": "on",
+   "unit": "",
+   "attributes": {
+    "brightness": 51
+   }
+  },
+  {
+   "id": "light.kitchen_pendants",
+   "domain": "light",
+   "name": "Kitchen Pendants",
+   "state": "off",
+   "unit": "",
+   "icon": "mdi:ceiling-light-multiple",
+   "attributes": {}
+  },
+  {
+   "id": "light.kitchen_under_cabinet",
+   "domain": "light",
+   "name": "Kitchen Under-Cabinet Strip",
+   "state": "on",
+   "unit": "",
+   "icon": "mdi:led-strip-variant",
+   "attributes": {
+    "brightness": 77
+   }
+  },
+  {
+   "id": "light.living_room_ceiling",
+   "domain": "light",
+   "name": "Living Room Ceiling",
+   "state": "on",
+   "unit": "",
+   "icon": "mdi:ceiling-light",
+   "attributes": {
+    "brightness": 204
+   }
+  },
+  {
+   "id": "light.living_room_floor_lamp",
+   "domain": "light",
+   "name": "Living Room Floor Lamp",
+   "state": "on",
+   "unit": "",
+   "icon": "mdi:floor-lamp",
+   "attributes": {
+    "brightness": 115
+   }
+  },
+  {
+   "id": "light.office_desk",
+   "domain": "light",
+   "name": "Office Desk Lamp",
+   "state": "on",
+   "unit": "",
+   "icon": "mdi:desk-lamp",
+   "attributes": {
+    "brightness": 230
+   }
+  },
+  {
+   "id": "light.stairs",
+   "domain": "light",
+   "name": "Stairs Night Light",
+   "state": "on",
+   "unit": "",
+   "attributes": {
+    "brightness": 20
+   }
+  },
+  {
+   "id": "lock.back_door",
+   "domain": "lock",
+   "name": "Back Door",
+   "state": "unlocked",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "lock.front_door",
+   "domain": "lock",
+   "name": "Front Door",
+   "state": "locked",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "lock.garden_shed",
+   "domain": "lock",
+   "name": "Garden Shed",
+   "state": "locked",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "media_player.bedroom_tv",
+   "domain": "media_player",
+   "name": "Bedroom TV",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "media_player.garden_speaker",
+   "domain": "media_player",
+   "name": "Garden Speaker",
+   "state": "playing",
+   "unit": "",
+   "attributes": {
+    "media_title": "Copper Kettle Waltz",
+    "media_artist": "Mira Okonjo Trio"
+   }
+  },
+  {
+   "id": "media_player.kitchen_radio",
+   "domain": "media_player",
+   "name": "Kitchen Radio",
+   "state": "paused",
+   "unit": "",
+   "attributes": {
+    "media_title": "Morning Bulletin",
+    "media_artist": "Harbor FM"
+   }
+  },
+  {
+   "id": "media_player.living_room_speaker",
+   "domain": "media_player",
+   "name": "Living Room Speaker",
+   "state": "playing",
+   "unit": "",
+   "attributes": {
+    "media_title": "Tidepool Lullaby",
+    "media_artist": "The Lantern Choir"
+   }
+  },
+  {
+   "id": "media_player.office_speaker",
+   "domain": "media_player",
+   "name": "Office Speaker",
+   "state": "idle",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "scene.all_off",
+   "domain": "scene",
+   "name": "All Off",
+   "state": "scening",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "scene.dinner",
+   "domain": "scene",
+   "name": "Dinner",
+   "state": "scening",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "scene.good_morning",
+   "domain": "scene",
+   "name": "Good Morning",
+   "state": "scening",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "scene.movie_night",
+   "domain": "scene",
+   "name": "Movie Night",
+   "state": "scening",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "scene.reading",
+   "domain": "scene",
+   "name": "Reading",
+   "state": "scening",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "script.goodnight",
+   "domain": "script",
+   "name": "Goodnight Routine",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "script.hallway_chime",
+   "domain": "script",
+   "name": "Ring the Hallway Chime",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "script.water_garden",
+   "domain": "script",
+   "name": "Water the Garden",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "sensor.barometer",
+   "domain": "sensor",
+   "name": "Barometer",
+   "state": "1012",
+   "unit": "hPa",
+   "attributes": {
+    "device_class": "pressure"
+   }
+  },
+  {
+   "id": "sensor.bedroom_temperature",
+   "domain": "sensor",
+   "name": "Bedroom Temperature",
+   "state": "19.3",
+   "unit": "C",
+   "attributes": {
+    "device_class": "temperature"
+   }
+  },
+  {
+   "id": "sensor.energy_today",
+   "domain": "sensor",
+   "name": "Energy Today",
+   "state": "7.83",
+   "unit": "kWh",
+   "attributes": {
+    "device_class": "energy"
+   }
+  },
+  {
+   "id": "sensor.front_door_lock_battery",
+   "domain": "sensor",
+   "name": "Front Door Lock Battery",
+   "state": "87",
+   "unit": "%",
+   "attributes": {
+    "device_class": "battery",
+    "battery_level": 87
+   }
+  },
+  {
+   "id": "sensor.hallway_motion_battery",
+   "domain": "sensor",
+   "name": "Hallway Motion Battery",
+   "state": "14",
+   "unit": "%",
+   "attributes": {
+    "device_class": "battery",
+    "battery_level": 14
+   }
+  },
+  {
+   "id": "sensor.house_power",
+   "domain": "sensor",
+   "name": "House Power",
+   "state": "412",
+   "unit": "W",
+   "attributes": {
+    "device_class": "power"
+   }
+  },
+  {
+   "id": "sensor.living_room_humidity",
+   "domain": "sensor",
+   "name": "Living Room Humidity",
+   "state": "43",
+   "unit": "%",
+   "attributes": {
+    "device_class": "humidity"
+   }
+  },
+  {
+   "id": "sensor.living_room_temperature",
+   "domain": "sensor",
+   "name": "Living Room Temperature",
+   "state": "20.6",
+   "unit": "C",
+   "attributes": {
+    "device_class": "temperature"
+   }
+  },
+  {
+   "id": "sensor.office_co2",
+   "domain": "sensor",
+   "name": "Office CO2",
+   "state": "612",
+   "unit": "ppm",
+   "attributes": {
+    "device_class": "carbon_dioxide"
+   }
+  },
+  {
+   "id": "sensor.outdoor_humidity",
+   "domain": "sensor",
+   "name": "Outdoor Humidity",
+   "state": "81",
+   "unit": "%",
+   "attributes": {
+    "device_class": "humidity"
+   }
+  },
+  {
+   "id": "sensor.outdoor_temperature",
+   "domain": "sensor",
+   "name": "Outdoor Temperature",
+   "state": "8.4",
+   "unit": "C",
+   "attributes": {
+    "device_class": "temperature"
+   }
+  },
+  {
+   "id": "sensor.rain_today",
+   "domain": "sensor",
+   "name": "Rain Today",
+   "state": "2.4",
+   "unit": "mm",
+   "attributes": {
+    "device_class": "precipitation"
+   }
+  },
+  {
+   "id": "sensor.solar_power",
+   "domain": "sensor",
+   "name": "Solar Panels",
+   "state": "1240",
+   "unit": "W",
+   "attributes": {
+    "device_class": "power"
+   }
+  },
+  {
+   "id": "sensor.washing_machine",
+   "domain": "sensor",
+   "name": "Washing Machine",
+   "state": "Rinsing",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "switch.basement_dehumidifier",
+   "domain": "switch",
+   "name": "Basement Dehumidifier",
+   "state": "on",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "switch.coffee_machine",
+   "domain": "switch",
+   "name": "Coffee Machine",
+   "state": "off",
+   "unit": "",
+   "icon": "mdi:coffee-maker",
+   "attributes": {}
+  },
+  {
+   "id": "switch.garden_fountain",
+   "domain": "switch",
+   "name": "Garden Fountain",
+   "state": "off",
+   "unit": "",
+   "icon": "mdi:fountain",
+   "attributes": {}
+  },
+  {
+   "id": "switch.towel_rail",
+   "domain": "switch",
+   "name": "Heated Towel Rail",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "switch.office_monitors",
+   "domain": "switch",
+   "name": "Office Monitors",
+   "state": "on",
+   "unit": "",
+   "attributes": {}
+  },
+  {
+   "id": "switch.printer_3d",
+   "domain": "switch",
+   "name": "Workshop 3D Printer",
+   "state": "off",
+   "unit": "",
+   "attributes": {}
+  }
+ ]
+}

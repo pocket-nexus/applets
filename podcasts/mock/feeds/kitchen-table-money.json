@@ -1,0 +1,47 @@
+{
+ "title": "Kitchen Table Money",
+ "author": "Priya Raman",
+ "artwork": "https://art.example.org/covers/kitchen-table-money.jpg",
+ "episodes": [
+  {
+   "guid": "kitchen-table-money-5",
+   "title": "The envelope budget, a year later",
+   "published": 1793509200000,
+   "durationS": 2039,
+   "audioUrl": "https://media.example.org/kitchen-table-money/5-the-envelope-budget-a-year-later.mp3",
+   "description": "What worked, what leaked and the fun money envelope. Plain talk about budgets, savings and money conversations at home. Hosted by Priya Raman."
+  },
+  {
+   "guid": "kitchen-table-money-4",
+   "title": "Talking about money with your parents",
+   "published": 1792904400000,
+   "durationS": 1496,
+   "audioUrl": "https://media.example.org/kitchen-table-money/4-talking-about-money-with-your-parents.mp3",
+   "description": "Scripts, timing and staying kind. Plain talk about budgets, savings and money conversations at home. Hosted by Priya Raman."
+  },
+  {
+   "guid": "kitchen-table-money-3",
+   "title": "Emergency funds for irregular income",
+   "published": 1792306800000,
+   "durationS": 1869,
+   "audioUrl": "https://media.example.org/kitchen-table-money/3-emergency-funds-for-irregular-income.mp3",
+   "description": "Freelancers, seasons and buffers. Plain talk about budgets, savings and money conversations at home. Hosted by Priya Raman."
+  },
+  {
+   "guid": "kitchen-table-money-2",
+   "title": "Subscriptions audit",
+   "published": 1791702000000,
+   "durationS": 1450,
+   "audioUrl": "https://media.example.org/kitchen-table-money/2-subscriptions-audit.mp3",
+   "description": "We found eleven we forgot about. Plain talk about budgets, savings and money conversations at home. Hosted by Priya Raman."
+  },
+  {
+   "guid": "kitchen-table-money-1",
+   "title": "Saving for a bike, a roof and a trip",
+   "published": 1791090000000,
+   "durationS": 1631,
+   "audioUrl": "https://media.example.org/kitchen-table-money/1-saving-for-a-bike-a-roof-and-a-trip.mp3",
+   "description": "Buckets, priorities and patience. Plain talk about budgets, savings and money conversations at home. Hosted by Priya Raman."
+  }
+ ]
+}

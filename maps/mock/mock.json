@@ -1,0 +1,1507 @@
+{
+  "store": {
+    "maps": {
+      "lat": 44.05713,
+      "lon": -31.34682,
+      "zoom": 14
+    }
+  },
+  "routes": [
+    {
+      "url": "https://companion.pocket/maps/tile?z=4&x=6&y=5",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/4-6-5.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=5&x=13&y=11",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/5-13-11.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=6&x=26&y=23",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/6-26-23.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=7&x=52&y=46",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/7-52-46.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=8&x=105&y=93",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/8-105-93.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=9&x=211&y=186",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/9-211-186.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=10&x=422&y=372",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/10-422-372.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=11&x=845&y=744",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/11-845-744.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=12&x=1691&y=1488",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/12-1691-1488.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=13&x=3382&y=2976",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/13-3382-2976.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=13&x=3383&y=2976",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/13-3383-2976.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=13&x=3382&y=2977",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/13-3382-2977.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=13&x=3383&y=2977",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/13-3383-2977.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6764&y=5952",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6764-5952.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6765&y=5952",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6765-5952.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6766&y=5952",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6766-5952.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6764&y=5953",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6764-5953.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6765&y=5953",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6765-5953.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6766&y=5953",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6766-5953.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6764&y=5954",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6764-5954.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6765&y=5954",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6765-5954.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=14&x=6766&y=5954",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/14-6766-5954.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13528&y=11905",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13528-11905.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13529&y=11905",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13529-11905.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13530&y=11905",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13530-11905.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13531&y=11905",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13531-11905.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13533&y=11905",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13533-11905.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13528&y=11906",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13528-11906.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13529&y=11906",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13529-11906.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13530&y=11906",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13530-11906.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13531&y=11906",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13531-11906.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13532&y=11906",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13532-11906.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13533&y=11906",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13533-11906.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13528&y=11907",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13528-11907.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13529&y=11907",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13529-11907.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13530&y=11907",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13530-11907.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13531&y=11907",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13531-11907.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13532&y=11907",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13532-11907.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13533&y=11907",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13533-11907.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13528&y=11908",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13528-11908.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13529&y=11908",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13529-11908.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13530&y=11908",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13530-11908.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13531&y=11908",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13531-11908.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13532&y=11908",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13532-11908.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13529&y=11909",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13529-11909.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13530&y=11909",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13530-11909.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=15&x=13531&y=11909",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/15-13531-11909.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27057&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27057-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27058&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27058-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27059&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27059-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27060&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27060-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27061&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27061-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27062&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27062-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27063&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27063-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27066&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27066-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27067&y=23811",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27067-23811.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27056&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27056-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27057&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27057-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27058&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27058-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27059&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27059-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27060&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27060-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27061&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27061-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27062&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27062-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27063&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27063-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27064&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27064-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27065&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27065-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27066&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27066-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27067&y=23812",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27067-23812.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27056&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27056-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27057&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27057-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27058&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27058-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27059&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27059-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27060&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27060-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27061&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27061-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27062&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27062-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27063&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27063-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27064&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27064-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27065&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27065-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27066&y=23813",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27066-23813.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27056&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27056-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27057&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27057-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27058&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27058-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27059&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27059-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27060&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27060-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27061&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27061-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27062&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27062-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27063&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27063-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27064&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27064-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27065&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27065-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27066&y=23814",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27066-23814.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27056&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27056-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27057&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27057-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27058&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27058-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27059&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27059-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27060&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27060-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27061&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27061-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27062&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27062-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27063&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27063-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27064&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27064-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27065&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27065-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27066&y=23815",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27066-23815.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27056&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27056-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27057&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27057-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27058&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27058-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27059&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27059-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27060&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27060-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27061&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27061-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27062&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27062-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27063&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27063-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27064&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27064-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27065&y=23816",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27065-23816.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27057&y=23817",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27057-23817.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27058&y=23817",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27058-23817.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27059&y=23817",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27059-23817.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27060&y=23817",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27060-23817.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27061&y=23817",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27061-23817.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27062&y=23817",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27062-23817.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27063&y=23817",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27063-23817.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27059&y=23818",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27059-23818.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27060&y=23818",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27060-23818.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27062&y=23818",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27062-23818.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=16&x=27063&y=23818",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/16-27063-23818.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=17&x=5411*&y=4762*",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/town-block.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=17&x=5412*&y=4762*",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/town-block.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=17&x=5413*&y=4762*",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/town-block.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=17&x=5411*&y=4763*",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/town-block.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=17&x=5412*&y=4763*",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/town-block.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?z=17&x=5413*&y=4763*",
+      "delay": 70,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/town-block.img"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=cafe*",
+      "delay": 400,
+      "file": "geocode-cafe.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Cafe*",
+      "delay": 400,
+      "file": "geocode-cafe.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=coffee*",
+      "delay": 400,
+      "file": "geocode-cafe.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Coffee*",
+      "delay": 400,
+      "file": "geocode-cafe.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=harbor*",
+      "delay": 400,
+      "file": "geocode-harbor.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Harbor*",
+      "delay": 400,
+      "file": "geocode-harbor.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=harbour*",
+      "delay": 400,
+      "file": "geocode-harbor.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Harbour*",
+      "delay": 400,
+      "file": "geocode-harbor.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=port*",
+      "delay": 400,
+      "file": "geocode-harbor.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Port*",
+      "delay": 400,
+      "file": "geocode-harbor.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=quay*",
+      "delay": 400,
+      "file": "geocode-harbor.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Quay*",
+      "delay": 400,
+      "file": "geocode-harbor.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=market*",
+      "delay": 400,
+      "file": "geocode-market.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Market*",
+      "delay": 400,
+      "file": "geocode-market.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=shop*",
+      "delay": 400,
+      "file": "geocode-market.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Shop*",
+      "delay": 400,
+      "file": "geocode-market.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=bakery*",
+      "delay": 400,
+      "file": "geocode-market.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Bakery*",
+      "delay": 400,
+      "file": "geocode-market.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=bread*",
+      "delay": 400,
+      "file": "geocode-market.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Bread*",
+      "delay": 400,
+      "file": "geocode-market.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=ferry*",
+      "delay": 400,
+      "file": "geocode-ferry.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Ferry*",
+      "delay": 400,
+      "file": "geocode-ferry.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=boat*",
+      "delay": 400,
+      "file": "geocode-ferry.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Boat*",
+      "delay": 400,
+      "file": "geocode-ferry.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=pier*",
+      "delay": 400,
+      "file": "geocode-ferry.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Pier*",
+      "delay": 400,
+      "file": "geocode-ferry.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=light*",
+      "delay": 400,
+      "file": "geocode-light.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Light*",
+      "delay": 400,
+      "file": "geocode-light.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=gull*",
+      "delay": 400,
+      "file": "geocode-light.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Gull*",
+      "delay": 400,
+      "file": "geocode-light.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=park*",
+      "delay": 400,
+      "file": "geocode-park.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Park*",
+      "delay": 400,
+      "file": "geocode-park.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=garden*",
+      "delay": 400,
+      "file": "geocode-park.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Garden*",
+      "delay": 400,
+      "file": "geocode-park.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=forest*",
+      "delay": 400,
+      "file": "geocode-forest.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Forest*",
+      "delay": 400,
+      "file": "geocode-forest.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=hill*",
+      "delay": 400,
+      "file": "geocode-forest.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Hill*",
+      "delay": 400,
+      "file": "geocode-forest.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=walk*",
+      "delay": 400,
+      "file": "geocode-forest.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Walk*",
+      "delay": 400,
+      "file": "geocode-forest.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=hike*",
+      "delay": 400,
+      "file": "geocode-forest.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Hike*",
+      "delay": 400,
+      "file": "geocode-forest.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=air*",
+      "delay": 400,
+      "file": "geocode-air.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Air*",
+      "delay": 400,
+      "file": "geocode-air.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=fly*",
+      "delay": 400,
+      "file": "geocode-air.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Fly*",
+      "delay": 400,
+      "file": "geocode-air.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=runway*",
+      "delay": 400,
+      "file": "geocode-air.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Runway*",
+      "delay": 400,
+      "file": "geocode-air.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=beach*",
+      "delay": 400,
+      "file": "geocode-beach.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Beach*",
+      "delay": 400,
+      "file": "geocode-beach.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=sand*",
+      "delay": 400,
+      "file": "geocode-beach.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Sand*",
+      "delay": 400,
+      "file": "geocode-beach.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=swim*",
+      "delay": 400,
+      "file": "geocode-beach.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Swim*",
+      "delay": 400,
+      "file": "geocode-beach.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=cove*",
+      "delay": 400,
+      "file": "geocode-beach.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Cove*",
+      "delay": 400,
+      "file": "geocode-beach.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=library*",
+      "delay": 400,
+      "file": "geocode-library.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Library*",
+      "delay": 400,
+      "file": "geocode-library.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=book*",
+      "delay": 400,
+      "file": "geocode-library.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Book*",
+      "delay": 400,
+      "file": "geocode-library.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=museum*",
+      "delay": 400,
+      "file": "geocode-museum.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Museum*",
+      "delay": 400,
+      "file": "geocode-museum.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=station*",
+      "delay": 400,
+      "file": "geocode-station.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Station*",
+      "delay": 400,
+      "file": "geocode-station.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=bus*",
+      "delay": 400,
+      "file": "geocode-station.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Bus*",
+      "delay": 400,
+      "file": "geocode-station.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=school*",
+      "delay": 400,
+      "file": "geocode-school.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=School*",
+      "delay": 400,
+      "file": "geocode-school.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=hospital*",
+      "delay": 400,
+      "file": "geocode-hospital.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Hospital*",
+      "delay": 400,
+      "file": "geocode-hospital.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=doctor*",
+      "delay": 400,
+      "file": "geocode-hospital.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Doctor*",
+      "delay": 400,
+      "file": "geocode-hospital.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=hotel*",
+      "delay": 400,
+      "file": "geocode-hotel.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Hotel*",
+      "delay": 400,
+      "file": "geocode-hotel.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=hostel*",
+      "delay": 400,
+      "file": "geocode-hotel.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Hostel*",
+      "delay": 400,
+      "file": "geocode-hotel.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=sleep*",
+      "delay": 400,
+      "file": "geocode-hotel.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Sleep*",
+      "delay": 400,
+      "file": "geocode-hotel.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=stay*",
+      "delay": 400,
+      "file": "geocode-hotel.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Stay*",
+      "delay": 400,
+      "file": "geocode-hotel.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=bridge*",
+      "delay": 400,
+      "file": "geocode-bridge.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Bridge*",
+      "delay": 400,
+      "file": "geocode-bridge.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=river*",
+      "delay": 400,
+      "file": "geocode-bridge.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=River*",
+      "delay": 400,
+      "file": "geocode-bridge.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=church*",
+      "delay": 400,
+      "file": "geocode-church.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Church*",
+      "delay": 400,
+      "file": "geocode-church.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=chapel*",
+      "delay": 400,
+      "file": "geocode-church.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Chapel*",
+      "delay": 400,
+      "file": "geocode-church.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=cemetery*",
+      "delay": 400,
+      "file": "geocode-church.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=Cemetery*",
+      "delay": 400,
+      "file": "geocode-church.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/geocode?q=*",
+      "delay": 400,
+      "file": "geocode-any.json"
+    },
+    {
+      "url": "https://companion.pocket/maps/locate",
+      "delay": 500,
+      "json": {
+        "lat": 44.05803,
+        "lon": -31.34745,
+        "city": "Port Lumen"
+      }
+    },
+    {
+      "url": "https://companion.pocket/maps/tile?*",
+      "delay": 40,
+      "headers": {
+        "content-type": "application/x-pocket-img"
+      },
+      "file": "tiles/sea.img"
+    }
+  ]
+}

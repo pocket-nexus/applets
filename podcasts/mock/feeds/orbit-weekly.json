@@ -1,0 +1,71 @@
+{
+ "title": "Orbit Weekly",
+ "author": "Science Minute Network",
+ "artwork": "https://art.example.org/covers/orbit-weekly.jpg",
+ "episodes": [
+  {
+   "guid": "orbit-weekly-318",
+   "title": "318: A comet with two tails",
+   "published": 1793692800000,
+   "durationS": 2625,
+   "audioUrl": "https://media.example.org/orbit-weekly/318-a-comet-with-two-tails.mp3",
+   "description": "Dust, ions and why the tails point different ways. What happened in space this week, explained over coffee. Hosted by Science Minute Network."
+  },
+  {
+   "guid": "orbit-weekly-317",
+   "title": "317: Small satellites, big pictures",
+   "published": 1793073600000,
+   "durationS": 2663,
+   "audioUrl": "https://media.example.org/orbit-weekly/317-small-satellites-big-pictures.mp3",
+   "description": "Cubesats that photograph every field every day. What happened in space this week, explained over coffee. Hosted by Science Minute Network."
+  },
+  {
+   "guid": "orbit-weekly-316",
+   "title": "316: The moon's slow drift",
+   "published": 1792476000000,
+   "durationS": 1962,
+   "audioUrl": "https://media.example.org/orbit-weekly/316-the-moon-s-slow-drift.mp3",
+   "description": "Four centimeters a year and the tides that cause it. What happened in space this week, explained over coffee. Hosted by Science Minute Network."
+  },
+  {
+   "guid": "orbit-weekly-315",
+   "title": "315: Listening to the sun",
+   "published": 1791867600000,
+   "durationS": 1846,
+   "audioUrl": "https://media.example.org/orbit-weekly/315-listening-to-the-sun.mp3",
+   "description": "Radio bursts and the amateurs who record them. What happened in space this week, explained over coffee. Hosted by Science Minute Network."
+  },
+  {
+   "guid": "orbit-weekly-314",
+   "title": "314: Space junk, counted",
+   "published": 1791270000000,
+   "durationS": 1957,
+   "audioUrl": "https://media.example.org/orbit-weekly/314-space-junk-counted.mp3",
+   "description": "Tracking ten thousand objects and the near misses. What happened in space this week, explained over coffee. Hosted by Science Minute Network."
+  },
+  {
+   "guid": "orbit-weekly-313",
+   "title": "313: How to see the space station tonight",
+   "published": 1790672400000,
+   "durationS": 2274,
+   "audioUrl": "https://media.example.org/orbit-weekly/313-how-to-see-the-space-station-tonight.mp3",
+   "description": "Passes, magnitudes and a good chair. What happened in space this week, explained over coffee. Hosted by Science Minute Network."
+  },
+  {
+   "guid": "orbit-weekly-312",
+   "title": "312: Dark skies in towns",
+   "published": 1790056800000,
+   "durationS": 2544,
+   "audioUrl": "https://media.example.org/orbit-weekly/312-dark-skies-in-towns.mp3",
+   "description": "Streetlights, shields and the stars that came back. What happened in space this week, explained over coffee. Hosted by Science Minute Network."
+  },
+  {
+   "guid": "orbit-weekly-311",
+   "title": "311: Mailbag: why is space cold and hot",
+   "published": 1789462800000,
+   "durationS": 2256,
+   "audioUrl": "https://media.example.org/orbit-weekly/311-mailbag-why-is-space-cold-and-hot.mp3",
+   "description": "Radiation, vacuum and the spacecraft blanket. What happened in space this week, explained over coffee. Hosted by Science Minute Network."
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "title": "Slow Cooking, Fast Talking",
+ "author": "Okafor Kitchen Collective",
+ "artwork": "https://art.example.org/covers/slow-cooking.jpg",
+ "episodes": [
+  {
+   "guid": "slow-cooking-6",
+   "title": "Stock is a weekend project",
+   "published": 1793433600000,
+   "durationS": 2666,
+   "audioUrl": "https://media.example.org/slow-cooking/6-stock-is-a-weekend-project.mp3",
+   "description": "Bones, onions and the freezer drawer. Three cooks, one pot, and an argument about salt. Hosted by Okafor Kitchen Collective."
+  },
+  {
+   "guid": "slow-cooking-5",
+   "title": "The great rice debate",
+   "published": 1792825200000,
+   "durationS": 3155,
+   "audioUrl": "https://media.example.org/slow-cooking/5-the-great-rice-debate.mp3",
+   "description": "Rinse or not, lid or not, and burnt bottoms. Three cooks, one pot, and an argument about salt. Hosted by Okafor Kitchen Collective."
+  },
+  {
+   "guid": "slow-cooking-4",
+   "title": "Bread for people with no time",
+   "published": 1792213200000,
+   "durationS": 2672,
+   "audioUrl": "https://media.example.org/slow-cooking/4-bread-for-people-with-no-time.mp3",
+   "description": "No-knead loaves and a cold fridge. Three cooks, one pot, and an argument about salt. Hosted by Okafor Kitchen Collective."
+  },
+  {
+   "guid": "slow-cooking-3",
+   "title": "Spice drawers, organized",
+   "published": 1791608400000,
+   "durationS": 3183,
+   "audioUrl": "https://media.example.org/slow-cooking/3-spice-drawers-organized.mp3",
+   "description": "Toast, grind and throw out the paprika from 2019. Three cooks, one pot, and an argument about salt. Hosted by Okafor Kitchen Collective."
+  },
+  {
+   "guid": "slow-cooking-2",
+   "title": "Feeding twelve on a Tuesday",
+   "published": 1791010800000,
+   "durationS": 3353,
+   "audioUrl": "https://media.example.org/slow-cooking/2-feeding-twelve-on-a-tuesday.mp3",
+   "description": "Big pots, cheap cuts and a plan. Three cooks, one pot, and an argument about salt. Hosted by Okafor Kitchen Collective."
+  },
+  {
+   "guid": "slow-cooking-1",
+   "title": "Pickles from whatever is left",
+   "published": 1790398800000,
+   "durationS": 3319,
+   "audioUrl": "https://media.example.org/slow-cooking/1-pickles-from-whatever-is-left.mp3",
+   "description": "Brine ratios and the cucumber that went soft. Three cooks, one pot, and an argument about salt. Hosted by Okafor Kitchen Collective."
+  }
+ ]
+}
