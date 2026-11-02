@@ -74,10 +74,23 @@ export function createStoreClient(): StoreClient {
 
 export const sizeText = (bytes: number) => (bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(bytes / 1024)} KB`);
 
-/** What an app's button offers. */
+/** Whether version `a` is later than `b`: dotted numbers compared in order
+ *  (0.10.0 is later than 0.9.2); a part that is not a number compares as 0. */
+export function laterVersion(a: string, b: string): boolean {
+  const left = a.split("."), right = b.split(".");
+  for (let i = 0; i < Math.max(left.length, right.length); i++) {
+    const x = Number.parseInt(left[i] ?? "0", 10) || 0, y = Number.parseInt(right[i] ?? "0", 10) || 0;
+    if (x !== y) return x > y;
+  }
+  return false;
+}
+
+/** What an app's button offers: an update only when the store's version is
+ *  later than the installed one. A system build newer than the store's
+ *  listing opens. */
 export type Action = "get" | "update" | "open" | "busy";
 export function actionOf(app: StoreApp, busy: boolean): Action {
   if (busy) return "busy";
   if (app.installed === null) return "get";
-  return app.installed === app.version ? "open" : "update";
+  return laterVersion(app.version, app.installed) ? "update" : "open";
 }
