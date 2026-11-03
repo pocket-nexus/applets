@@ -2,14 +2,16 @@
 // test/net.test.ts — the applets' network on its own: the worker
 // entry (ui/net-worker.ts) on PocketJS's worker runtime with a host whose
 // http node is scripted here, and the glyph atlas split into requests that
-// fit one descriptor and merged back (ui/glyphs.ts). The sims run the UI side
-// (ui/net.ts) against test/net-fake.ts.
+// fit one descriptor and merged back (ui/glyphs.ts), and a store document
+// saved in parts that fit (lib/store.ts). The sims run the UI side
+// (lib/net.ts) against test/net-fake.ts.
 
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { bindWorker, FactKind, ResourceStatus, type HostFact, type WorkerHost } from "@pocketjs/framework/worker";
 import { atlasFont, packAtlas, tofuCell, TOFU_CODEPOINT, type GlyphCell } from "../vendor/pocketjs/tools/companion/glyphs.ts";
 import { atlasBodies, GLYPH_ATLAS_URL, GLYPH_TEXT, mergeAtlases } from "../ui/glyphs.ts";
-import { DESCRIPTOR_BYTES, requestBytes } from "../lib/net.ts";
+import { companionService, DESCRIPTOR_BYTES, requestBytes } from "../lib/net.ts";
+import { loadDocument, saveDocument, type StoreRequests } from "../lib/store.ts";
 import { resolveWorkerChannels } from "../vendor/pocketjs/contracts/spec/worker.ts";
 import { Answer, answerBytes, decodeAnswer, decodeEnd, encodeRequest, NET_WORKER, text, utf8 } from "../lib/net-wire.ts";
 
@@ -194,5 +196,53 @@ describe("glyph atlases in requests that fit", () => {
     expect(mergeAtlases([atlas(a), packAtlas(new Map([[0x41, cell(0x41)]]), atlasFont(16), 21, false)])).toBeNull();
     expect(TOFU_CODEPOINT).toBe(0xfffd);
     expect(tofuCell(font).coverage.length).toBe(font.cellW * font.cellH);
+  });
+});
+
+describe("a store document in requests that fit", () => {
+  /** The companion's store in memory, with the requests a networked applet
+   *  would send it (the shape Weather and Podcasts use). */
+  function memoryStore() {
+    const values = new Map<string, unknown>();
+    const sent: { name: string; bytes: number }[] = [];
+    const store: StoreRequests = {
+      get: async (name) => values.get(name) ?? null,
+      set: async (name, body) => {
+        sent.push({ name, bytes: store.bytes(name, body) });
+        values.set(name, JSON.parse(body));
+      },
+      bytes: (name, body) =>
+        requestBytes(companionService("store", `/set?name=${name}`), { method: "POST", headers: { "content-type": "application/json" }, body, timeoutMs: 10_000, maxBytes: 4096 }),
+    };
+    return { store, values, sent };
+  }
+
+  test("a document that fits one request is saved whole", async () => {
+    const { store, values, sent } = memoryStore();
+    const saved = { places: [{ id: 1850147, name: "Tokyo", region: "Tokyo", country: "Japan", latitude: 35.6895, longitude: 139.6917 }], units: "c" };
+    await saveDocument(store, "weather", saved);
+    expect(sent.map((request) => request.name)).toEqual(["weather"]);
+    expect(values.get("weather")).toEqual(saved);
+    expect(await loadDocument(store, "weather")).toEqual(saved);
+  });
+
+  test("a larger one goes in parts that each fit, then a count, and reads back whole", async () => {
+    const { store, values, sent } = memoryStore();
+    // Thirty saved places with names in any script, and a quote and a
+    // backslash the descriptor has to escape.
+    const places = Array.from({ length: 30 }, (_, i) => ({ id: i, name: `東京 "${i}" \\ 🌧️`, region: "Région", country: "日本", latitude: 35.6 + i, longitude: 139.7 - i }));
+    const saved = { places, units: "f", current: 7 };
+    await saveDocument(store, "weather", saved);
+    const parts = sent.filter((request) => request.name !== "weather");
+    expect(parts.length).toBeGreaterThan(2);
+    expect(parts.map((request) => request.name)).toEqual(parts.map((_, i) => `weather.${i}`));
+    expect(sent.at(-1)!.name).toBe("weather");
+    for (const request of sent) expect(request.bytes).toBeLessThanOrEqual(DESCRIPTOR_BYTES);
+    expect(values.get("weather")).toEqual({ parts: parts.length });
+    expect(await loadDocument(store, "weather")).toEqual(saved);
+    // A missing part reads as nothing saved.
+    values.delete("weather.1");
+    expect(await loadDocument(store, "weather")).toBeNull();
+    expect(await loadDocument(store, "podcasts")).toBeNull();
   });
 });

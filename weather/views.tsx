@@ -19,6 +19,7 @@ import { COMPACT, SCREEN_W, appletTouch } from "../ui/screen.ts";
 import { tableContent, type Cell, type Section } from "../ui/table.tsx";
 import { ellipsize, FONT, toAscii, wrap } from "../ui/text.ts";
 import type { Press, Target } from "../ui/touch.ts";
+import { yourComputer } from "../ui/companion.ts";
 import type { Day, Forecast, Hour, Place, Units } from "./api.ts";
 import type { WeatherModel } from "./model.ts";
 import { conditionText, skyOf, type Sky } from "./wmo.ts";
@@ -244,7 +245,7 @@ export function placesPage(env: WeatherEnv, stack: NavStack, layer: LayerContext
             ? `A change could not be saved: ${storeError.detail}`
             : places.length
               ? ""
-              : "A place is found by its name and kept on this device.",
+              : `A place is found by its name and kept on ${yourComputer()}.`,
     });
     out.push({
       header: "Units",
