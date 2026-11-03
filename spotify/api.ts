@@ -79,6 +79,8 @@ export interface SpotifyClient {
   config(clientId: string): Promise<Status>;
   signIn(): Promise<Status>;
   signOut(): Promise<Status>;
+  /** Forget the sign-in waiting for the phone. */
+  cancelSignIn(): Promise<Status>;
   home(): Promise<Home>;
   library(shelf: Shelf, next?: string | null): Promise<Page>;
   search(words: string, type: SearchType, next?: string | null): Promise<Page>;
@@ -210,6 +212,7 @@ export function createSpotifyClient(): SpotifyClient {
     config: (clientId) => post<Status>("/config", { clientId }),
     signIn: () => post<Status>("/signin"),
     signOut: () => post<Status>("/signout"),
+    cancelSignIn: () => post<Status>("/cancel"),
     home: () => get<Home>("/home"),
     library: (shelf, next) => get<Page>(withNext(`/library/${shelf}`, next)),
     search: (words, type, next) => get<Page>(searchPath(words, type, next)),

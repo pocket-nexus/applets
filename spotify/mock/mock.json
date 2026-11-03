@@ -20,6 +20,11 @@
    "file": "answers/status-signed-out.json"
   },
   {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/cancel",
+   "file": "answers/status-cancelled.json"
+  },
+  {
    "url": "https://companion.pocket/spotify/home",
    "file": "answers/home.json"
   },

@@ -1,0 +1,13 @@
+{
+ "configured": true,
+ "signedIn": false,
+ "user": null,
+ "signIn": null,
+ "error": "",
+ "speaker": {
+  "name": "Omarchy Pocket",
+  "state": "off",
+  "id": null,
+  "message": ""
+ }
+}

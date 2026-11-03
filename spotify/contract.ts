@@ -14,6 +14,7 @@
 //   GET  /status                       Status
 //   POST /config     {clientId}        Status     set or clear the Client ID
 //   POST /signin                       Status     start a sign-in: status.signIn has the URL for a QR code
+//   POST /cancel                       Status     forget the sign-in waiting for the phone
 //   POST /signout                      Status
 //   GET  /home                         Home
 //   GET  /library/<shelf>?next=<t>     Page       shelf: playlists | albums | artists | tracks

@@ -530,9 +530,9 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
       return pending && pending.url !== hidden() ? pending : null;
     },
     cancelSignIn() {
-      // The service keeps no other record of a sign-in than its expiry: a
-      // cancelled one lapses there, and Sign In starts a new one.
+      // hidden at once; the service forgets it and stops asking the relay
       setHidden(status()?.signIn?.url ?? "");
+      client.cancelSignIn().then(applyStatus, fail);
     },
     signOut() {
       client.signOut().then(applyStatus, fail);

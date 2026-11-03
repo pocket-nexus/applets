@@ -254,6 +254,7 @@ answer("GET", "/status", "status.json", STATUS);
 answer("POST", "/config", "status-configured.json", CONFIGURED);
 answer("POST", "/signin", "status-signing-in.json", SIGNING_IN);
 answer("POST", "/signout", "status-signed-out.json", CONFIGURED);
+answer("POST", "/cancel", "status-cancelled.json", CONFIGURED);
 answer("GET", "/home", "home.json", HOME);
 answer("GET", "/library/playlists*", "library-playlists.json", page(PLAYLISTS.map(playlistItem)));
 answer("GET", "/library/albums?next=*", "library-albums-2.json", page(SAVED_ALBUMS.slice(8), null, SAVED_ALBUMS.length));
