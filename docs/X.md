@@ -1,8 +1,8 @@
 # X on the 3DS and the Tab5
 
 The X applet (`x/`) reads the Following and For You timelines and
-post threads, and likes, reposts and replies. It reaches X through **Pocket
-Companion** on the Mac: the applet fetches `https://companion.pocket/x/…`, and
+post threads, and likes, reposts and replies. It reaches X through
+**Pocket Hub** on the Mac: the applet fetches `https://companion.pocket/x/…`, and
 the companion's x service (PocketJS `tools/companion/services/x.ts`) calls
 x.com with a session signed in on that Mac. The console never holds the
 session. On Omarchy Pocket the x service runs in omarchy-pocketd on the
@@ -10,16 +10,15 @@ device itself (`ui/companion.ts`); the sign-in below is the Mac's.
 
 ## What it needs
 
-- Pocket Companion running on a Mac paired with the console (Settings > Mac
-  on the console shows it linked). The app is at
-  <https://studio.pocket.nexus/apps/companion>, and its X page signs in and
-  out. The commands below do the same from a PocketJS checkout
+- Pocket Hub running on a Mac paired with the console (Settings > Mac on the
+  console shows it linked). Pocket Hub is not released yet. Its X page signs
+  in and out. The commands below do the same from a PocketJS checkout
   (`bun tools/companion.ts …`); they talk to the running companion.
 - An X account signed in once on that Mac.
 
 ## Signing in
 
-Choose **Sign In to X…** on Pocket Companion's X page, or run:
+Choose **Sign In to X…** on Pocket Hub's X page, or run:
 
 ```sh
 bun tools/companion.ts service x login
@@ -55,8 +54,8 @@ bun tools/companion.ts service x cookies <auth_token> <ct0>
 
 ## What is stored, and where
 
-Under the companion's store, `~/Library/Application Support/Pocket Companion/`
-(or `$POCKET_COMPANION_HOME`):
+Under the companion's store, `~/Library/Application Support/Pocket Hub/`
+(or `$POCKET_HUB_HOME`):
 
 | File | Contents | Permissions |
 | --- | --- | --- |
