@@ -17,14 +17,14 @@
       "requires": [
         "text.glyphs.baked",
         "input.buttons",
-        "display.auxiliary",
-        "input.touch.auxiliary",
         "net.http"
       ],
       "enhances": [
         "input.analog.left",
         "system.agent",
-        "media.playback"
+        "media.playback",
+        "display.auxiliary",
+        "input.touch.auxiliary"
       ]
     }
   },
@@ -32,6 +32,9 @@
     "entry": "youtube/main.tsx",
     "output": "youtube-main",
     "framework": "solid",
+    "modality": {
+      "touch": "auxiliary"
+    },
     "surfaces": {
       "auxiliary": {
         "adaptive": {
@@ -60,7 +63,27 @@
         ],
         "presentation": "native"
       }
-    }
+    },
+    "presentations": [
+      {
+        "id": "full-screen",
+        "entry": "youtube/main.tsx",
+        "modality": {
+          "screens": 1,
+          "touch": "none",
+          "buttons": true
+        },
+        "viewport": {
+          "fixed": {
+            "logical": [
+              480,
+              272
+            ],
+            "presentation": "native"
+          }
+        }
+      }
+    ]
   },
   "domains": {
     "worker": {
