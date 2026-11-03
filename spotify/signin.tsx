@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // pocket-applet: draws its own pixels because the sign-in page shows a QR code.
 // spotify/signin.tsx — the pages before Spotify answers for the owner: the
-// service starting or not answering, the setup (the owner's own Spotify app
-// and its Client ID, typed with the deck's keyboard), and the sign-in, whose
-// URL the owner's phone opens from a QR code. The service polls Spotify for
-// the grant; the status, asked for every 2 s, says when it is done.
+// service starting or not answering, and the sign-in. Sign In starts a
+// pairing, as a TV signs in: the service shows a short code, and the owner
+// confirms it at spotify.com/pair on a phone (from the QR code, the code
+// filled in) or on any computer (typing the code). The status, asked for
+// every 2 s, says when it is done; Cancel forgets the pairing.
 
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show, type Accessor } from "solid-js";
 import { Image, Text, View } from "@pocketjs/framework/components";
@@ -18,24 +19,13 @@ import { NAV_H } from "../ui/bar.tsx";
 import { viewHeight, type LayerContext, type PageSpec } from "../ui/nav.tsx";
 import { SCREEN_H, SCREEN_W } from "../ui/screen.ts";
 import { FONT, wrap } from "../ui/text.ts";
-import { expiresIn } from "./format.ts";
+import { minutesLeft, spacedCode } from "./format.ts";
 import { listContent } from "./list.tsx";
-import { litFor, Lines, Message, messageButtonY, messageHeight, Pill, type Control, type Env } from "./parts.tsx";
-import { fit } from "./text.ts";
-import { BAR, C, F, S } from "./theme.ts";
+import { litFor, Message, messageButtonY, messageHeight, Pill, type Env } from "./parts.tsx";
+import { BAR, C, S } from "./theme.ts";
 
-/** The Client ID being typed, its failure and whether it is being saved. */
-export interface ClientIdField {
-  value: Accessor<string>;
-  error: Accessor<string>;
-  saving: Accessor<boolean>;
-  save(): void;
-}
-
-// shown, not fetched
-const DASHBOARD_URL = "https://developer.spotify.com/dashboard";
-// shown, not fetched
-const REDIRECT_URI = "https://applets.pocket.nexus/oauth/spotify";
+/** What the pairing page says to someone without the QR code. */
+const ELSEWHERE = "or open spotify.com/pair on any phone or computer and enter the code";
 
 /** A QR code as one texture: a module a texel (or two), white around it,
  *  drawn with nearest sampling. Null when the text does not fit a code. */
@@ -126,97 +116,7 @@ export function loadingPage(env: Env, layer: LayerContext): PageSpec {
   return { title: () => "Spotify", tint: "flat", barColors: BAR, content, activateLabel: () => "Choose" };
 }
 
-/** The setup: make a Spotify app, then type its Client ID. `changing` is
- *  the page Account opens to set another. */
-export function setupPage(env: Env, layer: LayerContext, field: ClientIdField, changing: boolean): PageSpec {
-  const W = SCREEN_W;
-  const lit = litFor(env, layer.focus);
-  const wide = W >= 440;
-  const QR = 132;
-  const textW = wide ? W - S.pad * 3 - QR : W - S.pad * 2;
-  const numW = 22;
-  const steps = [
-    "On a phone or a computer, open developer.spotify.com/dashboard and sign in.",
-    `Create an app. Its redirect URI is ${REDIRECT_URI}. Tick Web API and Web Playback SDK.`,
-    "Open the app's settings and copy its Client ID.",
-    "Type the Client ID here, with the keyboard.",
-  ];
-  const layout = createMemo(() => {
-    const intro = wrap(changing ? "Type the Client ID of another Spotify app of yours. This device signs in again with it." : "This device signs in to Spotify with an app of your own. Make one once:", FONT.sm, textW, 4);
-    let y = 14 + 26 + intro.length * 18 + 10;
-    const placed = (changing ? steps.slice(2) : steps).map((step, index) => {
-      const lines = wrap(step, FONT.xs, textW - numW, 5);
-      const at = { number: String(changing ? index + 3 : index + 1), lines, y };
-      y += lines.length * 16 + 10;
-      return at;
-    });
-    const fieldY = Math.max(y + 2, wide && !changing ? 14 + QR + 30 : 0);
-    return { intro, steps: placed, fieldY, saveY: fieldY + 48, noteY: fieldY + 48 + 44 };
-  });
-  const fieldW = Math.min(W - S.pad * 2, 360);
-  const controls = (): Control[] => [
-    { id: "setup.field", x: S.pad, y: layout().fieldY, w: fieldW, h: 38, run: () => env.edit("clientId") },
-    { id: "setup.save", x: S.pad, y: layout().saveY, w: 120, h: 34, run: field.save },
-  ];
-  const typed = () => {
-    env.faces.revision();
-    const draft = env.draft("clientId");
-    const value = draft ?? field.value();
-    return fit(env.faces, value || "32 letters and digits", F.body, fieldW - 24);
-  };
-  const noteLines = () => wrap(field.error() || "Playing needs a Spotify Premium account.", FONT.xs, W - S.pad * 2, 3);
-  const content = listContent({
-    env,
-    layer,
-    width: W,
-    view: viewHeight(),
-    head: {
-      height: () => layout().noteY + noteLines().length * 16 + 16,
-      controls,
-      view: () => (
-        <>
-          <Text class="absolute text-xl font-bold" style={{ insetL: S.pad, insetT: 12, width: textW, textColor: C.text }}>{changing ? "Change Client ID" : "Set up Spotify"}</Text>
-          <Text class="absolute text-sm leading-[18]" style={{ insetL: S.pad, insetT: 42, width: textW, textColor: C.muted }}>{layout().intro.join("\n")}</Text>
-          <For each={layout().steps}>
-            {(step) => (
-              <>
-                <View class="absolute" style={{ insetL: S.pad, insetT: step.y, width: 16, height: 16, radius: 8, bgColor: C.accent }} />
-                <Text class="absolute text-2xs font-bold text-center" style={{ insetL: S.pad, insetT: step.y + 3, width: 16, textColor: C.black }}>{step.number}</Text>
-                <Text class="absolute text-xs leading-[16]" style={{ insetL: S.pad + numW, insetT: step.y, width: textW - numW, textColor: C.text }}>{step.lines.join("\n")}</Text>
-              </>
-            )}
-          </For>
-          <Show when={wide && !changing}>
-            <Qr url={() => DASHBOARD_URL} x={W - S.pad - QR} y={14} size={QR} />
-            <Text class="absolute text-2xs text-center" style={{ insetL: W - S.pad - QR, insetT: 14 + QR + 6, width: QR, textColor: C.muted }}>Scan to open the dashboard</Text>
-          </Show>
-          <View class="absolute border" style={{ insetL: S.pad, insetT: layout().fieldY, width: fieldW, height: 38, radius: 6, bgColor: lit("setup.field") ? "#333333" : C.raised, borderColor: env.draft("clientId") !== null ? C.accent : C.raised }} />
-          <Lines fitted={typed()} x={S.pad + 12} y={layout().fieldY + 10} w={fieldW - 24} leading={18} color={env.draft("clientId") !== null || field.value() ? C.text : C.faint} />
-          <Pill x={S.pad} y={layout().saveY} w={120} h={34} label={field.saving() ? "Saving" : "Save"} primary lit={() => lit("setup.save")} />
-          <Text class="absolute text-xs leading-[16]" style={{ insetL: S.pad, insetT: layout().noteY, width: W - S.pad * 2, textColor: field.error() ? C.red : C.muted }}>{noteLines().join("\n")}</Text>
-        </>
-      ),
-    },
-    rows: () => [],
-  });
-  return {
-    title: () => (changing ? "Client ID" : "Spotify"),
-    backLabel: "Setup",
-    tint: "flat",
-    barColors: BAR,
-    content,
-    activateLabel: () => "Choose",
-    legend: () => [{ button: "square", label: "Type" }],
-    key(pressed) {
-      if (pressed & BTN.SQUARE) env.edit("clientId");
-      else if (pressed & BTN.START) field.save();
-      else return false;
-      return true;
-    },
-  };
-}
-
-/** Sign in: a button, then the sign-in's QR code until the phone allows it. */
+/** Sign In, then the pairing: its QR code, its code, the time left and Cancel. */
 export function signInPage(env: Env, layer: LayerContext): PageSpec {
   const W = SCREEN_W;
   const H = SCREEN_H;
@@ -229,36 +129,44 @@ export function signInPage(env: Env, layer: LayerContext): PageSpec {
   onFrame(() => {
     if (++frames % 30 === 0) setNow(companionNow());
   });
-  const wide = W >= 440;
-  const qrSize = wide ? Math.min(H - NAV_H - 32, 240) : Math.min(H - NAV_H - 24, 150);
+  const wide = W >= 440 && H >= 300;
+  const qrSize = wide ? Math.min(H - NAV_H - 40, 220) : Math.min(H - NAV_H - 24, 120);
   const qrX = wide ? 18 : S.pad;
-  const qrY = NAV_H + Math.max(12, Math.round((H - NAV_H - qrSize) / 2));
-  const textX = qrX + qrSize + (wide ? 22 : 12);
-  const textW = W - textX - S.pad;
-  const errorLines = () => (model.status()?.error ? wrap(model.status()!.error, FONT.xs, pending() ? textW : W - 48, 4) : []);
-  const scanLines = () => wrap("Scan with your phone and allow access", wide ? FONT.baseBold : FONT.smBold, textW, 4);
-  const scanLeading = wide ? 20 : 18;
-  const left = () => {
-    const value = pending();
-    return value ? expiresIn(value.expiresAt, now()) : "";
-  };
-  /** The time left while it is under an hour; past an hour the page says it waits. */
+  const colX = qrX + qrSize + (wide ? 24 : 12);
+  const colW = W - colX - (wide ? 16 : S.pad);
+  const leading = wide ? 20 : 18;
+  const codeH = wide ? 44 : 36;
+  const cancelW = Math.min(140, colW);
+  const errorLines = (width: number) => (model.status()?.error ? wrap(model.status()!.error, FONT.xs, width, 4) : []);
+  const pairing = createMemo(() => {
+    const scan = wrap("Scan with your phone", wide ? FONT.baseBold : FONT.smBold, colW, 2);
+    const elsewhere = wrap(ELSEWHERE, FONT.xs, colW, 5);
+    const codeY = scan.length * leading + 8;
+    const elsewhereY = codeY + codeH + 8;
+    const expiryY = elsewhereY + elsewhere.length * 15 + 4;
+    const cancelY = expiryY + 15 + 12;
+    const errorY = cancelY + 34 + 10;
+    const column = errorY + (wide ? errorLines(colW).length * 16 : 0);
+    const top = NAV_H + Math.max(10, Math.round((H - NAV_H - Math.max(qrSize, column)) / 2));
+    return { scan, elsewhere, top, codeY: top + codeY, elsewhereY: top + elsewhereY, expiryY: top + expiryY, cancelY: top + cancelY, errorY: top + errorY };
+  });
+  /** Minutes while under an hour: a pairing lasts up to one. */
   const expiry = () => {
     const value = pending();
-    if (!value || !left()) return "Expired: sign in again";
-    return value.expiresAt - now() > 3_600_000 ? "Waiting for your phone" : `Expires in ${left()}`;
+    if (!value) return "";
+    const left = minutesLeft(value.expiresAt, now());
+    if (!left) return "Expired: sign in again";
+    return value.expiresAt - now() > 3_660_000 ? "Waiting for you to enter the code" : `Expires in ${left}`;
   };
-  const cancelY = () => qrY + 8 + scanLines().length * scanLeading + 26;
   const introTop = NAV_H + 20;
-  const intro = wrap("Your phone signs this device in: Sign In shows a QR code that opens Spotify's page for it.", FONT.xs, Math.min(320, W - 48), 4);
+  const introW = Math.min(320, W - 48);
+  const intro = wrap("Your phone, or any computer, confirms the sign-in with a code.", FONT.xs, introW, 3);
   const buttonY = () => introTop + 34 + intro.length * 16 + 12;
+  const noteLines = () => (errorLines(W - 48).length ? errorLines(W - 48) : wrap("Playing needs Spotify Premium.", FONT.xs, W - 48, 2));
   const fixedTargets = () =>
     pending()
-      ? [{ id: "signin.cancel", x: textX, y: cancelY(), w: Math.min(140, textW), h: 34, run: () => model.cancelSignIn() }]
-      : [
-          { id: "signin.start", x: (W - 180) / 2, y: buttonY(), w: 180, h: 38, run: () => model.signIn() },
-          { id: "signin.client", x: (W - 180) / 2, y: buttonY() + 48, w: 180, h: 34, run: () => env.stack.push("config") },
-        ];
+      ? [{ id: "signin.cancel", x: colX, y: pairing().cancelY, w: cancelW, h: 34, run: () => model.cancelSignIn() }]
+      : [{ id: "signin.start", x: (W - 180) / 2, y: buttonY(), w: 180, h: 38, run: () => model.signIn() }];
   return {
     title: () => "Spotify",
     backLabel: "Sign In",
@@ -270,22 +178,27 @@ export function signInPage(env: Env, layer: LayerContext): PageSpec {
         <Show when={pending()}>
           {(value) => (
             <>
-              <Qr url={() => value().url} x={qrX} y={qrY} size={qrSize} />
-              <Text class={wide ? "absolute text-base font-bold leading-[20]" : "absolute text-sm font-bold leading-[18]"} style={{ insetL: textX, insetT: qrY + 8, width: textW, textColor: C.text }}>{scanLines().join("\n")}</Text>
-              <Text class="absolute text-xs" style={{ insetL: textX, insetT: qrY + 8 + scanLines().length * scanLeading + 4, width: textW, textColor: C.muted }}>{expiry()}</Text>
-              <Pill x={textX} y={cancelY()} w={Math.min(140, textW)} h={34} label="Cancel" lit={() => lit("signin.cancel")} />
-              <Text class="absolute text-xs leading-[16]" style={{ insetL: textX, insetT: cancelY() + 46, width: textW, textColor: C.red }}>{errorLines().join("\n")}</Text>
+              <Qr url={() => value().url} x={qrX} y={pairing().top} size={qrSize} />
+              <Text class={wide ? "absolute text-base font-bold leading-[20]" : "absolute text-sm font-bold leading-[18]"} style={{ insetL: colX, insetT: pairing().top, width: colW, textColor: C.text }}>{pairing().scan.join("\n")}</Text>
+              <View class="absolute" style={{ insetL: colX, insetT: pairing().codeY, width: colW, height: codeH, radius: 8, bgColor: C.raised }} />
+              <Text class="absolute text-xl font-bold text-center" style={{ insetL: colX, insetT: pairing().codeY + (codeH - 22) / 2, width: colW, textColor: C.text }}>{spacedCode(value().code)}</Text>
+              <Text class="absolute text-xs leading-[15]" style={{ insetL: colX, insetT: pairing().elsewhereY, width: colW, textColor: C.muted }}>{pairing().elsewhere.join("\n")}</Text>
+              <Text class="absolute text-xs" style={{ insetL: colX, insetT: pairing().expiryY, width: colW, textColor: C.muted }}>{expiry()}</Text>
+              <Pill x={colX} y={pairing().cancelY} w={cancelW} h={34} label="Cancel" lit={() => lit("signin.cancel")} />
+              <Show
+                when={wide}
+                fallback={<Text class="absolute text-xs leading-[16]" style={{ insetL: qrX, insetT: pairing().top + qrSize + 8, width: qrSize, textColor: C.red }}>{errorLines(qrSize).join("\n")}</Text>}
+              >
+                <Text class="absolute text-xs leading-[16]" style={{ insetL: colX, insetT: pairing().errorY, width: colW, textColor: C.red }}>{errorLines(colW).join("\n")}</Text>
+              </Show>
             </>
           )}
         </Show>
         <Show when={!pending()}>
           <Text class="absolute text-xl font-bold text-center" style={{ insetL: 0, insetT: introTop, width: W, textColor: C.text }}>Sign in to Spotify</Text>
-          <Text class="absolute text-xs text-center leading-[16]" style={{ insetL: (W - Math.min(320, W - 48)) / 2, insetT: introTop + 34, width: Math.min(320, W - 48), textColor: C.muted }}>{intro.join("\n")}</Text>
+          <Text class="absolute text-xs text-center leading-[16]" style={{ insetL: (W - introW) / 2, insetT: introTop + 34, width: introW, textColor: C.muted }}>{intro.join("\n")}</Text>
           <Pill x={(W - 180) / 2} y={buttonY()} w={180} h={38} label={model.starting() ? "Starting" : "Sign In"} primary lit={() => lit("signin.start")} />
-          <Pill x={(W - 180) / 2} y={buttonY() + 48} w={180} h={34} label="Change Client ID" lit={() => lit("signin.client")} />
-          <Text class="absolute text-xs text-center leading-[16]" style={{ insetL: 24, insetT: buttonY() + 96, width: W - 48, textColor: model.status()?.error ? C.red : C.muted }}>
-            {errorLines().length ? errorLines().join("\n") : "Playing needs a Spotify Premium account."}
-          </Text>
+          <Text class="absolute text-xs text-center leading-[16]" style={{ insetL: 24, insetT: buttonY() + 50, width: W - 48, textColor: model.status()?.error ? C.red : C.muted }}>{noteLines().join("\n")}</Text>
         </Show>
       </>
     ),

@@ -432,7 +432,7 @@ export function playlistPage(env: Env, layer: LayerContext, page: string): PageS
     } satisfies Head;
   };
   const block = detailHead(env, layer, head, W);
-  const note = "Spotify lists the songs of a playlist to apps only when you made it or collaborate on it. Play and Shuffle play all of it.";
+  const note = "Spotify does not list this playlist's songs here. Play and Shuffle play all of it.";
   const content = listContent({
     env,
     layer,
@@ -518,11 +518,25 @@ export function artistPage(env: Env, layer: LayerContext, page: string): PageSpe
     width: W,
     view: viewHeight(env.inset),
     head: detailHead(env, layer, head, W),
+    // Popular: the artist's own tracks, which play the artist from that one; then Albums
     rows: (top) => {
+      const out: Row[] = [];
+      let y = top;
+      const add = (rows: Row[]) => {
+        out.push(...rows);
+        if (rows.length) y = rows[rows.length - 1]!.y + rows[rows.length - 1]!.h;
+      };
+      const popular = artist.data()?.top ?? [];
+      if (popular.length) {
+        add([sectionRow(env, "top.head", "Popular", y, W)]);
+        add(itemRows(env, popular, y, W, { lead: "cover", prefix: "top", subtitle: (track) => track.album?.name || track.subtitle, run: (track) => uri() && model.play(uri(), { uri: track.uri }) }));
+      }
       const list = albums.items();
-      if (!list.length) return [];
-      const heading = sectionRow(env, "albums.head", "Albums", top, W);
-      return [heading, ...itemRows(env, list, top + heading.h, W, { lead: "cover", prefix: "album", subtitle: (album) => facts([album.year, album.count !== undefined ? songs(album.count) : ""]), run: (album) => env.open(album) })];
+      if (list.length) {
+        add([sectionRow(env, "albums.head", "Albums", y, W)]);
+        add(itemRows(env, list, y, W, { lead: "cover", prefix: "album", subtitle: (album) => facts([album.year, album.count !== undefined ? songs(album.count) : ""]), run: (album) => env.open(album) }));
+      }
+      return out;
     },
     foot: pagedFoot(env, layer, () => detailList(artist, albums), W, () => (artist.data() ? { title: "No albums", detail: "Spotify lists no albums for this artist." } : null)),
     onEnd: albums.more,
@@ -611,7 +625,7 @@ export function devicesPage(env: Env, layer: LayerContext): PageSpec {
   const devices = model.devices();
   if (devices.data()) devices.reload();
   const lit = litFor(env, layer.focus);
-  const hint = () => (devices.data()?.some((device) => device.local) ? "" : model.speakerHint());
+  const hint = () => (devices.data()?.some((device) => device.local) ? "" : model.speakerNote());
   const hintLines = () => (hint() ? wrap(hint(), FONT.xs, W - S.pad * 2 - 20, 3) : []);
   const top = () => (hintLines().length ? hintLines().length * 16 + 28 : 4);
   const list = () => devices.data() ?? [];
@@ -672,7 +686,7 @@ export function devicesPage(env: Env, layer: LayerContext): PageSpec {
 
 // ---- the account ------------------------------------------------------------------
 
-const SPEAKER_STATES = { off: "Off", starting: "Starting", waiting: "Waiting for Spotify", ready: "Ready", error: "Stopped" } as const;
+const SPEAKER_STATES = { off: "Off", starting: "Starting", ready: "Ready", error: "Stopped" } as const;
 
 export function accountPage(env: Env, layer: LayerContext): PageSpec {
   const W = SCREEN_W;
@@ -683,26 +697,40 @@ export function accountPage(env: Env, layer: LayerContext): PageSpec {
     env.faces.revision();
     return fit(env.faces, status()?.user?.name ?? "Spotify", F.h2, W - 92 - S.pad);
   });
-  const speakerLines = () => {
-    const speaker = status()?.speaker;
-    if (!speaker) return [];
-    const words = [`${speaker.name || "This device"}: ${SPEAKER_STATES[speaker.state]}.`, speaker.state === "waiting" ? model.speakerHint() : speaker.state === "error" ? speaker.message : ""].filter(Boolean).join(" ");
-    return wrap(words, FONT.xs, W - S.pad * 2 - 20, 4);
-  };
+  /** A fact's height: its line, and its note with a gap under it. */
+  const factH = (fact: { note: string[] }) => 24 + (fact.note.length ? fact.note.length * 16 + 6 : 0);
+  /** The facts, a label and a value each, with a note under a value that needs one. */
+  const details = createMemo(() => {
+    const value = status();
+    if (!value) return [];
+    const out: { label: string; value: string; note: string[] }[] = [];
+    const noteW = W - S.pad * 2 - 20;
+    if (value.premium !== null) {
+      out.push({ label: "Premium", value: value.premium ? "Yes" : "No", note: value.premium ? [] : wrap("Playing needs Spotify Premium. Browsing works without it.", FONT.xs, noteW, 3) });
+    }
+    const speaker = value.speaker;
+    out.push({ label: "Speaker", value: `${speaker.name || "This device"}: ${SPEAKER_STATES[speaker.state]}`, note: speaker.state === "error" && speaker.message ? wrap(speaker.message, FONT.xs, noteW, 3) : [] });
+    let y = 0;
+    return out.map((fact) => {
+      const at = { ...fact, y };
+      y += factH(fact);
+      return at;
+    });
+  });
+  const factsTop = 92;
+  const factsH = () => details().reduce((sum, fact) => sum + factH(fact), 0) + 8;
   const errorLines = () => (status()?.error ? wrap(status()!.error, FONT.xs, W - S.pad * 2, 3) : []);
-  const speakerTop = 92;
-  const errorTop = () => speakerTop + speakerLines().length * 16 + 34;
+  const errorTop = () => factsTop + factsH() + 12;
   const buttonsTop = () => errorTop() + (errorLines().length ? errorLines().length * 16 + 12 : 0);
   const buttonW = Math.min(220, W - S.pad * 2);
   const controls = (): Control[] => [
-    { id: "account.client", x: (W - buttonW) / 2, y: buttonsTop(), w: buttonW, h: 36, run: () => env.stack.push("config") },
     {
       id: "account.signout",
       x: (W - buttonW) / 2,
-      y: buttonsTop() + 48,
+      y: buttonsTop(),
       w: buttonW,
       h: 36,
-      run: () => env.confirm({ title: "Sign out of Spotify?", message: "This device forgets your sign-in. Its speaker stays until you sign in again.", action: "Sign Out", run: () => model.signOut() }),
+      run: () => env.confirm({ title: "Sign out of Spotify?", message: "This device forgets your sign-in, and its speaker leaves your devices until you sign in again.", action: "Sign Out", run: () => model.signOut() }),
     },
   ];
   const content = listContent({
@@ -711,19 +739,27 @@ export function accountPage(env: Env, layer: LayerContext): PageSpec {
     width: W,
     view: viewHeight(env.inset),
     head: {
-      height: () => buttonsTop() + 96,
+      height: () => buttonsTop() + 48,
       controls,
       view: () => (
         <>
           <Cover covers={env.covers} url={() => status()?.user?.image ?? ""} x={S.pad} y={14} size={64} side={coverSide(64)} round />
           <Lines fitted={name()} x={92} y={24} w={W - 92 - S.pad} leading={22} color={C.text} />
           <Text class="absolute text-xs" style={{ insetL: 92, insetT: 50, width: W - 92 - S.pad, textColor: C.muted }}>Signed in to Spotify</Text>
-          <Text class="absolute text-xs font-bold" style={{ insetL: S.pad, insetT: speakerTop - 4, width: W, textColor: C.muted }}>SPEAKER</Text>
-          <View class="absolute" style={{ insetL: S.pad, insetT: speakerTop + 14, width: W - S.pad * 2, height: speakerLines().length * 16 + 14, radius: 6, bgColor: C.surface }} />
-          <For each={speakerLines()}>{(line, index) => <Text class="absolute text-xs" style={{ insetL: S.pad + 10, insetT: speakerTop + 21 + index() * 16, width: W - S.pad * 2 - 20, textColor: C.text }}>{line}</Text>}</For>
+          <View class="absolute" style={{ insetL: S.pad, insetT: factsTop, width: W - S.pad * 2, height: factsH(), radius: 6, bgColor: C.surface }} />
+          <For each={details()}>
+            {(fact) => (
+              <>
+                <Text class="absolute text-xs" style={{ insetL: S.pad + 10, insetT: factsTop + 8 + fact.y, width: 90, textColor: C.muted }}>{fact.label}</Text>
+                <Text class="absolute text-xs font-bold text-right" style={{ insetL: S.pad + 100, insetT: factsTop + 8 + fact.y, width: W - S.pad * 2 - 110, textColor: C.text }}>{fact.value}</Text>
+                <Show when={fact.note.length}>
+                  <Text class="absolute text-xs leading-[16]" style={{ insetL: S.pad + 10, insetT: factsTop + 8 + fact.y + 20, width: W - S.pad * 2 - 20, textColor: C.muted }}>{fact.note.join("\n")}</Text>
+                </Show>
+              </>
+            )}
+          </For>
           <For each={errorLines()}>{(line, index) => <Text class="absolute text-xs" style={{ insetL: S.pad, insetT: errorTop() + index() * 16, width: W - S.pad * 2, textColor: C.red }}>{line}</Text>}</For>
-          <Pill x={(W - buttonW) / 2} y={buttonsTop()} w={buttonW} h={36} label="Change Client ID" lit={() => lit("account.client")} />
-          <Pill x={(W - buttonW) / 2} y={buttonsTop() + 48} w={buttonW} h={36} label="Sign Out" lit={() => lit("account.signout")} />
+          <Pill x={(W - buttonW) / 2} y={buttonsTop()} w={buttonW} h={36} label="Sign Out" lit={() => lit("account.signout")} />
         </>
       ),
     },

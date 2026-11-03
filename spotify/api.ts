@@ -48,7 +48,7 @@ export class SpotifyError extends Error {
   }
 }
 
-const REASONS: readonly Reason[] = ["configure", "signin", "premium", "nodevice", "rate", "restricted", "other"];
+const REASONS: readonly Reason[] = ["signin", "premium", "nodevice", "rate", "restricted", "other"];
 
 /** The order requests leave the queue in. */
 const Lane = { command: 0, page: 1, glyphs: 2, cover: 3 } as const;
@@ -76,10 +76,10 @@ export interface Covers {
 
 export interface SpotifyClient {
   status(): Promise<Status>;
-  config(clientId: string): Promise<Status>;
+  /** Start a pairing: the status names its code and URL. */
   signIn(): Promise<Status>;
   signOut(): Promise<Status>;
-  /** Forget the sign-in waiting for the phone. */
+  /** Forget the pairing waiting for the owner. */
   cancelSignIn(): Promise<Status>;
   home(): Promise<Home>;
   library(shelf: Shelf, next?: string | null): Promise<Page>;
@@ -209,7 +209,6 @@ export function createSpotifyClient(): SpotifyClient {
 
   return {
     status: () => get<Status>("/status"),
-    config: (clientId) => post<Status>("/config", { clientId }),
     signIn: () => post<Status>("/signin"),
     signOut: () => post<Status>("/signout"),
     cancelSignIn: () => post<Status>("/cancel"),

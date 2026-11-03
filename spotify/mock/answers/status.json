@@ -1,11 +1,11 @@
 {
- "configured": true,
  "signedIn": true,
  "user": {
   "id": "renarlo",
   "name": "Ren Arlo",
   "image": "https://i.scdn.co/image/pocket-sample-user-renarlo"
  },
+ "premium": true,
  "signIn": null,
  "error": "",
  "speaker": {

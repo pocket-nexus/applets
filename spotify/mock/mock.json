@@ -6,13 +6,8 @@
   },
   {
    "method": "POST",
-   "url": "https://companion.pocket/spotify/config",
-   "file": "answers/status-configured.json"
-  },
-  {
-   "method": "POST",
    "url": "https://companion.pocket/spotify/signin",
-   "file": "answers/status-signing-in.json"
+   "file": "answers/status-pairing.json"
   },
   {
    "method": "POST",

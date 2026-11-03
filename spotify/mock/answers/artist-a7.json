@@ -7,6 +7,100 @@
   "subtitle": "Artist",
   "image": "https://i.scdn.co/image/pocket-sample-artist-a7"
  },
+ "top": [
+  {
+   "kind": "track",
+   "id": "al-static-bloom-2",
+   "uri": "spotify:track:al-static-bloom-2",
+   "title": "Moth Frequencies",
+   "subtitle": "Tin Moth Radio",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-static-bloom",
+   "durationMs": 251000,
+   "explicit": false,
+   "album": {
+    "id": "al-static-bloom",
+    "uri": "spotify:album:al-static-bloom",
+    "name": "Static Bloom"
+   },
+   "artists": [
+    {
+     "id": "a7",
+     "uri": "spotify:artist:a7",
+     "name": "Tin Moth Radio"
+    }
+   ],
+   "trackNumber": 2
+  },
+  {
+   "kind": "track",
+   "id": "al-static-bloom-3",
+   "uri": "spotify:track:al-static-bloom-3",
+   "title": "Porchlight",
+   "subtitle": "Tin Moth Radio",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-static-bloom",
+   "durationMs": 183000,
+   "explicit": false,
+   "album": {
+    "id": "al-static-bloom",
+    "uri": "spotify:album:al-static-bloom",
+    "name": "Static Bloom"
+   },
+   "artists": [
+    {
+     "id": "a7",
+     "uri": "spotify:artist:a7",
+     "name": "Tin Moth Radio"
+    }
+   ],
+   "trackNumber": 3
+  },
+  {
+   "kind": "track",
+   "id": "al-static-bloom-1",
+   "uri": "spotify:track:al-static-bloom-1",
+   "title": "Static Bloom",
+   "subtitle": "Tin Moth Radio",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-static-bloom",
+   "durationMs": 219000,
+   "explicit": false,
+   "album": {
+    "id": "al-static-bloom",
+    "uri": "spotify:album:al-static-bloom",
+    "name": "Static Bloom"
+   },
+   "artists": [
+    {
+     "id": "a7",
+     "uri": "spotify:artist:a7",
+     "name": "Tin Moth Radio"
+    }
+   ],
+   "trackNumber": 1
+  },
+  {
+   "kind": "track",
+   "id": "al-static-bloom-4",
+   "uri": "spotify:track:al-static-bloom-4",
+   "title": "AM Dial",
+   "subtitle": "Tin Moth Radio",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-static-bloom",
+   "durationMs": 287000,
+   "explicit": false,
+   "album": {
+    "id": "al-static-bloom",
+    "uri": "spotify:album:al-static-bloom",
+    "name": "Static Bloom"
+   },
+   "artists": [
+    {
+     "id": "a7",
+     "uri": "spotify:artist:a7",
+     "name": "Tin Moth Radio"
+    }
+   ],
+   "trackNumber": 4
+  }
+ ],
  "albums": {
   "items": [
    {

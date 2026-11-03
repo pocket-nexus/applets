@@ -21,7 +21,7 @@ Each directory with a `pocket.app.json` is one applet. **One source builds a var
 | Photos | `photos/` | | ✓ | ✓ |
 | Notes | `notes/` | | ✓ | ✓ |
 
-Camera and Photos need `camera.photo`, Notes `data.fs`; Omarchy Pocket's host contract offers neither, so its builds leave them out. The Store client talks to omarchy-pocketd's `appstore` service and is built for Omarchy Pocket alone (`ONLY` in `tools/apps.ts`); Pocket Shell installs from its paired Mac. Spotify is built for Omarchy Pocket alone too: its `spotify` service (the owner's sign-in, `spotify/contract.ts`) and librespot, this device's Spotify Connect speaker, run in omarchy-pocketd.
+Camera and Photos need `camera.photo`, Notes `data.fs`; Omarchy Pocket's host contract offers neither, so its builds leave them out. The Store client talks to omarchy-pocketd's `appstore` service and is built for Omarchy Pocket alone (`ONLY` in `tools/apps.ts`); Pocket Shell installs from its paired Mac. Spotify is built for Omarchy Pocket alone too: its `spotify` service (`spotify/contract.ts`), which signs the owner in with a pairing code confirmed at spotify.com/pair and is this device's Spotify Connect speaker, runs in omarchy-pocketd.
 
 Hacker News, X, YouTube, Discord and GitHub also declare the applet **full-screen presentation**: one screen, no touch, buttons, at the PSP's 480×272. Without touch the d-pad focus holds a row from the start, and a button legend along the bottom (`ui/legend.tsx`) names what each button does on the page. PocketJS's PSP host runs no worker yet and every networked applet needs one, so the resolver leaves them out of a PSP build until it does.
 

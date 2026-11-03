@@ -7,6 +7,146 @@
   "subtitle": "Artist",
   "image": "https://i.scdn.co/image/pocket-sample-artist-a10"
  },
+ "top": [
+  {
+   "kind": "track",
+   "id": "al-absolute-zero-4",
+   "uri": "spotify:track:al-absolute-zero-4",
+   "title": "Ice Cream Physics",
+   "subtitle": "Cobalt Picnic",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+   "durationMs": 172000,
+   "explicit": false,
+   "album": {
+    "id": "al-absolute-zero",
+    "uri": "spotify:album:al-absolute-zero",
+    "name": "Picnic at Absolute Zero"
+   },
+   "artists": [
+    {
+     "id": "a10",
+     "uri": "spotify:artist:a10",
+     "name": "Cobalt Picnic"
+    }
+   ],
+   "trackNumber": 4
+  },
+  {
+   "kind": "track",
+   "id": "al-absolute-zero-1",
+   "uri": "spotify:track:al-absolute-zero-1",
+   "title": "Absolute Zero",
+   "subtitle": "Cobalt Picnic",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+   "durationMs": 208000,
+   "explicit": false,
+   "album": {
+    "id": "al-absolute-zero",
+    "uri": "spotify:album:al-absolute-zero",
+    "name": "Picnic at Absolute Zero"
+   },
+   "artists": [
+    {
+     "id": "a10",
+     "uri": "spotify:artist:a10",
+     "name": "Cobalt Picnic"
+    }
+   ],
+   "trackNumber": 1
+  },
+  {
+   "kind": "track",
+   "id": "al-absolute-zero-5",
+   "uri": "spotify:track:al-absolute-zero-5",
+   "title": "Kelvin",
+   "subtitle": "Cobalt Picnic",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+   "durationMs": 215000,
+   "explicit": false,
+   "album": {
+    "id": "al-absolute-zero",
+    "uri": "spotify:album:al-absolute-zero",
+    "name": "Picnic at Absolute Zero"
+   },
+   "artists": [
+    {
+     "id": "a10",
+     "uri": "spotify:artist:a10",
+     "name": "Cobalt Picnic"
+    }
+   ],
+   "trackNumber": 5
+  },
+  {
+   "kind": "track",
+   "id": "al-absolute-zero-3",
+   "uri": "spotify:track:al-absolute-zero-3",
+   "title": "Frost on the Blanket",
+   "subtitle": "Cobalt Picnic",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+   "durationMs": 243000,
+   "explicit": false,
+   "album": {
+    "id": "al-absolute-zero",
+    "uri": "spotify:album:al-absolute-zero",
+    "name": "Picnic at Absolute Zero"
+   },
+   "artists": [
+    {
+     "id": "a10",
+     "uri": "spotify:artist:a10",
+     "name": "Cobalt Picnic"
+    }
+   ],
+   "trackNumber": 3
+  },
+  {
+   "kind": "track",
+   "id": "al-absolute-zero-6",
+   "uri": "spotify:track:al-absolute-zero-6",
+   "title": "Snowglobe Party",
+   "subtitle": "Cobalt Picnic",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+   "durationMs": 258000,
+   "explicit": false,
+   "album": {
+    "id": "al-absolute-zero",
+    "uri": "spotify:album:al-absolute-zero",
+    "name": "Picnic at Absolute Zero"
+   },
+   "artists": [
+    {
+     "id": "a10",
+     "uri": "spotify:artist:a10",
+     "name": "Cobalt Picnic"
+    }
+   ],
+   "trackNumber": 6
+  },
+  {
+   "kind": "track",
+   "id": "al-absolute-zero-2",
+   "uri": "spotify:track:al-absolute-zero-2",
+   "title": "Thermos Blues",
+   "subtitle": "Cobalt Picnic",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+   "durationMs": 227000,
+   "explicit": true,
+   "album": {
+    "id": "al-absolute-zero",
+    "uri": "spotify:album:al-absolute-zero",
+    "name": "Picnic at Absolute Zero"
+   },
+   "artists": [
+    {
+     "id": "a10",
+     "uri": "spotify:artist:a10",
+     "name": "Cobalt Picnic"
+    }
+   ],
+   "trackNumber": 2
+  }
+ ],
  "albums": {
   "items": [
    {

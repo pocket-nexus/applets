@@ -7,6 +7,238 @@
   "subtitle": "Artist",
   "image": "https://i.scdn.co/image/pocket-sample-artist-a1"
  },
+ "top": [
+  {
+   "kind": "track",
+   "id": "al-harbor-lights-10",
+   "uri": "spotify:track:al-harbor-lights-10",
+   "title": "Harbor Lights",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "durationMs": 284000,
+   "explicit": false,
+   "album": {
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "name": "Harbor Lights at Low Tide"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 10
+  },
+  {
+   "kind": "track",
+   "id": "al-harbor-lights-6",
+   "uri": "spotify:track:al-harbor-lights-6",
+   "title": "Night Ferry",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "durationMs": 213000,
+   "explicit": true,
+   "album": {
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "name": "Harbor Lights at Low Tide"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 6
+  },
+  {
+   "kind": "track",
+   "id": "al-harbor-lights-9",
+   "uri": "spotify:track:al-harbor-lights-9",
+   "title": "The Long Wave",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "durationMs": 320000,
+   "explicit": false,
+   "album": {
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "name": "Harbor Lights at Low Tide"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 9
+  },
+  {
+   "kind": "track",
+   "id": "al-harbor-lights-3",
+   "uri": "spotify:track:al-harbor-lights-3",
+   "title": "Salt in the Radio",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "durationMs": 198000,
+   "explicit": false,
+   "album": {
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "name": "Harbor Lights at Low Tide"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 3
+  },
+  {
+   "kind": "track",
+   "id": "al-harbor-lights-8",
+   "uri": "spotify:track:al-harbor-lights-8",
+   "title": "Tidepool Lights",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "durationMs": 187000,
+   "explicit": false,
+   "album": {
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "name": "Harbor Lights at Low Tide"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 8
+  },
+  {
+   "kind": "track",
+   "id": "al-harbor-lights-2",
+   "uri": "spotify:track:al-harbor-lights-2",
+   "title": "Breakwater",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "durationMs": 245000,
+   "explicit": false,
+   "album": {
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "name": "Harbor Lights at Low Tide"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 2
+  },
+  {
+   "kind": "track",
+   "id": "al-harbor-lights-1",
+   "uri": "spotify:track:al-harbor-lights-1",
+   "title": "Lantern Swim",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "durationMs": 222000,
+   "explicit": false,
+   "album": {
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "name": "Harbor Lights at Low Tide"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 1
+  },
+  {
+   "kind": "track",
+   "id": "al-lantern-swim-single-1",
+   "uri": "spotify:track:al-lantern-swim-single-1",
+   "title": "Lantern Swim",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-lantern-swim-single",
+   "durationMs": 222000,
+   "explicit": false,
+   "album": {
+    "id": "al-lantern-swim-single",
+    "uri": "spotify:album:al-lantern-swim-single",
+    "name": "Lantern Swim"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 1
+  },
+  {
+   "kind": "track",
+   "id": "al-breakwater-live-1",
+   "uri": "spotify:track:al-breakwater-live-1",
+   "title": "Breakwater (Live)",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-breakwater-live",
+   "durationMs": 302000,
+   "explicit": false,
+   "album": {
+    "id": "al-breakwater-live",
+    "uri": "spotify:album:al-breakwater-live",
+    "name": "Breakwater (Live at the Pier)"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 1
+  },
+  {
+   "kind": "track",
+   "id": "al-harbor-lights-4",
+   "uri": "spotify:track:al-harbor-lights-4",
+   "title": "Low Tide Choir",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "durationMs": 291000,
+   "explicit": false,
+   "album": {
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "name": "Harbor Lights at Low Tide"
+   },
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "trackNumber": 4
+  }
+ ],
  "albums": {
   "items": [
    {

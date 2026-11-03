@@ -1,7 +1,7 @@
 {
- "configured": true,
  "signedIn": false,
  "user": null,
+ "premium": null,
  "signIn": null,
  "error": "",
  "speaker": {

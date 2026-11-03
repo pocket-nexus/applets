@@ -4,10 +4,10 @@
 // change it, what is liked, a short notice over the pages, and the answers
 // the pages show, kept by key so going back does not ask again.
 //
-// The status is asked for every STATUS_SETUP_MS while there is no sign-in
-// (the phone may finish one at any moment), less often after. The player is
-// asked for every PLAYER_SHOWN_MS while Now Playing is on screen and every
-// PLAYER_HIDDEN_MS otherwise, and every command answers the player as it is
+// The status is asked for every STATUS_SIGNIN_MS while no one is signed in
+// (the owner may confirm a pairing at any moment), less often after. The
+// player is asked for every PLAYER_SHOWN_MS while Now Playing is on screen and
+// every PLAYER_HIDDEN_MS otherwise, and every command answers the player as it is
 // after it, which replaces the one shown. A poll that left before a command
 // and answers after it is dropped: it describes the player before the
 // command. Between answers the position moves on by the clock (format.ts
@@ -21,7 +21,7 @@ import { SpotifyError, type Reason, type SearchType, type Shelf, type SpotifyCli
 import type { Device, Item, Page, Player, PlayRequest, Status } from "./contract.ts";
 import { appendPage, failureText, nextRepeat, progressAt } from "./format.ts";
 
-export const STATUS_SETUP_MS = 2_000;
+export const STATUS_SIGNIN_MS = 2_000;
 export const STATUS_READY_MS = 30_000;
 export const PLAYER_SHOWN_MS = 3_000;
 export const PLAYER_HIDDEN_MS = 10_000;
@@ -32,7 +32,7 @@ export const ANSWERS_KEPT = 24;
 /** A volume step, in percent. */
 export const VOLUME_STEP = 10;
 
-export type Phase = "loading" | "offline" | "setup" | "signin" | "ready";
+export type Phase = "loading" | "offline" | "signin" | "ready";
 
 /** A failure as a page shows it. */
 export interface Problem {
@@ -260,17 +260,18 @@ export interface SpotifyModel {
   /** The service did not answer the status. */
   offline: Accessor<Problem | null>;
   refreshStatus(): void;
-  /** Set the Client ID (POST /config); rejects with the service's words. */
-  saveClientId(clientId: string): Promise<void>;
+  /** Start a pairing (POST /signin). */
   signIn(): void;
   /** POST /signin is on its way. */
   starting: Accessor<boolean>;
-  /** The sign-in to show as a QR code: the service's, unless it passed or Cancel hid it. */
+  /** The pairing to show: the service's, unless Cancel hid it. */
   pendingSignIn: Accessor<Status["signIn"]>;
   cancelSignIn(): void;
   signOut(): void;
-  /** The speaker's hint while Spotify has not signed it in, else "". */
-  speakerHint: Accessor<string>;
+  /** What keeps this device's speaker from playing (starting, stopped), else "". */
+  speakerNote: Accessor<string>;
+  /** Said where playing would start while the account has no Premium, else "". */
+  premiumNote: Accessor<string>;
   player: Accessor<Player | null>;
   /** The playing item's position now, in ms. */
   position(): number;
@@ -340,7 +341,6 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
   const phase = (): Phase => {
     const value = status();
     if (!value) return offline() ? "offline" : "loading";
-    if (!value.configured) return "setup";
     if (!value.signedIn) return "signin";
     return "ready";
   };
@@ -390,7 +390,7 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
         setOffline(problemOf(error));
       },
     );
-    nextStatusAt = companionNow() + (phase() === "ready" ? STATUS_READY_MS : STATUS_SETUP_MS);
+    nextStatusAt = companionNow() + (phase() === "ready" ? STATUS_READY_MS : STATUS_SIGNIN_MS);
   };
 
   const refreshPlayer = () => {
@@ -413,21 +413,20 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
   /** What a failed command or page tells the reader, and what it can do. */
   const fail = (error: unknown) => {
     const reason = error instanceof SpotifyError ? error.reason : "other";
-    if (reason === "signin" || reason === "configure") {
+    if (reason === "signin") {
       refreshStatus();
       return;
     }
     if (reason === "nodevice") {
-      // this device's speaker is not one of Spotify's devices yet: say how it becomes one
-      const hint = speakerHint();
-      if (hint) return say(hint, true);
+      // nothing plays anywhere: this device's speaker, when it is one of Spotify's devices
+      if (!localSpeaker()) return say(speakerNote() || failureText({ reason, error: "" }), true);
       return say(failureText({ reason, error: "" }), true, { label: "Play on this device", run: () => model.playHere() });
     }
     if (reason === "unavailable") return say(notLinked("Spotify").title, true);
     say(error instanceof SpotifyError ? failureText({ reason: error.reason, error: error.message }) : String(error), true);
   };
   client.onFailure((error) => {
-    if (error.reason === "signin" || error.reason === "configure") refreshStatus();
+    if (error.reason === "signin" || error.reason === "premium") refreshStatus();
   });
 
   /** Run a command; its answer is the player after it. `undo` puts back
@@ -488,15 +487,15 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
 
   const localSpeaker = (): string | null => status()?.speaker.id ?? devices.find((device) => device.local)?.id ?? null;
 
-  const speakerHint = () => {
+  const speakerNote = () => {
     const speaker = status()?.speaker;
     if (!speaker || phase() !== "ready") return "";
-    const name = speaker.name || "this device";
-    if (speaker.state === "waiting") return `Open Spotify on your phone and pick ${name} once to connect this speaker.`;
+    const name = speaker.name || "This device";
     if (speaker.state === "starting") return `${name}'s speaker is starting.`;
     if (speaker.state === "error") return speaker.message || `${name}'s speaker stopped.`;
     return "";
   };
+  const premiumNote = () => (phase() === "ready" && status()?.premium === false ? "Spotify Premium is needed to play. Browsing works without it." : "");
 
   const model: SpotifyModel = {
     client,
@@ -505,10 +504,6 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
     phase,
     offline,
     refreshStatus,
-    saveClientId: (clientId) =>
-      client.config(clientId.trim()).then(applyStatus, (error: unknown) => {
-        throw new Error(problemOf(error).detail || problemOf(error).title);
-      }),
     signIn() {
       if (starting()) return;
       setStarting(true);
@@ -537,7 +532,8 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
     signOut() {
       client.signOut().then(applyStatus, fail);
     },
-    speakerHint,
+    speakerNote,
+    premiumNote,
     player,
     position() {
       const value = player();
@@ -618,7 +614,8 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
     },
     playHere() {
       const id = localSpeaker();
-      if (!id) return say(speakerHint() || "This device's speaker is not running.", true);
+      if (premiumNote()) return say(failureText({ reason: "premium", error: "" }), true);
+      if (!id) return say(speakerNote() || "This device's speaker is not ready.", true);
       command(() => client.transfer(id, true));
     },
     liked: (uri) => likes().get(uri) ?? null,

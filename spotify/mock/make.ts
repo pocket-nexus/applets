@@ -178,12 +178,14 @@ const LIKED: Item = { kind: "liked", id: "", uri: LIKED_URI, title: "Liked Songs
 // ---- the answers --------------------------------------------------------------------
 
 const SPEAKER: Status["speaker"] = { name: "Omarchy Pocket", state: "ready", id: "dev-omarchy-pocket", message: "" };
-const STATUS: Status = { configured: true, signedIn: true, user: USER, signIn: null, error: "", speaker: SPEAKER };
-const CONFIGURED: Status = { ...STATUS, signedIn: false, user: null, speaker: { ...SPEAKER, state: "off", id: null } };
+const STATUS: Status = { signedIn: true, user: USER, premium: true, signIn: null, error: "", speaker: SPEAKER };
+const SIGNED_OUT: Status = { ...STATUS, signedIn: false, user: null, premium: null, speaker: { ...SPEAKER, state: "off", id: null } };
+/** A made-up pairing code, and the page that confirms it with the code filled in. */
+const PAIRING_CODE = "QK7FTM";
 // shown, not fetched
-const SIGN_IN_URL = "https://accounts.spotify.com/authorize?response_type=code&client_id=0f3c9a7d5b2e4c1f8a6d3b9e7c5a1f2d&redirect_uri=https%3A%2F%2Fapplets.pocket.nexus%2Foauth%2Fspotify&code_challenge_method=S256&code_challenge=Qm3x9vT2kLpR7sYwZ1aB4cD6eF8gH0jK2lM5nP7qR9s&state=sample-7f3k2p9q&scope=user-read-playback-state%20user-modify-playback-state%20user-read-currently-playing%20user-library-read%20user-library-modify%20playlist-read-private%20user-follow-read%20user-read-recently-played%20streaming";
-const SIGNING_IN: Status = { ...CONFIGURED, signIn: { url: SIGN_IN_URL, expiresAt: 4_102_444_800_000 } };
-const UNCONFIGURED: Status = { ...CONFIGURED, configured: false };
+const PAIRING_URL = `https://spotify.com/pair?code=${PAIRING_CODE}`;
+/** A pairing lasts up to an hour; sample data cannot count down, so this one lasts past 2100. */
+const PAIRING: Status = { ...SIGNED_OUT, signIn: { url: PAIRING_URL, code: PAIRING_CODE, expiresAt: 4_102_444_800_000 } };
 
 const LOCAL: Device = { id: SPEAKER.id!, name: SPEAKER.name, type: "GameConsole", volume: 64, active: true, local: true, restricted: false };
 const DEVICES: Device[] = [
@@ -233,9 +235,16 @@ function playlistPage(spec: PlaylistSpec): PlaylistPage {
   return { playlist: { ...playlistItem(spec), description: spec.description, owner: spec.owner }, tracks };
 }
 
+/** An artist's popular tracks: ten of theirs, in an order of their own. */
+function popular(id: string): Item[] {
+  const all = ALBUMS.filter((spec) => spec.artists.includes(id)).flatMap(trackItems);
+  const score = (item: Item) => (item.title.length * 7 + (item.trackNumber ?? 0) * 13) % 17;
+  return all.sort((a, b) => score(a) - score(b) || a.uri.localeCompare(b.uri)).slice(0, 10);
+}
+
 function artistPage(id: string): ArtistPage {
   const theirs = ALBUMS.filter((spec) => spec.artists.includes(id)).sort((a, b) => b.year.localeCompare(a.year)).map(albumItem);
-  return { artist: artistItem(id), albums: id === "a1" ? page(theirs.slice(0, 2), "2", theirs.length) : page(theirs) };
+  return { artist: artistItem(id), top: popular(id), albums: id === "a1" ? page(theirs.slice(0, 2), "2", theirs.length) : page(theirs) };
 }
 
 const QUEUE: Queue = { now: NOW, next: [...trackItems(album("al-harbor-lights")).slice(1), track("al-night-ferry", 1)] };
@@ -251,10 +260,9 @@ const answer = (method: string, path: string, file: string, value: unknown) => {
 };
 
 answer("GET", "/status", "status.json", STATUS);
-answer("POST", "/config", "status-configured.json", CONFIGURED);
-answer("POST", "/signin", "status-signing-in.json", SIGNING_IN);
-answer("POST", "/signout", "status-signed-out.json", CONFIGURED);
-answer("POST", "/cancel", "status-cancelled.json", CONFIGURED);
+answer("POST", "/signin", "status-pairing.json", PAIRING);
+answer("POST", "/signout", "status-signed-out.json", SIGNED_OUT);
+answer("POST", "/cancel", "status-cancelled.json", SIGNED_OUT);
 answer("GET", "/home", "home.json", HOME);
 answer("GET", "/library/playlists*", "library-playlists.json", page(PLAYLISTS.map(playlistItem)));
 answer("GET", "/library/albums?next=*", "library-albums-2.json", page(SAVED_ALBUMS.slice(8), null, SAVED_ALBUMS.length));

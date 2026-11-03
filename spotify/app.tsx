@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // spotify/app.tsx — Spotify for Omarchy Pocket: the owner's library, search,
 // albums, playlists and artists, and the player, over the device's `spotify`
-// service (spotify/contract.ts), which holds the sign-in and runs librespot
-// as this device's Spotify Connect speaker.
+// service (spotify/contract.ts), which holds the sign-in and is this
+// device's Spotify Connect speaker.
 //
-// The root page follows the service's status: the setup while no Client ID
-// is set, the sign-in while no one is signed in, else Home, Search and
-// Library under one bar (L and R step through them). Pages push from there;
-// the bar's back button and B pop them. The mini player along the bottom of
-// every page opens Now Playing; START opens it from anywhere. The deck's
-// keyboard types into the search field and the Client ID field while one is
-// open.
+// The root page follows the service's status: the sign-in (a pairing code
+// the owner confirms on a phone or a computer) while no one is signed in,
+// else Home, Search and Library under one bar (L and R step through them).
+// Pages push from there; the bar's back button and B pop them. The mini
+// player along the bottom of every page opens Now Playing; START opens it
+// from anywhere. The deck's keyboard types into the search field while it
+// is open.
 
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 import { AppletSurface } from "@pocketjs/framework/applet";
@@ -26,13 +26,12 @@ import { FONT, measure, wrap } from "../ui/text.ts";
 import { createPress, createTouchRouter, type Target, type TouchPage } from "../ui/touch.ts";
 import { createSpotifyClient } from "./api.ts";
 import type { Item } from "./contract.ts";
-import { isClientId } from "./format.ts";
 import { homePage, rootPage, type Tab } from "./home.tsx";
 import { createSpotifyModel } from "./model.ts";
 import { accountPage, albumPage, artistPage, devicesPage, libraryPage, likedPage, pageOf, partsOf, playlistPage, queuePage, remember, searchPage } from "./pages.tsx";
 import { Pill, type Env } from "./parts.tsx";
-import { bottomBar, miniHeight, MiniPlayer, miniTargets, playerPage, SpeakerHint } from "./player.tsx";
-import { loadingPage, setupPage, signInPage, type ClientIdField } from "./signin.tsx";
+import { bottomBar, miniHeight, MiniPlayer, miniTargets, playerPage, PremiumNote } from "./player.tsx";
+import { loadingPage, signInPage } from "./signin.tsx";
 import { createFaces } from "./text.ts";
 import { C } from "./theme.ts";
 
@@ -56,48 +55,21 @@ export default function Spotify() {
   const [keys, setKeys] = createSignal(!appletTouch());
   const [alert, setAlert] = createSignal<Alert | null>(null);
 
-  // ---- the keyboard: the search words and the Client ID ----------------------
-  const typing = keep("typing", () => ({ field: createSignal<"search" | "clientId" | null>(null), clientId: createSignal(""), error: createSignal(""), saving: createSignal(false) }));
-  const [field, setField] = typing.field;
-  const [clientId, setClientId] = typing.clientId;
-  const [clientError, setClientError] = typing.error;
-  const [saving, setSaving] = typing.saving;
+  // ---- the keyboard: the search words ----------------------------------------
+  const field = keep("typing", () => createSignal<"search" | null>(null));
+  const [editing, setEditing] = field;
   const [draft, setDraft] = createSignal("");
-  const saveClientId = () => {
-    const value = clientId().trim();
-    if (saving()) return;
-    if (!isClientId(value)) return setClientError("A Client ID is 32 letters and digits: copy it from the app's settings in the dashboard.");
-    setSaving(true);
-    setClientError("");
-    model.saveClientId(value).then(
-      () => {
-        setSaving(false);
-        if (stack.top()?.page === "config") stack.pop();
-        model.say("Client ID saved");
-      },
-      (failure: unknown) => {
-        setSaving(false);
-        setClientError(failure instanceof Error ? failure.message : String(failure));
-      },
-    );
-  };
   const osk = createOsk({
     value: draft,
     setValue: setDraft,
     maxLength: 80,
     onCommit: (text) => {
-      const editing = field();
-      setField(null);
-      if (editing === "search") model.setWords(text.trim());
-      else if (editing === "clientId") {
-        setClientId(text.trim());
-        saveClientId();
-      }
+      if (editing() === "search") model.setWords(text.trim());
+      setEditing(null);
     },
-    onClose: () => setField(null),
+    onClose: () => setEditing(null),
   });
-  legendWhileTyping(osk.isOpen, "Done");
-  const clientField: ClientIdField = { value: clientId, error: clientError, saving, save: saveClientId };
+  legendWhileTyping(osk.isOpen, "Search");
 
   const env: Env = {
     model,
@@ -108,10 +80,10 @@ export default function Spotify() {
     keys,
     useKeys: () => setKeys(true),
     stack: null as unknown as NavStack,
-    draft: (which) => (osk.isOpen() && field() === which ? osk.display("|") : null),
+    draft: (which) => (osk.isOpen() && editing() === which ? osk.display("|") : null),
     edit(which) {
-      setField(which);
-      setDraft(which === "search" ? model.words() : clientId());
+      setEditing(which);
+      setDraft(model.words());
       osk.open();
     },
     bottom: () => (bottom() ? miniHeight() : 0),
@@ -168,10 +140,6 @@ export default function Spotify() {
           return devicesPage(env, layer);
         case "account":
           return accountPage(env, layer);
-        case "setup":
-          return setupPage(env, layer, clientField, false);
-        case "config":
-          return setupPage(env, layer, clientField, true);
         case "signin":
           return signInPage(env, layer);
         default:
@@ -181,11 +149,11 @@ export default function Spotify() {
   });
   env.stack = stack;
 
-  // The root page follows the status: a sign-out or a new Client ID starts over.
+  // The root page follows the status: a sign-out starts over.
   createEffect(() => {
     const phase = model.phase();
     const root = stack.entries()[0]?.page ?? "";
-    const want = phase === "ready" ? (ROOTS.includes(root) ? root : "home") : phase === "setup" ? "setup" : phase === "signin" ? "signin" : "loading";
+    const want = phase === "ready" ? (ROOTS.includes(root) ? root : "home") : phase === "signin" ? "signin" : "loading";
     if (root !== want) untrack(() => stack.reset(want));
   });
   if (model.status() === null) model.refreshStatus();
@@ -235,7 +203,7 @@ export default function Spotify() {
       ...page,
       targets: () => [
         ...page.targets(),
-        ...(bar === "mini" ? miniTargets(env) : bar === "hint" ? [{ id: "hint", x: 0, y: cut, w: W, h: SCREEN_H - cut }] : []),
+        ...(bar === "mini" ? miniTargets(env) : bar === "premium" ? [{ id: "premium", x: 0, y: cut, w: W, h: SCREEN_H - cut }] : []),
         ...noticeTargets(),
       ],
       scroll: page.scroll ? { ...page.scroll, bottom: Math.min(page.scroll.bottom, cut) } : undefined,
@@ -268,8 +236,8 @@ export default function Spotify() {
         <Show when={bottom() === "mini"}>
           <MiniPlayer env={env} />
         </Show>
-        <Show when={bottom() === "hint"}>
-          <SpeakerHint env={env} />
+        <Show when={bottom() === "premium"}>
+          <PremiumNote env={env} />
         </Show>
         <Show when={model.notice()}>
           {(shown) => (

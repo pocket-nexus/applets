@@ -99,18 +99,26 @@ export function failureText(failure: { reason: Failure["reason"] | string; error
       return "That device does not take commands";
     case "signin":
       return "Sign in to Spotify again";
-    case "configure":
-      return "Set the Client ID of your Spotify app first";
     default:
       return failure.error || "Spotify did not answer";
   }
 }
 
-/** A Spotify app's Client ID: 32 hexadecimal digits. */
-export const isClientId = (text: string) => /^[0-9a-f]{32}$/i.test(text.trim());
-
-/** "4:59" until `expiresAt`, "" once it has passed. */
-export function expiresIn(expiresAt: number, now: number): string {
+/** A pairing's time left in whole minutes: "60 min", "1 min", "less than a
+ *  minute"; "" once it has passed. A pairing lasts up to an hour. */
+export function minutesLeft(expiresAt: number, now: number): string {
   const left = expiresAt - now;
-  return left > 0 ? clock(left) : "";
+  if (left <= 0) return "";
+  if (left < 60_000) return "less than a minute";
+  return `${Math.ceil(left / 60_000)} min`;
+}
+
+/** A pairing code in groups for reading and typing, upper case: "QK7FTM"
+ *  as "QK7 FTM", an 8-character one in fours. */
+export function spacedCode(code: string): string {
+  const plain = code.replace(/\s+/g, "").toUpperCase();
+  const size = plain.length === 6 || plain.length === 9 ? 3 : 4;
+  const groups: string[] = [];
+  for (let at = 0; at < plain.length; at += size) groups.push(plain.slice(at, at + size));
+  return groups.join(" ");
 }

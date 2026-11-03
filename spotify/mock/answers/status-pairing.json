@@ -1,8 +1,12 @@
 {
- "configured": true,
  "signedIn": false,
  "user": null,
- "signIn": null,
+ "premium": null,
+ "signIn": {
+  "url": "https://spotify.com/pair?code=QK7FTM",
+  "code": "QK7FTM",
+  "expiresAt": 4102444800000
+ },
  "error": "",
  "speaker": {
   "name": "Omarchy Pocket",

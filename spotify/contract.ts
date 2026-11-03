@@ -5,16 +5,15 @@
 // vendor/applets submodule); the applet's sample data (spotify/mock/) answers
 // it in the store's player. Every path is under companionService("spotify").
 //
-// The service holds the Spotify sign-in (an OAuth PKCE grant of the owner's
-// own Client ID; the refresh token never reaches the applet), turns the Web
-// API's objects into the compact ones below, and runs librespot as this
-// device's Spotify Connect speaker. A request answers JSON; a failure answers
-// a 4xx or 5xx with `Failure`.
+// The service holds the Spotify sign-in (a pairing code the owner confirms
+// at spotify.com/pair, as a TV signs in; no credential reaches the applet),
+// answers from Spotify's own internal API in the compact objects below, and
+// is this device's Spotify Connect speaker. A request answers JSON; a failure
+// answers a 4xx or 5xx with `Failure`.
 //
 //   GET  /status                       Status
-//   POST /config     {clientId}        Status     set or clear the Client ID
-//   POST /signin                       Status     start a sign-in: status.signIn has the URL for a QR code
-//   POST /cancel                       Status     forget the sign-in waiting for the phone
+//   POST /signin                       Status     start a pairing: status.signIn has its code and URL
+//   POST /cancel                       Status     forget the pairing waiting for the owner
 //   POST /signout                      Status
 //   GET  /home                         Home
 //   GET  /library/<shelf>?next=<t>     Page       shelf: playlists | albums | artists | tracks
@@ -85,22 +84,23 @@ export interface Page {
 }
 
 export interface Status {
-  /** a Client ID is set */
-  configured: boolean;
   signedIn: boolean;
   user: { id: string; name: string; image: string } | null;
-  /** a sign-in waiting for the owner's phone: show `url` as a QR code */
-  signIn: { url: string; expiresAt: number } | null;
+  /** the account has Premium; null until Spotify says. Playing needs it */
+  premium: boolean | null;
+  /** a pairing waiting for the owner: `url` (spotify.com/pair with the code
+   *  filled in) as a QR code, and `code` large, for spotify.com/pair typed on
+   *  any phone or computer */
+  signIn: { url: string; code: string; expiresAt: number } | null;
   /** why the last sign-in or the session failed, for the reader */
   error: string;
-  /** librespot, this device's Spotify Connect speaker */
+  /** this device's Spotify Connect speaker */
   speaker: {
     name: string;
-    /** off: not running; starting; waiting: running, and Spotify has not
-     *  signed it in yet (pick it once in Spotify on a phone);
-     *  ready: in the account's devices; error: see message */
-    state: "off" | "starting" | "waiting" | "ready" | "error";
-    /** its Connect device id once Spotify lists it */
+    /** off: not signed in; starting; ready: in the account's devices;
+     *  error: see message */
+    state: "off" | "starting" | "ready" | "error";
+    /** its Connect device id */
     id: string | null;
     message: string;
   };
@@ -125,13 +125,14 @@ export interface AlbumPage {
 
 export interface PlaylistPage {
   playlist: Item & { description: string; owner: string };
-  /** null when Spotify does not list this playlist's tracks to the app (a
-   *  playlist the owner neither made nor collaborates on): it still plays */
+  /** null when Spotify does not list this playlist's tracks: it still plays */
   tracks: Page | null;
 }
 
 export interface ArtistPage {
   artist: Item;
+  /** the artist's popular tracks, at most 10 */
+  top: Item[];
   /** albums and singles, newest first */
   albums: Page;
 }
@@ -186,8 +187,8 @@ export interface PlayRequest {
 
 export interface Failure {
   error: string;
-  /** what the applet can do about it: configure (no Client ID), signin,
-   *  premium (the account cannot play), nodevice (nothing to play on),
-   *  rate (Spotify asked to wait), restricted (the device refuses), other */
-  reason: "configure" | "signin" | "premium" | "nodevice" | "rate" | "restricted" | "other";
+  /** what the applet can do about it: signin, premium (the account cannot
+   *  play), nodevice (nothing to play on), rate (Spotify asked to wait),
+   *  restricted (the device refuses), other */
+  reason: "signin" | "premium" | "nodevice" | "rate" | "restricted" | "other";
 }

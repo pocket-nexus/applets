@@ -5,7 +5,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { appendPage, clock, CLOCK_TRUST_MS, expiresIn, facts, failureText, fractionAt, isClientId, nextRepeat, progressAt, searchPath, span, withNext } from "../spotify/format.ts";
+import { appendPage, clock, CLOCK_TRUST_MS, facts, failureText, fractionAt, minutesLeft, nextRepeat, progressAt, searchPath, spacedCode, span, withNext } from "../spotify/format.ts";
 import type { AlbumPage, ArtistPage, Home, Item, Page, Player, PlaylistPage, Status } from "../spotify/contract.ts";
 import { packMock } from "../tools/mock.ts";
 import { findRoute } from "../lib/mock.ts";
@@ -74,16 +74,18 @@ describe("controls", () => {
     expect(nextRepeat("track")).toBe("off");
   });
 
-  test("a Client ID is 32 hexadecimal digits", () => {
-    expect(isClientId("0123456789abcdef0123456789ABCDEF")).toBe(true);
-    expect(isClientId(" 0123456789abcdef0123456789abcdef ")).toBe(true);
-    expect(isClientId("0123456789abcdef0123456789abcde")).toBe(false);
-    expect(isClientId("0123456789abcdef0123456789abcdeg")).toBe(false);
+  test("a pairing code reads in groups", () => {
+    expect(spacedCode("QK7FTM")).toBe("QK7 FTM");
+    expect(spacedCode("qk7 ftm")).toBe("QK7 FTM");
+    expect(spacedCode("ABCD1234")).toBe("ABCD 1234");
   });
 
-  test("a sign-in's time left", () => {
-    expect(expiresIn(1_300_000, 1_000_000)).toBe("5:00");
-    expect(expiresIn(1_000_000, 1_000_000)).toBe("");
+  test("a pairing's time left, in minutes", () => {
+    expect(minutesLeft(1_000_000 + 3_599_000, 1_000_000)).toBe("60 min");
+    expect(minutesLeft(1_000_000 + 61_000, 1_000_000)).toBe("2 min");
+    expect(minutesLeft(1_000_000 + 60_000, 1_000_000)).toBe("1 min");
+    expect(minutesLeft(1_000_000 + 59_000, 1_000_000)).toBe("less than a minute");
+    expect(minutesLeft(1_000_000, 1_000_000)).toBe("");
   });
 
   test("failures in the reader's words", () => {
@@ -133,7 +135,7 @@ describe("the sample data", () => {
 
   test("signed in, with something playing on this device's speaker", () => {
     const status = json<Status>("GET", "/status");
-    expect([status.configured, status.signedIn, status.speaker.state]).toEqual([true, true, "ready"]);
+    expect([status.signedIn, status.premium, status.speaker.state]).toEqual([true, true, "ready"]);
     const player = json<Player>("GET", "/player");
     expect(player.active && player.device?.local).toBe(true);
   });
@@ -147,8 +149,27 @@ describe("the sample data", () => {
     }
   });
 
+  test("a pairing names its code and spotify.com/pair with the code filled in; no Client ID anywhere", () => {
+    const pairing = json<Status>("POST", "/signin");
+    expect(pairing.signedIn).toBe(false);
+    expect(pairing.signIn?.code).toBe("QK7FTM");
+    expect(pairing.signIn?.url).toBe("https://spotify.com/pair?code=QK7FTM");
+    expect(findRoute(packed.data, "POST", "https://companion.pocket/spotify/config")).toBe(null);
+    const raw = readFileSync(join(import.meta.dir, "..", "spotify", "mock", "mock.json"), "utf8");
+    expect(/configured|clientId/.test(raw)).toBe(false);
+  });
+
+  test("an artist's page has its popular tracks, the artist's own", () => {
+    for (const item of json<Home>("GET", "/home").artists) {
+      const artist = json<ArtistPage>("GET", `/artist/${item.id}`);
+      expect(artist.top.length).toBeGreaterThan(0);
+      expect(artist.top.length).toBeLessThanOrEqual(10);
+      expect(artist.top.every((track) => track.kind === "track" && track.artists?.some((ref) => ref.id === item.id))).toBe(true);
+    }
+  });
+
   test("every POST has an answer", () => {
-    for (const path of ["/config", "/signin", "/signout", "/play", "/pause", "/resume", "/next", "/previous", "/seek", "/volume", "/shuffle", "/repeat", "/transfer", "/like"]) {
+    for (const path of ["/signin", "/cancel", "/signout", "/play", "/pause", "/resume", "/next", "/previous", "/seek", "/volume", "/shuffle", "/repeat", "/transfer", "/like"]) {
       expect([path, findRoute(packed.data, "POST", `https://companion.pocket/spotify${path}`) !== null]).toEqual([path, true]);
     }
   });

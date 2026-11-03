@@ -13,8 +13,8 @@
 //
 // The mini player is the bar along the bottom of every other page while
 // something plays anywhere: the cover, the title and artists, play and
-// pause, next; a tap on it opens Now Playing. While nothing plays and this
-// device's speaker waits for Spotify, the same bar says how to connect it.
+// pause, next; a tap on it opens Now Playing. While nothing plays and the
+// account has no Premium, the same bar says that playing needs it.
 
 import { createMemo, createSignal, onCleanup, Show, type Accessor } from "solid-js";
 import { jump } from "@pocketjs/framework/animation";
@@ -219,7 +219,8 @@ export function playerPage(env: Env): PageSpec {
   const likeTarget = (): Target => ({ id: "player.like", x: g.textX + g.textW - 32, y: g.titleY - 4, w: 34, h: 32, run: () => item() && model.toggleLike(item()!.uri) });
 
   const emptyY = NAV_H + 30;
-  const hint = () => model.speakerHint();
+  /** Why playing here cannot start: no Premium, or the speaker not ready. */
+  const hint = () => model.premiumNote() || model.speakerNote();
   const hintLines = () => (hint() ? wrap(hint(), FONT.xs, Math.min(300, W - 32), 3) : []);
   const playHereY = () => messageButtonY(emptyY, "Start something on any device, or play here.", W);
 
@@ -304,16 +305,16 @@ export function playerPage(env: Env): PageSpec {
   };
 }
 
-// ---- the mini player and the speaker's hint --------------------------------------
+// ---- the mini player and the Premium note -----------------------------------------
 
 /** What the bar along the bottom shows. */
-export function bottomBar(env: Env): Accessor<"mini" | "hint" | null> {
+export function bottomBar(env: Env): Accessor<"mini" | "premium" | null> {
   return () => {
     const { model } = env;
     if (model.phase() !== "ready") return null;
     if (env.stack.top()?.page === "player") return null;
     if (model.player()?.active && model.player()?.item) return "mini";
-    return model.speakerHint() ? "hint" : null;
+    return model.premiumNote() ? "premium" : null;
   };
 }
 
@@ -368,25 +369,24 @@ export function MiniPlayer(props: { env: Env }) {
   );
 }
 
-/** The speaker's hint in the mini player's place. */
-export function SpeakerHint(props: { env: Env }) {
+/** The Premium note in the mini player's place, while nothing plays. */
+export function PremiumNote(props: { env: Env }) {
   const H = miniHeight();
   const W = SCREEN_W;
   const y = SCREEN_H - H + 4;
   const h = H - 8;
   // two lines of the small face when they hold it, else of the smaller one
-  const fits = () => wrap(props.env.model.speakerHint(), FONT.xs, W - 60, 3).length <= 2;
-  const lines = () => wrap(props.env.model.speakerHint(), fits() ? FONT.xs : FONT.xxs, W - 60, 2);
+  const fits = () => wrap(props.env.model.premiumNote(), FONT.xs, W - 36, 3).length <= 2;
+  const lines = () => wrap(props.env.model.premiumNote(), fits() ? FONT.xs : FONT.xxs, W - 36, 2);
   return (
     <>
       <View class="absolute" style={{ insetL: 0, insetT: SCREEN_H - H, width: W, height: H, bgColor: C.bg }} />
       <View class="absolute" style={{ insetL: 6, insetT: y, width: W - 12, height: h, radius: 6, bgColor: C.surface }} />
-      <Image class="absolute w-[20] h-[20]" src={ICON.console.green20} style={{ insetL: 16, insetT: y + (h - 20) / 2 }} />
       <Show
         when={fits()}
-        fallback={<Text class="absolute text-2xs leading-[13]" style={{ insetL: 46, insetT: y + (h - lines().length * 13) / 2 - 1, width: W - 60, textColor: C.text }}>{lines().join("\n")}</Text>}
+        fallback={<Text class="absolute text-2xs leading-[13]" style={{ insetL: 18, insetT: y + (h - lines().length * 13) / 2 - 1, width: W - 36, textColor: C.text }}>{lines().join("\n")}</Text>}
       >
-        <Text class="absolute text-xs leading-[15]" style={{ insetL: 46, insetT: y + (h - lines().length * 15) / 2 - 1, width: W - 60, textColor: C.text }}>{lines().join("\n")}</Text>
+        <Text class="absolute text-xs leading-[15]" style={{ insetL: 18, insetT: y + (h - lines().length * 15) / 2 - 1, width: W - 36, textColor: C.text }}>{lines().join("\n")}</Text>
       </Show>
     </>
   );

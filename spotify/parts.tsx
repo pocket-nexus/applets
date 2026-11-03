@@ -35,10 +35,10 @@ export interface Env {
   useKeys(): void;
   stack: NavStack;
   /** The keyboard's text with its caret while it edits `field`, else null. */
-  draft(field: "search" | "clientId"): string | null;
+  draft(field: "search"): string | null;
   /** Open the keyboard on a field. */
-  edit(field: "search" | "clientId"): void;
-  /** Px along the bottom the mini player or the speaker's hint covers now. */
+  edit(field: "search"): void;
+  /** Px along the bottom the mini player or the Premium note covers now. */
   bottom: Accessor<number>;
   /** Px a signed-in page keeps free along its bottom for them (PageSpec.inset). */
   inset: number;
