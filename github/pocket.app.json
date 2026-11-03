@@ -24,13 +24,13 @@
       "requires": [
         "text.glyphs.baked",
         "input.buttons",
-        "display.auxiliary",
-        "input.touch.auxiliary",
         "net.http"
       ],
       "enhances": [
         "input.analog.left",
-        "system.agent"
+        "system.agent",
+        "display.auxiliary",
+        "input.touch.auxiliary"
       ]
     }
   },
@@ -38,6 +38,9 @@
     "entry": "github/main.tsx",
     "output": "github-main",
     "framework": "solid",
+    "modality": {
+      "touch": "auxiliary"
+    },
     "surfaces": {
       "auxiliary": {
         "adaptive": {
@@ -66,7 +69,27 @@
         ],
         "presentation": "native"
       }
-    }
+    },
+    "presentations": [
+      {
+        "id": "full-screen",
+        "entry": "github/main.tsx",
+        "modality": {
+          "screens": 1,
+          "touch": "none",
+          "buttons": true
+        },
+        "viewport": {
+          "fixed": {
+            "logical": [
+              480,
+              272
+            ],
+            "presentation": "native"
+          }
+        }
+      }
+    ]
   },
   "domains": {
     "worker": {

@@ -8,6 +8,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { validateAndResolveBuildPlan } from "../vendor/pocketjs/framework/src/manifest/resolve.ts";
 import { checkApplet, formatAppletDiagnostics } from "../vendor/pocketjs/tools/applet-check.ts";
 import { APPS, appContract } from "../tools/apps.ts";
 import { ROOT } from "../tools/paths.ts";
@@ -36,6 +37,20 @@ describe("Pocket Applets", () => {
       if (!icon) continue;
       const png = readFileSync(resolve(ROOT, app, icon));
       expect([app, png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([app, 128, 128]);
+    }
+  });
+
+  // The full-screen presentation is one screen, no touch and buttons: the
+  // PSP's 480x272, read by the d-pad and the button legend (ui/legend.tsx).
+  // The PSP host runs no worker (pocketjs 9a746094 took its network away), so
+  // an applet with a network does not resolve there yet; nothing else may stop it.
+  test("an applet with the full-screen presentation resolves for the PSP but for the network it lacks", () => {
+    const presented = APPS.filter((app) => JSON.parse(readFileSync(appContract(app), "utf8")).app.presentations);
+    expect(presented).toEqual(["discord", "github", "hn", "x", "youtube"]);
+    for (const app of presented) {
+      const resolution = validateAndResolveBuildPlan(JSON.parse(readFileSync(appContract(app), "utf8")), { target: "psp" });
+      const reasons = resolution.ok ? [] : resolution.diagnostics.map((item) => item.message);
+      expect([app, reasons.filter((reason) => !/does not provide (net\.http|runtime\.worker)\b/.test(reason))]).toEqual([app, []]);
     }
   });
 
