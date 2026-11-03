@@ -36,6 +36,8 @@ export function createImages(): Images {
             while (textures.size > LIMIT) {
               const [oldest, old] = textures.entries().next().value as [string, number];
               textures.delete(oldest);
+              // fetched again the next time a page draws it
+              asked.delete(oldest);
               getOps().freeTexture?.(old);
             }
             setRevision(revision() + 1);

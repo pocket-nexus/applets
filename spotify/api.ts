@@ -6,9 +6,11 @@
 // omarchy-pocketd answers on the device itself. The worker's http node runs
 // two requests at a time, so they share one queue here, in order of what a
 // reader waits on: player commands first, then pages, then glyph atlases,
-// then cover art (the newest asked for first). A cover arrives as an IMG
-// entry from the images service and becomes a texture; the least recently
-// drawn are freed past COVERS_KEPT.
+// then cover art (the most recently drawn first). At most COVERS_WAITING
+// covers wait: past it the one drawn longest ago is dropped, and asked for
+// again when a page draws it again. A cover arrives as an IMG entry from the
+// images service and becomes a texture; the least recently drawn are freed
+// past COVERS_KEPT.
 //
 // A failure answers a 4xx or 5xx with the contract's Failure; a request
 // that never reached the service has the transport's code instead.
@@ -24,6 +26,8 @@ import { searchPath, withNext } from "./format.ts";
 export const MAX_INFLIGHT = 2;
 /** Cover textures kept uploaded. */
 export const COVERS_KEPT = 72;
+/** Cover requests waiting to start: about a full window of covers. */
+export const COVERS_WAITING = 32;
 /** The texture side the images service is asked for to draw a cover
  *  `logical` px wide: a power of two at least that many samples on this
  *  surface (platform.pixelRatio), at most 256. */
@@ -62,6 +66,8 @@ interface Task {
   maxBytes: number;
   resolve: (response: NetResponse) => void;
   reject: (error: SpotifyError) => void;
+  /** a cover's texture key, while it waits */
+  cover?: string;
 }
 
 export type Shelf = "playlists" | "albums" | "artists" | "tracks";
@@ -154,15 +160,17 @@ export function createSpotifyClient(): SpotifyClient {
     }
   };
 
-  /** Queue a request: a lane's tasks wait behind every earlier lane's;
-   *  covers go newest first. */
-  const request = (url: string, lane: Lane, options: { body?: string; timeoutMs?: number; maxBytes?: number } = {}) =>
-    new Promise<NetResponse>((resolve, reject) => {
-      const task: Task = { url, lane, body: options.body, timeoutMs: options.timeoutMs ?? 30_000, maxBytes: options.maxBytes ?? 1024 * 1024, resolve, reject };
-      const at = lane === Lane.cover ? queue.findIndex((queued) => queued.lane === Lane.cover) : queue.findIndex((queued) => queued.lane > lane);
-      queue.splice(at < 0 ? queue.length : at, 0, task);
-      pump();
-    });
+  /** Queue a task: a lane's tasks wait behind every earlier lane's; a cover
+   *  goes in front of the other covers. */
+  const enqueue = (task: Task) => {
+    const at = task.lane === Lane.cover ? queue.findIndex((queued) => queued.lane === Lane.cover) : queue.findIndex((queued) => queued.lane > task.lane);
+    queue.splice(at < 0 ? queue.length : at, 0, task);
+    pump();
+  };
+  const request = (url: string, lane: Lane, options: { body?: string; timeoutMs?: number; maxBytes?: number; cover?: string } = {}) =>
+    new Promise<NetResponse>((resolve, reject) =>
+      enqueue({ url, lane, body: options.body, timeoutMs: options.timeoutMs ?? 30_000, maxBytes: options.maxBytes ?? 1024 * 1024, resolve, reject, cover: options.cover }),
+    );
 
   const get = async <T,>(path: string): Promise<T> => (await request(companionService("spotify", path), Lane.page)).json<T>();
   const post = async <T,>(path: string, body: unknown = {}): Promise<T> =>
@@ -184,13 +192,18 @@ export function createSpotifyClient(): SpotifyClient {
         textures.set(key, have);
         return have;
       }
-      if (asked.has(key)) return -1;
+      if (asked.has(key)) {
+        // drawn again while it waits: it goes in front of the other covers
+        const at = queue.findIndex((queued) => queued.cover === key);
+        if (at >= 0) enqueue(queue.splice(at, 1)[0]!);
+        return -1;
+      }
       asked.add(key);
       const path = `/fetch?url=${encodeURIComponent(url)}&w=${side}&h=${side}${round ? "&round=1" : ""}`;
-      request(companionService("images", path), Lane.cover, { timeoutMs: 30_000, maxBytes: 8 + side * side * 4 + 64 }).then(
-        async (response) => {
+      request(companionService("images", path), Lane.cover, { timeoutMs: 30_000, maxBytes: 8 + side * side * 4 + 64, cover: key })
+        .then(async (response) => {
           const handle = getOps().uploadImgEntry?.(await response.bytes()) ?? -1;
-          if (handle < 0) return;
+          if (handle < 0) throw new SpotifyError("other", "The cover did not upload.");
           textures.set(key, handle);
           while (textures.size > COVERS_KEPT) {
             const [oldest, old] = textures.entries().next().value as [string, number];
@@ -199,10 +212,12 @@ export function createSpotifyClient(): SpotifyClient {
             getOps().freeTexture?.(old);
           }
           setRevision(revision() + 1);
-        },
-        // asked again the next time a page draws it
-        () => asked.delete(key),
-      );
+        })
+        // failed, or dropped while it waited: asked again the next time a page draws it
+        .catch(() => asked.delete(key));
+      // covers are the last lane, so the queue's tail is the cover drawn longest ago
+      const first = queue.findIndex((queued) => queued.lane === Lane.cover);
+      if (first >= 0 && queue.length - first > COVERS_WAITING) queue.pop()!.reject(new SpotifyError("other", "The cover is no longer drawn."));
       return -1;
     },
   };
