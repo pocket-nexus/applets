@@ -152,7 +152,9 @@ export function StatusBar(props: StatusBarProps) {
 /** Icons rendered in Blender (art/icons/icons.py) and finished by
  *  art/icons/bake.ts: the picture, the gloss, the rim and, at 46, the drop
  *  shadow are all in the texture. */
-export type IconArt = "settings" | "mac" | "wifi" | "apps" | "hn" | "nexus" | "youtube" | "x" | "discord" | "camera" | "photos" | "github";
+export type IconArt =
+  | "settings" | "mac" | "wifi" | "apps" | "hn" | "nexus" | "youtube" | "x" | "discord" | "camera" | "photos"
+  | "github" | "weather" | "podcasts" | "maps" | "homeassistant";
 
 /** Corner radius as a fraction of the side (art/icons/bake.ts ICON_RADIUS). */
 const ICON_RADIUS = 0.2;
@@ -173,6 +175,10 @@ const ART: Record<IconArt | "plain", readonly Variant[]> = {
   camera: [[24, 32, "art/icons/camera-24.png"], [46, 64, "art/icons/camera-46.png"], [64, 64, "art/icons/camera-64.png"]],
   photos: [[24, 32, "art/icons/photos-24.png"], [46, 64, "art/icons/photos-46.png"], [64, 64, "art/icons/photos-64.png"]],
   github: [[24, 32, "art/icons/github-24.png"], [46, 64, "art/icons/github-46.png"], [64, 64, "art/icons/github-64.png"]],
+  weather: [[24, 32, "art/icons/weather-24.png"], [46, 64, "art/icons/weather-46.png"], [64, 64, "art/icons/weather-64.png"]],
+  podcasts: [[24, 32, "art/icons/podcasts-24.png"], [46, 64, "art/icons/podcasts-46.png"], [64, 64, "art/icons/podcasts-64.png"]],
+  maps: [[24, 32, "art/icons/maps-24.png"], [46, 64, "art/icons/maps-46.png"], [64, 64, "art/icons/maps-64.png"]],
+  homeassistant: [[24, 32, "art/icons/homeassistant-24.png"], [46, 64, "art/icons/homeassistant-46.png"], [64, 64, "art/icons/homeassistant-64.png"]],
   /** The finish alone, over the tint and glyph of an app that ships no icon. */
   plain: [[24, 32, "art/icons/plain-24.png"], [46, 64, "art/icons/plain-46.png"], [64, 64, "art/icons/plain-64.png"]],
 };
@@ -194,6 +200,10 @@ const APP_ART: Record<string, IconArt> = {
   "dev.pocket-nexus.camera": "camera",
   "dev.pocket-nexus.photos": "photos",
   "dev.pocket-nexus.github": "github",
+  "dev.pocket-nexus.weather": "weather",
+  "dev.pocket-nexus.podcasts": "podcasts",
+  "dev.pocket-nexus.maps": "maps",
+  "dev.pocket-nexus.homeassistant": "homeassistant",
 };
 
 export interface TileProps {
