@@ -1,0 +1,219 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a4",
+  "uri": "spotify:artist:a4",
+  "title": "夜光ポスト",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a4"
+ },
+ "top": [
+  {
+   "kind": "track",
+   "id": "al-mayonaka-5",
+   "uri": "spotify:track:al-mayonaka-5",
+   "title": "月見坂",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "durationMs": 288000,
+   "explicit": false,
+   "album": {
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "name": "真夜中の郵便配達"
+   },
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "trackNumber": 5
+  },
+  {
+   "kind": "track",
+   "id": "al-mayonaka-2",
+   "uri": "spotify:track:al-mayonaka-2",
+   "title": "手紙の雨",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "durationMs": 261000,
+   "explicit": false,
+   "album": {
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "name": "真夜中の郵便配達"
+   },
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "trackNumber": 2
+  },
+  {
+   "kind": "track",
+   "id": "al-mayonaka-6",
+   "uri": "spotify:track:al-mayonaka-6",
+   "title": "おやすみ交差点",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "durationMs": 206000,
+   "explicit": false,
+   "album": {
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "name": "真夜中の郵便配達"
+   },
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "trackNumber": 6
+  },
+  {
+   "kind": "track",
+   "id": "al-mayonaka-7",
+   "uri": "spotify:track:al-mayonaka-7",
+   "title": "Postmark (Interlude)",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "durationMs": 92000,
+   "explicit": false,
+   "album": {
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "name": "真夜中の郵便配達"
+   },
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "trackNumber": 7
+  },
+  {
+   "kind": "track",
+   "id": "al-mayonaka-8",
+   "uri": "spotify:track:al-mayonaka-8",
+   "title": "夜明けの配達",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "durationMs": 308000,
+   "explicit": false,
+   "album": {
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "name": "真夜中の郵便配達"
+   },
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "trackNumber": 8
+  },
+  {
+   "kind": "track",
+   "id": "al-mayonaka-4",
+   "uri": "spotify:track:al-mayonaka-4",
+   "title": "青い切手",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "durationMs": 183000,
+   "explicit": false,
+   "album": {
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "name": "真夜中の郵便配達"
+   },
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "trackNumber": 4
+  },
+  {
+   "kind": "track",
+   "id": "al-mayonaka-1",
+   "uri": "spotify:track:al-mayonaka-1",
+   "title": "夜光ポスト",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "durationMs": 230000,
+   "explicit": false,
+   "album": {
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "name": "真夜中の郵便配達"
+   },
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "trackNumber": 1
+  },
+  {
+   "kind": "track",
+   "id": "al-mayonaka-3",
+   "uri": "spotify:track:al-mayonaka-3",
+   "title": "最終列車",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "durationMs": 217000,
+   "explicit": false,
+   "album": {
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "name": "真夜中の郵便配達"
+   },
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "trackNumber": 3
+  }
+ ],
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "title": "真夜中の郵便配達",
+    "subtitle": "夜光ポスト",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+    "artists": [
+     {
+      "id": "a4",
+      "uri": "spotify:artist:a4",
+      "name": "夜光ポスト"
+     }
+    ],
+    "count": 8,
+    "year": "2022"
+   }
+  ],
+  "total": 1,
+  "next": null
+ }
+}

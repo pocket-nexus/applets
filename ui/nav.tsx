@@ -15,7 +15,7 @@ import { after } from "@pocketjs/framework/clock";
 import { BTN } from "@pocketjs/framework/input";
 import { analogY, onFrame } from "@pocketjs/framework/lifecycle";
 import { createScroller } from "@pocketjs/framework/kinetics";
-import { NAV_H, NavBar, navTargets, type NavButton } from "./bar.tsx";
+import { NAV_H, NavBar, navTargets, type BarColors, type NavButton } from "./bar.tsx";
 import { setLegend, type LegendEntry } from "./legend.tsx";
 import { appletTouch, SCREEN_H, SCREEN_W } from "./screen.ts";
 import { keep } from "./keep.ts";
@@ -66,6 +66,8 @@ export interface PageSpec {
   key?: (pressed: number) => boolean;
   /** Bar tint (default iOS 6 blue; black over the camera). */
   tint?: "blue" | "black" | "orange" | "flat";
+  /** The flat bar's palette, for an app with a look of its own. */
+  barColors?: BarColors;
   /** Drawn in the bar instead of the title. */
   titleView?: () => JSX.Element;
   /** No page background (options.background): fixed content paints its own,
@@ -148,8 +150,13 @@ export function createNavStack(options: NavOptions): NavStack {
   let nextKey = 1;
   const record = options.restore ? keep<NavRecord>(`nav:${options.restore}`, () => ({ pages: [], scrolls: [] })) : null;
   const [entries, setEntries] = createSignal<readonly StackEntry[]>(record ? record.pages.map((page) => ({ key: nextKey++, page })) : []);
-  // the record follows the stack: its pages now, its offsets as the layers scroll
-  if (record) createEffect(() => (record.pages = entries().map((entry) => entry.page)));
+  // the record follows the stack: its pages now, its offsets as the layers
+  // scroll; a popped page's offset goes with it, so the next page pushed at
+  // its depth starts at the top
+  if (record) createEffect(() => {
+    record.pages = entries().map((entry) => entry.page);
+    if (record.scrolls.length > record.pages.length) record.scrolls.length = record.pages.length;
+  });
   const scrollOf = (entry: StackEntry): number => (record ? record.scrolls[entries().findIndex((e) => e.key === entry.key)] ?? 0 : 0);
   const scrolled = (entry: StackEntry, offset: number) => {
     if (!record) return;
@@ -203,6 +210,7 @@ export function createNavStack(options: NavOptions): NavStack {
       settle(SETTLE_MS, () => setEntries(entries().filter((entry) => entry.key !== leaving.key)));
     },
     reset(page) {
+      if (record) record.scrolls = [];
       setEntries(page ? [{ key: nextKey++, page }] : []);
     },
     touch() {
@@ -424,6 +432,7 @@ function LayerView(props: {
         right={spec.right?.() ?? null}
         press={props.options.press}
         tint={spec.tint}
+        colors={spec.barColors}
         titleView={spec.titleView}
       />
     </View>

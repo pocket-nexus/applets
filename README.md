@@ -15,12 +15,13 @@ Each directory with a `pocket.app.json` is one applet. **One source builds a var
 | Podcasts | `podcasts/` | ✓ | ✓ | ✓ |
 | Maps | `maps/` | ✓ | ✓ | ✓ |
 | Home (Home Assistant) | `homeassistant/` | ✓ | ✓ | ✓ |
+| Spotify | `spotify/` | ✓ | | |
 | Store (the applet store client) | `appstore/` | ✓ | | |
 | Camera | `camera/` | | ✓ | ✓ |
 | Photos | `photos/` | | ✓ | ✓ |
 | Notes | `notes/` | | ✓ | ✓ |
 
-Camera and Photos need `camera.photo`, Notes `data.fs`; Omarchy Pocket's host contract offers neither, so its builds leave them out. The Store client talks to omarchy-pocketd's `appstore` service and is built for Omarchy Pocket alone (`ONLY` in `tools/apps.ts`); Pocket Shell installs from its paired Mac.
+Camera and Photos need `camera.photo`, Notes `data.fs`; Omarchy Pocket's host contract offers neither, so its builds leave them out. The Store client talks to omarchy-pocketd's `appstore` service and is built for Omarchy Pocket alone (`ONLY` in `tools/apps.ts`); Pocket Shell installs from its paired Mac. Spotify is built for Omarchy Pocket alone too: its `spotify` service (`spotify/contract.ts`), which signs the owner in with a pairing code confirmed at spotify.com/pair and is this device's Spotify Connect speaker, runs in omarchy-pocketd.
 
 Hacker News, X, YouTube, Discord and GitHub also declare the applet **full-screen presentation**: one screen, no touch, buttons, at the PSP's 480×272. Without touch the d-pad focus holds a row from the start, and a button legend along the bottom (`ui/legend.tsx`) names what each button does on the page. PocketJS's PSP host runs no worker yet and every networked applet needs one, so the resolver leaves them out of a PSP build until it does.
 
@@ -28,7 +29,7 @@ Hacker News, X, YouTube, Discord and GitHub also declare the applet **full-scree
 
 | Piece | What it is |
 | --- | --- |
-| `ui/` | The iOS 6 kit the applets and Pocket Shell's launcher draw with: navigation stack and bar, grouped tables, alerts, text fitting, slot pools for long lists, one touch router per screen. `ui/screen.ts` reads the surface size; `ui/window.tsx` mounts an applet and remounts it when Omarchy Pocket resizes its window. |
+| `ui/` | The iOS 6 kit the applets and Pocket Shell's launcher draw with: navigation stack and bar, grouped tables, alerts, text fitting, slot pools for long lists, one touch router per screen. `ui/screen.ts` reads the surface size; `ui/window.tsx` mounts an applet and remounts it when Omarchy Pocket resizes its window. `ui/setup.tsx` is the owner setup page of any companion service (what its `/_setup` answers: the keys the owner types, the vendor programs fetched on the owner's consent, a prompt), in the palette an applet passes. |
 | `kit/` | The design system newer applets are written on (`kit/README.md`): a page is a list of rows. GitHub is built on it, and `tools/check.ts` holds an applet made on it to its rules. |
 | `lib/net.ts` | `fetch` for an applet. **The UI realm has no network**: a request goes to the applet's worker (`lib/net-worker.ts`, declared in every networked applet's `domains.worker`) as a record on the `request` ring, and the worker performs it with the device's `http` node: the Pocket Link to a paired Mac on the 3DS, the firmware's own HTTP on the Tab5, omarchy-pocketd on Omarchy Pocket. One request's descriptor (URL, method, headers and body as JSON) is at most **1020 bytes**. One response is at most what the device's host contract states (`worker.http.responseBytes`: **4 MiB** on Omarchy Pocket, **256 KiB** where it states none), and the `response` ring is declared `"host"`, so each device's build takes the channel its contract states (**64 records of 16 KiB** on Omarchy Pocket, **8 of 1 KiB** elsewhere). |
 | `lib/store.ts` | A JSON document in the companion's `store` service, whatever its size: saved whole when one `/set` fits a request's 1020-byte descriptor, else in parts `<name>.0…` and then `{"parts": n}` under `<name>`. Weather's places and Podcasts' library use it. |

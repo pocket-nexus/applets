@@ -1,0 +1,38 @@
+[
+ {
+  "id": "dev-ren-phone",
+  "name": "Ren's Phone",
+  "type": "Smartphone",
+  "volume": null,
+  "active": false,
+  "local": false,
+  "restricted": false
+ },
+ {
+  "id": "dev-omarchy-pocket",
+  "name": "Omarchy Pocket",
+  "type": "GameConsole",
+  "volume": 64,
+  "active": true,
+  "local": true,
+  "restricted": false
+ },
+ {
+  "id": "dev-studio-laptop",
+  "name": "Studio Laptop",
+  "type": "Computer",
+  "volume": 40,
+  "active": false,
+  "local": false,
+  "restricted": false
+ },
+ {
+  "id": "dev-kitchen-speaker",
+  "name": "Kitchen Speaker",
+  "type": "Speaker",
+  "volume": 30,
+  "active": false,
+  "local": false,
+  "restricted": true
+ }
+]

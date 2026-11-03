@@ -1,0 +1,314 @@
+{
+ "routes": [
+  {
+   "url": "https://companion.pocket/spotify/status",
+   "file": "answers/status.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/signin",
+   "file": "answers/status-pairing.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/signout",
+   "file": "answers/status-signed-out.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/cancel",
+   "file": "answers/status-cancelled.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/home",
+   "file": "answers/home.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/library/playlists*",
+   "file": "answers/library-playlists.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/library/albums?next=*",
+   "file": "answers/library-albums-2.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/library/albums",
+   "file": "answers/library-albums.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/library/artists*",
+   "file": "answers/library-artists.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/library/tracks?next=*",
+   "file": "answers/library-tracks-2.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/library/tracks",
+   "file": "answers/library-tracks.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/search?q=*&type=track&next=*",
+   "file": "answers/search-track-2.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/search?q=*&type=track",
+   "file": "answers/search-track.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/search?q=*&type=album*",
+   "file": "answers/search-album.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/search?q=*&type=artist*",
+   "file": "answers/search-artist.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/search?q=*&type=playlist*",
+   "file": "answers/search-playlist.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-harbor-lights",
+   "file": "answers/album-al-harbor-lights.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-paper-satellites",
+   "file": "answers/album-al-paper-satellites.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-condensation",
+   "file": "answers/album-al-condensation.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-mayonaka",
+   "file": "answers/album-al-mayonaka.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-xingji",
+   "file": "answers/album-al-xingji.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-coordinates",
+   "file": "answers/album-al-coordinates.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-static-bloom",
+   "file": "answers/album-al-static-bloom.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-night-ferry",
+   "file": "answers/album-al-night-ferry.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-absolute-zero",
+   "file": "answers/album-al-absolute-zero.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-weather-for-two",
+   "file": "answers/album-al-weather-for-two.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-lantern-swim-single",
+   "file": "answers/album-al-lantern-swim-single.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/album/al-breakwater-live",
+   "file": "answers/album-al-breakwater-live.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/tracks/playlist/pl-late-train?next=*",
+   "file": "answers/playlist-pl-late-train-2.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/playlist/pl-late-train",
+   "file": "answers/playlist-pl-late-train.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/playlist/pl-rain-desk",
+   "file": "answers/playlist-pl-rain-desk.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/playlist/pl-city-night",
+   "file": "answers/playlist-pl-city-night.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/playlist/pl-sunday-pancakes",
+   "file": "answers/playlist-pl-sunday-pancakes.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/playlist/pl-kite-season",
+   "file": "answers/playlist-pl-kite-season.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/playlist/pl-morning-run",
+   "file": "answers/playlist-pl-morning-run.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/albums/artist/a1?next=*",
+   "file": "answers/artist-a1-2.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a1",
+   "file": "answers/artist-a1.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a2",
+   "file": "answers/artist-a2.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a3",
+   "file": "answers/artist-a3.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a4",
+   "file": "answers/artist-a4.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a5",
+   "file": "answers/artist-a5.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a6",
+   "file": "answers/artist-a6.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a7",
+   "file": "answers/artist-a7.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a8",
+   "file": "answers/artist-a8.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a9",
+   "file": "answers/artist-a9.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/artist/a10",
+   "file": "answers/artist-a10.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/_setup",
+   "file": "answers/setup.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/_setup",
+   "file": "answers/setup-fetching.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/player",
+   "file": "answers/player.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/devices",
+   "file": "answers/devices.json"
+  },
+  {
+   "url": "https://companion.pocket/spotify/queue",
+   "file": "answers/queue.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/pause",
+   "file": "answers/player-paused.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/resume",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/next",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/previous",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/seek",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/volume",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/shuffle",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/repeat",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/transfer",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/play",
+   "file": "answers/player.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/like",
+   "file": "answers/like.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/glyphs/atlas?face=text",
+   "file": "glyphs/text.font",
+   "headers": {
+    "content-type": "application/x-pocket-font"
+   }
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/glyphs/atlas?face=bold",
+   "file": "glyphs/bold.font",
+   "headers": {
+    "content-type": "application/x-pocket-font"
+   }
+  }
+ ],
+ "images": {
+  "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights": "covers/album-al-harbor-lights.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites": "covers/album-al-paper-satellites.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-condensation": "covers/album-al-condensation.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-mayonaka": "covers/album-al-mayonaka.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-xingji": "covers/album-al-xingji.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-coordinates": "covers/album-al-coordinates.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-static-bloom": "covers/album-al-static-bloom.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-night-ferry": "covers/album-al-night-ferry.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero": "covers/album-al-absolute-zero.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-weather-for-two": "covers/album-al-weather-for-two.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-lantern-swim-single": "covers/album-al-lantern-swim-single.jpg",
+  "https://i.scdn.co/image/pocket-sample-album-al-breakwater-live": "covers/album-al-breakwater-live.jpg",
+  "https://mosaic.scdn.co/300/pocket-sample-playlist-pl-late-train": "covers/playlist-pl-late-train.jpg",
+  "https://i.scdn.co/image/pocket-sample-playlist-pl-rain-desk": "covers/playlist-pl-rain-desk.jpg",
+  "https://mosaic.scdn.co/300/pocket-sample-playlist-pl-city-night": "covers/playlist-pl-city-night.jpg",
+  "https://i.scdn.co/image/pocket-sample-playlist-pl-sunday-pancakes": "covers/playlist-pl-sunday-pancakes.jpg",
+  "https://i.scdn.co/image/pocket-sample-playlist-pl-kite-season": "covers/playlist-pl-kite-season.jpg",
+  "https://i.scdn.co/image/pocket-sample-playlist-pl-morning-run": "covers/playlist-pl-morning-run.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a1": "covers/artist-a1.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a2": "covers/artist-a2.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a3": "covers/artist-a3.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a4": "covers/artist-a4.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a5": "covers/artist-a5.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a6": "covers/artist-a6.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a7": "covers/artist-a7.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a8": "covers/artist-a8.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a9": "covers/artist-a9.jpg",
+  "https://i.scdn.co/image/pocket-sample-artist-a10": "covers/artist-a10.jpg",
+  "https://i.scdn.co/image/pocket-sample-user-renarlo": "covers/user-renarlo.jpg"
+ }
+}

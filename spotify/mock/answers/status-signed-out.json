@@ -1,0 +1,15 @@
+{
+ "signedIn": false,
+ "user": null,
+ "premium": null,
+ "signIn": null,
+ "error": "",
+ "speaker": {
+  "name": "Omarchy Pocket",
+  "engine": "librespot",
+  "state": "off",
+  "id": null,
+  "message": "",
+  "setup": true
+ }
+}

@@ -1,0 +1,157 @@
+{
+ "playlist": {
+  "kind": "playlist",
+  "id": "pl-rain-desk",
+  "uri": "spotify:playlist:pl-rain-desk",
+  "title": "Focus: Rain Desk",
+  "subtitle": "By Ren Arlo",
+  "image": "https://i.scdn.co/image/pocket-sample-playlist-pl-rain-desk",
+  "count": 6,
+  "description": "Instrumental, low and steady. For writing.",
+  "owner": "Ren Arlo"
+ },
+ "tracks": {
+  "items": [
+   {
+    "kind": "track",
+    "id": "al-condensation-1",
+    "uri": "spotify:track:al-condensation-1",
+    "title": "Fogged Glass",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 192000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 1
+   },
+   {
+    "kind": "track",
+    "id": "al-condensation-4",
+    "uri": "spotify:track:al-condensation-4",
+    "title": "Humidity",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 178000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 4
+   },
+   {
+    "kind": "track",
+    "id": "al-night-ferry-1",
+    "uri": "spotify:track:al-night-ferry-1",
+    "title": "Overture for Deckhands",
+    "subtitle": "Small Hours Ensemble",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-night-ferry",
+    "durationMs": 169000,
+    "explicit": false,
+    "album": {
+     "id": "al-night-ferry",
+     "uri": "spotify:album:al-night-ferry",
+     "name": "Night Ferry Sessions"
+    },
+    "artists": [
+     {
+      "id": "a9",
+      "uri": "spotify:artist:a9",
+      "name": "Small Hours Ensemble"
+     }
+    ],
+    "trackNumber": 1
+   },
+   {
+    "kind": "track",
+    "id": "al-night-ferry-4",
+    "uri": "spotify:track:al-night-ferry-4",
+    "title": "Fog Signal",
+    "subtitle": "Small Hours Ensemble",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-night-ferry",
+    "durationMs": 235000,
+    "explicit": false,
+    "album": {
+     "id": "al-night-ferry",
+     "uri": "spotify:album:al-night-ferry",
+     "name": "Night Ferry Sessions"
+    },
+    "artists": [
+     {
+      "id": "a9",
+      "uri": "spotify:artist:a9",
+      "name": "Small Hours Ensemble"
+     }
+    ],
+    "trackNumber": 4
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-5",
+    "uri": "spotify:track:al-coordinates-5",
+    "title": "Topography",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 265000,
+    "explicit": false,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 5
+   },
+   {
+    "kind": "track",
+    "id": "al-static-bloom-2",
+    "uri": "spotify:track:al-static-bloom-2",
+    "title": "Moth Frequencies",
+    "subtitle": "Tin Moth Radio",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-static-bloom",
+    "durationMs": 251000,
+    "explicit": false,
+    "album": {
+     "id": "al-static-bloom",
+     "uri": "spotify:album:al-static-bloom",
+     "name": "Static Bloom"
+    },
+    "artists": [
+     {
+      "id": "a7",
+      "uri": "spotify:artist:a7",
+      "name": "Tin Moth Radio"
+     }
+    ],
+    "trackNumber": 2
+   }
+  ],
+  "total": 6,
+  "next": null
+ }
+}

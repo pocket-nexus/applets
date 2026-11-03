@@ -17,5 +17,5 @@
       "@pocketjs/framework/*": ["./vendor/pocketjs/framework/src/*"]
     }
   },
-  "include": ["appstore", "camera", "discord", "github", "hn", "homeassistant", "maps", "notes", "photos", "podcasts", "weather", "x", "youtube", "kit", "lib", "ui", "tools", "test"]
+  "include": ["appstore", "camera", "discord", "github", "hn", "homeassistant", "maps", "notes", "photos", "podcasts", "spotify", "weather", "x", "youtube", "kit", "lib", "ui", "tools", "test"]
 }

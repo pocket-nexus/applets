@@ -1,6 +1,7 @@
-// A QR code encoder for the pairing URI: byte mode, error correction level M,
-// versions 1–10 (ISO/IEC 18004). The smallest version that holds the data is
-// chosen, then the mask with the lowest penalty score.
+// A QR code encoder for the pairing URI and sign-in URLs: byte mode, error
+// correction level M, versions 1–20 (ISO/IEC 18004), up to 666 bytes. The
+// smallest version that holds the data is chosen, then the mask with the
+// lowest penalty score.
 
 /** Level M block structure per version: [ec codewords per block, [blocks, data codewords per block]...]. */
 const M_BLOCKS: readonly (readonly [number, readonly (readonly [number, number])[]])[] = [
@@ -15,6 +16,16 @@ const M_BLOCKS: readonly (readonly [number, readonly (readonly [number, number])
   [22, [[2, 38], [2, 39]]],
   [22, [[3, 36], [2, 37]]],
   [26, [[4, 43], [1, 44]]],
+  [30, [[1, 50], [4, 51]]],
+  [22, [[6, 36], [2, 37]]],
+  [22, [[8, 37], [1, 38]]],
+  [24, [[4, 40], [5, 41]]],
+  [24, [[5, 41], [5, 42]]],
+  [28, [[7, 45], [3, 46]]],
+  [28, [[10, 46], [1, 47]]],
+  [26, [[9, 43], [4, 44]]],
+  [26, [[3, 44], [11, 45]]],
+  [26, [[3, 41], [13, 42]]],
 ];
 
 const ALIGNMENT: readonly (readonly number[])[] = [
@@ -29,9 +40,19 @@ const ALIGNMENT: readonly (readonly number[])[] = [
   [6, 24, 42],
   [6, 26, 46],
   [6, 28, 50],
+  [6, 30, 54],
+  [6, 32, 58],
+  [6, 34, 62],
+  [6, 26, 46, 66],
+  [6, 26, 48, 70],
+  [6, 26, 50, 74],
+  [6, 30, 54, 78],
+  [6, 30, 56, 82],
+  [6, 30, 58, 86],
+  [6, 34, 62, 90],
 ];
 
-export const QR_MAX_VERSION = 10;
+export const QR_MAX_VERSION = 20;
 
 export interface QrCode {
   version: number;

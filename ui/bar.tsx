@@ -202,8 +202,23 @@ export interface NavBarProps {
   press: Press;
   /** Bar tint: iOS 6 blue (default), black translucent (camera), orange, or the kit's flat bar. */
   tint?: "blue" | "black" | "orange" | "flat";
+  /** The flat bar's colours and back icon; the kit's when absent. */
+  colors?: BarColors;
   /** Drawn instead of the title (a segmented control). */
   titleView?: () => JSX.Element;
+}
+
+/** A flat bar's palette: an app with a look of its own (Spotify) passes it. */
+export interface BarColors {
+  bg: string;
+  /** The hairline under the bar. */
+  line: string;
+  title: string;
+  button: string;
+  /** A button while pressed. */
+  lit: string;
+  /** The back button's icon, an image path the bundle names. */
+  back: string;
 }
 
 /** The kit names its back icon, so an app without the kit bakes no image for it. */
@@ -219,21 +234,22 @@ function FlatBar(props: NavBarProps) {
   const side = Math.max(leftW, props.right ? barButtonWidth(props.right) + 10 : 10);
   const titleW = props.width - side * 2;
   const title = () => ellipsize(props.title(), FONT.smBold, titleW);
+  const colors = props.colors;
   const button = (bar: NavButton, x: number) => (
-    <Text class="absolute text-sm font-bold" style={{ insetL: x, insetT: 10, textColor: props.press.is(bar.id) ? "#8b949e" : "#58a6ff" }}>
+    <Text class="absolute text-sm font-bold" style={{ insetL: x, insetT: 10, textColor: props.press.is(bar.id) ? colors?.lit ?? "#8b949e" : colors?.button ?? "#58a6ff" }}>
       {bar.label}
     </Text>
   );
   return (
-    <View class="absolute left-0 top-0 h-[36] bg-[#161b22]" style={{ width: props.width }}>
-      <View class="absolute left-0 right-0 bottom-0 h-[1] bg-[#30363d]" />
-      <Show when={props.titleView} fallback={<Text class="absolute text-sm text-[#e6edf3] font-bold text-center" style={{ insetL: side, insetT: 10, width: titleW }}>{title()}</Text>}>
+    <View class="absolute left-0 top-0 h-[36]" style={{ width: props.width, bgColor: colors?.bg ?? "#161b22" }}>
+      <View class="absolute left-0 right-0 bottom-0 h-[1]" style={{ bgColor: colors?.line ?? "#30363d" }} />
+      <Show when={props.titleView} fallback={<Text class="absolute text-sm font-bold text-center" style={{ insetL: side, insetT: 10, width: titleW, textColor: colors?.title ?? "#e6edf3" }}>{title()}</Text>}>
         {(view) => <>{view()()}</>}
       </Show>
       <Show when={props.left}>
         {(left) => (
           <>
-            <Image class="absolute w-[16] h-[16]" src={flatBack} style={{ insetL: 3, insetT: 10 }} />
+            <Image class="absolute w-[16] h-[16]" src={colors?.back ?? flatBack} style={{ insetL: 3, insetT: 10 }} />
             {button(measure(left().label, FONT.smBold) > props.width * 0.26 ? { ...left(), label: "Back" } : left(), 19)}
           </>
         )}

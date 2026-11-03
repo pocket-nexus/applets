@@ -1,0 +1,297 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a2",
+  "uri": "spotify:artist:a2",
+  "title": "Niko Thessaly",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a2"
+ },
+ "top": [
+  {
+   "kind": "track",
+   "id": "al-paper-satellites-6",
+   "uri": "spotify:track:al-paper-satellites-6",
+   "title": "Mission Control Lullaby",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "durationMs": 302000,
+   "explicit": false,
+   "album": {
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "name": "Paper Satellites"
+   },
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 6
+  },
+  {
+   "kind": "track",
+   "id": "al-paper-satellites-1",
+   "uri": "spotify:track:al-paper-satellites-1",
+   "title": "Orbit for Two",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "durationMs": 235000,
+   "explicit": false,
+   "album": {
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "name": "Paper Satellites"
+   },
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 1
+  },
+  {
+   "kind": "track",
+   "id": "al-paper-satellites-2",
+   "uri": "spotify:track:al-paper-satellites-2",
+   "title": "Paper Satellites",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "durationMs": 242000,
+   "explicit": false,
+   "album": {
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "name": "Paper Satellites"
+   },
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 2
+  },
+  {
+   "kind": "track",
+   "id": "al-weather-for-two-2",
+   "uri": "spotify:track:al-weather-for-two-2",
+   "title": "Weather for Two (Acoustic)",
+   "subtitle": "Mira Okonkwo-Hale, Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-weather-for-two",
+   "durationMs": 224000,
+   "explicit": false,
+   "album": {
+    "id": "al-weather-for-two",
+    "uri": "spotify:album:al-weather-for-two",
+    "name": "Weather for Two"
+   },
+   "artists": [
+    {
+     "id": "a8",
+     "uri": "spotify:artist:a8",
+     "name": "Mira Okonkwo-Hale"
+    },
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 2
+  },
+  {
+   "kind": "track",
+   "id": "al-paper-satellites-3",
+   "uri": "spotify:track:al-paper-satellites-3",
+   "title": "Static Hearts",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "durationMs": 201000,
+   "explicit": true,
+   "album": {
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "name": "Paper Satellites"
+   },
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 3
+  },
+  {
+   "kind": "track",
+   "id": "al-paper-satellites-4",
+   "uri": "spotify:track:al-paper-satellites-4",
+   "title": "Countdown Garden",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "durationMs": 228000,
+   "explicit": false,
+   "album": {
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "name": "Paper Satellites"
+   },
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 4
+  },
+  {
+   "kind": "track",
+   "id": "al-paper-satellites-7",
+   "uri": "spotify:track:al-paper-satellites-7",
+   "title": "Re-entry",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "durationMs": 161000,
+   "explicit": false,
+   "album": {
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "name": "Paper Satellites"
+   },
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 7
+  },
+  {
+   "kind": "track",
+   "id": "al-paper-satellites-8",
+   "uri": "spotify:track:al-paper-satellites-8",
+   "title": "Small Blue Light",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "durationMs": 239000,
+   "explicit": false,
+   "album": {
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "name": "Paper Satellites"
+   },
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 8
+  },
+  {
+   "kind": "track",
+   "id": "al-paper-satellites-5",
+   "uri": "spotify:track:al-paper-satellites-5",
+   "title": "Weightless Sunday",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "durationMs": 270000,
+   "explicit": false,
+   "album": {
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "name": "Paper Satellites"
+   },
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 5
+  },
+  {
+   "kind": "track",
+   "id": "al-weather-for-two-1",
+   "uri": "spotify:track:al-weather-for-two-1",
+   "title": "Weather for Two",
+   "subtitle": "Mira Okonkwo-Hale, Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-weather-for-two",
+   "durationMs": 211000,
+   "explicit": false,
+   "album": {
+    "id": "al-weather-for-two",
+    "uri": "spotify:album:al-weather-for-two",
+    "name": "Weather for Two"
+   },
+   "artists": [
+    {
+     "id": "a8",
+     "uri": "spotify:artist:a8",
+     "name": "Mira Okonkwo-Hale"
+    },
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 1
+  }
+ ],
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-weather-for-two",
+    "uri": "spotify:album:al-weather-for-two",
+    "title": "Weather for Two",
+    "subtitle": "Mira Okonkwo-Hale, Niko Thessaly",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-weather-for-two",
+    "artists": [
+     {
+      "id": "a8",
+      "uri": "spotify:artist:a8",
+      "name": "Mira Okonkwo-Hale"
+     },
+     {
+      "id": "a2",
+      "uri": "spotify:artist:a2",
+      "name": "Niko Thessaly"
+     }
+    ],
+    "count": 2,
+    "year": "2025"
+   },
+   {
+    "kind": "album",
+    "id": "al-paper-satellites",
+    "uri": "spotify:album:al-paper-satellites",
+    "title": "Paper Satellites",
+    "subtitle": "Niko Thessaly",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+    "artists": [
+     {
+      "id": "a2",
+      "uri": "spotify:artist:a2",
+      "name": "Niko Thessaly"
+     }
+    ],
+    "count": 8,
+    "year": "2023"
+   }
+  ],
+  "total": 2,
+  "next": null
+ }
+}

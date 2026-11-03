@@ -6,6 +6,9 @@
 //
 //   bun store/play/serve.ts <package.pocket> <applet dir> [port]
 //   pocket-applet web <name>            (the SDK's way to the same page)
+//
+// The surface is 512 x 384, the store's; `/?size=320x240` lays the app out
+// at another size, as a smaller window tile on Omarchy Pocket does.
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { packMock } from "../../tools/mock.ts";
@@ -31,6 +34,8 @@ const PAGE = `<!doctype html>
 <ol id="requests"></ol>
 <script>
 const frame = document.getElementById("player"), list = document.getElementById("requests"), state = document.getElementById("state");
+const size = (/^(\\d+)x(\\d+)$/.exec(new URLSearchParams(location.search).get("size") || "") || [0, 512, 384]).slice(1, 3).map(Number);
+document.querySelector(".frame").style.aspectRatio = size[0] + " / " + size[1];
 document.getElementById("back").onclick = () => frame.contentWindow.postMessage({ type: "button", name: "back" }, "*");
 addEventListener("message", async (e) => {
   if (e.source !== frame.contentWindow) return;
@@ -38,7 +43,7 @@ addEventListener("message", async (e) => {
   if (m.type === "ready") {
     const [pkg, wasm, mock] = await Promise.all([fetch("/local/package").then((r) => r.arrayBuffer()), fetch("/play/pocketjs.wasm").then((r) => r.arrayBuffer()), fetch("/local/mock").then((r) => r.json())]);
     if (mock.errors) state.textContent = "mock/mock.json: " + mock.errors.join("; ");
-    frame.contentWindow.postMessage({ type: "boot", package: pkg, wasm, mock: mock.errors ? null : mock, size: [512, 384] }, "*", [pkg, wasm]);
+    frame.contentWindow.postMessage({ type: "boot", package: pkg, wasm, mock: mock.errors ? null : mock, size }, "*", [pkg, wasm]);
   } else if (m.type === "running") state.textContent = m.title + ", on its sample data";
   else if (m.type === "error") state.textContent = "stopped: " + m.message;
   else if (m.type === "request") {

@@ -1,0 +1,139 @@
+{
+ "playlist": {
+  "kind": "playlist",
+  "id": "pl-sunday-pancakes",
+  "uri": "spotify:playlist:pl-sunday-pancakes",
+  "title": "Sunday Pancakes",
+  "subtitle": "By Ren Arlo",
+  "image": "https://i.scdn.co/image/pocket-sample-playlist-pl-sunday-pancakes",
+  "count": 5,
+  "description": "Breakfast songs. Add yours.",
+  "owner": "Ren Arlo"
+ },
+ "tracks": {
+  "items": [
+   {
+    "kind": "track",
+    "id": "al-weather-for-two-1",
+    "uri": "spotify:track:al-weather-for-two-1",
+    "title": "Weather for Two",
+    "subtitle": "Mira Okonkwo-Hale, Niko Thessaly",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-weather-for-two",
+    "durationMs": 211000,
+    "explicit": false,
+    "album": {
+     "id": "al-weather-for-two",
+     "uri": "spotify:album:al-weather-for-two",
+     "name": "Weather for Two"
+    },
+    "artists": [
+     {
+      "id": "a8",
+      "uri": "spotify:artist:a8",
+      "name": "Mira Okonkwo-Hale"
+     },
+     {
+      "id": "a2",
+      "uri": "spotify:artist:a2",
+      "name": "Niko Thessaly"
+     }
+    ],
+    "trackNumber": 1
+   },
+   {
+    "kind": "track",
+    "id": "al-absolute-zero-4",
+    "uri": "spotify:track:al-absolute-zero-4",
+    "title": "Ice Cream Physics",
+    "subtitle": "Cobalt Picnic",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+    "durationMs": 172000,
+    "explicit": false,
+    "album": {
+     "id": "al-absolute-zero",
+     "uri": "spotify:album:al-absolute-zero",
+     "name": "Picnic at Absolute Zero"
+    },
+    "artists": [
+     {
+      "id": "a10",
+      "uri": "spotify:artist:a10",
+      "name": "Cobalt Picnic"
+     }
+    ],
+    "trackNumber": 4
+   },
+   {
+    "kind": "track",
+    "id": "al-paper-satellites-5",
+    "uri": "spotify:track:al-paper-satellites-5",
+    "title": "Weightless Sunday",
+    "subtitle": "Niko Thessaly",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+    "durationMs": 270000,
+    "explicit": false,
+    "album": {
+     "id": "al-paper-satellites",
+     "uri": "spotify:album:al-paper-satellites",
+     "name": "Paper Satellites"
+    },
+    "artists": [
+     {
+      "id": "a2",
+      "uri": "spotify:artist:a2",
+      "name": "Niko Thessaly"
+     }
+    ],
+    "trackNumber": 5
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-3",
+    "uri": "spotify:track:al-coordinates-3",
+    "title": "Compass Rose",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 238000,
+    "explicit": false,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 3
+   },
+   {
+    "kind": "track",
+    "id": "al-absolute-zero-6",
+    "uri": "spotify:track:al-absolute-zero-6",
+    "title": "Snowglobe Party",
+    "subtitle": "Cobalt Picnic",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+    "durationMs": 258000,
+    "explicit": false,
+    "album": {
+     "id": "al-absolute-zero",
+     "uri": "spotify:album:al-absolute-zero",
+     "name": "Picnic at Absolute Zero"
+    },
+    "artists": [
+     {
+      "id": "a10",
+      "uri": "spotify:artist:a10",
+      "name": "Cobalt Picnic"
+     }
+    ],
+    "trackNumber": 6
+   }
+  ],
+  "total": 5,
+  "next": null
+ }
+}

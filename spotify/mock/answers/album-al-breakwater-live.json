@@ -1,0 +1,72 @@
+{
+ "album": {
+  "kind": "album",
+  "id": "al-breakwater-live",
+  "uri": "spotify:album:al-breakwater-live",
+  "title": "Breakwater (Live at the Pier)",
+  "subtitle": "Coral Lantern Club",
+  "image": "https://i.scdn.co/image/pocket-sample-album-al-breakwater-live",
+  "artists": [
+   {
+    "id": "a1",
+    "uri": "spotify:artist:a1",
+    "name": "Coral Lantern Club"
+   }
+  ],
+  "count": 2,
+  "year": "2024"
+ },
+ "tracks": {
+  "items": [
+   {
+    "kind": "track",
+    "id": "al-breakwater-live-1",
+    "uri": "spotify:track:al-breakwater-live-1",
+    "title": "Breakwater (Live)",
+    "subtitle": "Coral Lantern Club",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-breakwater-live",
+    "durationMs": 302000,
+    "explicit": false,
+    "album": {
+     "id": "al-breakwater-live",
+     "uri": "spotify:album:al-breakwater-live",
+     "name": "Breakwater (Live at the Pier)"
+    },
+    "artists": [
+     {
+      "id": "a1",
+      "uri": "spotify:artist:a1",
+      "name": "Coral Lantern Club"
+     }
+    ],
+    "trackNumber": 1
+   },
+   {
+    "kind": "track",
+    "id": "al-breakwater-live-2",
+    "uri": "spotify:track:al-breakwater-live-2",
+    "title": "Anchor Song (Live)",
+    "subtitle": "Coral Lantern Club",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-breakwater-live",
+    "durationMs": 280000,
+    "explicit": false,
+    "album": {
+     "id": "al-breakwater-live",
+     "uri": "spotify:album:al-breakwater-live",
+     "name": "Breakwater (Live at the Pier)"
+    },
+    "artists": [
+     {
+      "id": "a1",
+      "uri": "spotify:artist:a1",
+      "name": "Coral Lantern Club"
+     }
+    ],
+    "trackNumber": 2
+   }
+  ],
+  "total": 2,
+  "next": null
+ },
+ "liked": false
+}

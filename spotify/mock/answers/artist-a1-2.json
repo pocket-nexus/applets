@@ -1,0 +1,23 @@
+{
+ "items": [
+  {
+   "kind": "album",
+   "id": "al-lantern-swim-single",
+   "uri": "spotify:album:al-lantern-swim-single",
+   "title": "Lantern Swim",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-lantern-swim-single",
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "count": 1,
+   "year": "2023"
+  }
+ ],
+ "total": 3,
+ "next": null
+}

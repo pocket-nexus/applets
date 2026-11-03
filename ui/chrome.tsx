@@ -154,7 +154,7 @@ export function StatusBar(props: StatusBarProps) {
  *  shadow are all in the texture. */
 export type IconArt =
   | "settings" | "mac" | "wifi" | "apps" | "hn" | "nexus" | "youtube" | "x" | "discord" | "camera" | "photos"
-  | "github" | "weather" | "podcasts" | "maps" | "homeassistant";
+  | "github" | "weather" | "podcasts" | "maps" | "homeassistant" | "spotify";
 
 /** Corner radius as a fraction of the side (art/icons/bake.ts ICON_RADIUS). */
 const ICON_RADIUS = 0.2;
@@ -179,6 +179,7 @@ const ART: Record<IconArt | "plain", readonly Variant[]> = {
   podcasts: [[24, 32, "art/icons/podcasts-24.png"], [46, 64, "art/icons/podcasts-46.png"], [64, 64, "art/icons/podcasts-64.png"]],
   maps: [[24, 32, "art/icons/maps-24.png"], [46, 64, "art/icons/maps-46.png"], [64, 64, "art/icons/maps-64.png"]],
   homeassistant: [[24, 32, "art/icons/homeassistant-24.png"], [46, 64, "art/icons/homeassistant-46.png"], [64, 64, "art/icons/homeassistant-64.png"]],
+  spotify: [[24, 32, "art/icons/spotify-24.png"], [46, 64, "art/icons/spotify-46.png"], [64, 64, "art/icons/spotify-64.png"]],
   /** The finish alone, over the tint and glyph of an app that ships no icon. */
   plain: [[24, 32, "art/icons/plain-24.png"], [46, 64, "art/icons/plain-46.png"], [64, 64, "art/icons/plain-64.png"]],
 };
@@ -204,6 +205,7 @@ const APP_ART: Record<string, IconArt> = {
   "dev.pocket-nexus.podcasts": "podcasts",
   "dev.pocket-nexus.maps": "maps",
   "dev.pocket-nexus.homeassistant": "homeassistant",
+  "dev.pocket-nexus.spotify": "spotify",
 };
 
 export interface TileProps {

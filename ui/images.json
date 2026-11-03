@@ -179,6 +179,141 @@
   "art/shutter.svg": {
     "linear": true
   },
+  "art/spotify/back-white-16.svg": {
+    "linear": true
+  },
+  "art/spotify/check-green-16.svg": {
+    "linear": true
+  },
+  "art/spotify/computer-green-20.svg": {
+    "linear": true
+  },
+  "art/spotify/computer-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/console-green-20.svg": {
+    "linear": true
+  },
+  "art/spotify/console-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/devices-green-20.svg": {
+    "linear": true
+  },
+  "art/spotify/devices-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/heart-fill-green-16.svg": {
+    "linear": true
+  },
+  "art/spotify/heart-fill-green-20.svg": {
+    "linear": true
+  },
+  "art/spotify/heart-fill-white-24.svg": {
+    "linear": true
+  },
+  "art/spotify/heart-fill-white-32.svg": {
+    "linear": true
+  },
+  "art/spotify/heart-muted-16.svg": {
+    "linear": true
+  },
+  "art/spotify/heart-white-16.svg": {
+    "linear": true
+  },
+  "art/spotify/heart-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/next-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/next-white-24.svg": {
+    "linear": true
+  },
+  "art/spotify/note-muted-16.svg": {
+    "linear": true
+  },
+  "art/spotify/note-muted-24.svg": {
+    "linear": true
+  },
+  "art/spotify/pause-black-20.svg": {
+    "linear": true
+  },
+  "art/spotify/pause-black-24.svg": {
+    "linear": true
+  },
+  "art/spotify/pause-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/person-muted-16.svg": {
+    "linear": true
+  },
+  "art/spotify/person-muted-24.svg": {
+    "linear": true
+  },
+  "art/spotify/phone-green-20.svg": {
+    "linear": true
+  },
+  "art/spotify/phone-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/play-black-16.svg": {
+    "linear": true
+  },
+  "art/spotify/play-black-20.svg": {
+    "linear": true
+  },
+  "art/spotify/play-black-24.svg": {
+    "linear": true
+  },
+  "art/spotify/play-white-16.svg": {
+    "linear": true
+  },
+  "art/spotify/play-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/previous-white-24.svg": {
+    "linear": true
+  },
+  "art/spotify/queue-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/repeat-green-20.svg": {
+    "linear": true
+  },
+  "art/spotify/repeat-muted-20.svg": {
+    "linear": true
+  },
+  "art/spotify/repeat-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/search-black-16.svg": {
+    "linear": true
+  },
+  "art/spotify/search-muted-16.svg": {
+    "linear": true
+  },
+  "art/spotify/shuffle-green-20.svg": {
+    "linear": true
+  },
+  "art/spotify/shuffle-muted-20.svg": {
+    "linear": true
+  },
+  "art/spotify/shuffle-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/speaker-green-20.svg": {
+    "linear": true
+  },
+  "art/spotify/speaker-white-20.svg": {
+    "linear": true
+  },
+  "art/spotify/volume-muted-16.svg": {
+    "linear": true
+  },
+  "art/spotify/volume-white-16.svg": {
+    "linear": true
+  },
   "art/stripes.svg": {
     "psm": 0
   },

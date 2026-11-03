@@ -1,0 +1,164 @@
+{
+ "album": {
+  "kind": "album",
+  "id": "al-coordinates",
+  "uri": "spotify:album:al-coordinates",
+  "title": "Coordinates",
+  "subtitle": "Pine & Parallax",
+  "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+  "artists": [
+   {
+    "id": "a6",
+    "uri": "spotify:artist:a6",
+    "name": "Pine & Parallax"
+   }
+  ],
+  "count": 6,
+  "year": "2020"
+ },
+ "tracks": {
+  "items": [
+   {
+    "kind": "track",
+    "id": "al-coordinates-1",
+    "uri": "spotify:track:al-coordinates-1",
+    "title": "North by Northwest of Here",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 244000,
+    "explicit": false,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 1
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-2",
+    "uri": "spotify:track:al-coordinates-2",
+    "title": "Latitude",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 211000,
+    "explicit": false,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 2
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-3",
+    "uri": "spotify:track:al-coordinates-3",
+    "title": "Compass Rose",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 238000,
+    "explicit": false,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 3
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-4",
+    "uri": "spotify:track:al-coordinates-4",
+    "title": "Parallax Error",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 192000,
+    "explicit": true,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 4
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-5",
+    "uri": "spotify:track:al-coordinates-5",
+    "title": "Topography",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 265000,
+    "explicit": false,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 5
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-6",
+    "uri": "spotify:track:al-coordinates-6",
+    "title": "Elevation Gain",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 301000,
+    "explicit": false,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 6
+   }
+  ],
+  "total": 6,
+  "next": null
+ },
+ "liked": false
+}

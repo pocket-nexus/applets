@@ -1,0 +1,96 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a8",
+  "uri": "spotify:artist:a8",
+  "title": "Mira Okonkwo-Hale",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a8"
+ },
+ "top": [
+  {
+   "kind": "track",
+   "id": "al-weather-for-two-2",
+   "uri": "spotify:track:al-weather-for-two-2",
+   "title": "Weather for Two (Acoustic)",
+   "subtitle": "Mira Okonkwo-Hale, Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-weather-for-two",
+   "durationMs": 224000,
+   "explicit": false,
+   "album": {
+    "id": "al-weather-for-two",
+    "uri": "spotify:album:al-weather-for-two",
+    "name": "Weather for Two"
+   },
+   "artists": [
+    {
+     "id": "a8",
+     "uri": "spotify:artist:a8",
+     "name": "Mira Okonkwo-Hale"
+    },
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 2
+  },
+  {
+   "kind": "track",
+   "id": "al-weather-for-two-1",
+   "uri": "spotify:track:al-weather-for-two-1",
+   "title": "Weather for Two",
+   "subtitle": "Mira Okonkwo-Hale, Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-weather-for-two",
+   "durationMs": 211000,
+   "explicit": false,
+   "album": {
+    "id": "al-weather-for-two",
+    "uri": "spotify:album:al-weather-for-two",
+    "name": "Weather for Two"
+   },
+   "artists": [
+    {
+     "id": "a8",
+     "uri": "spotify:artist:a8",
+     "name": "Mira Okonkwo-Hale"
+    },
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "trackNumber": 1
+  }
+ ],
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-weather-for-two",
+    "uri": "spotify:album:al-weather-for-two",
+    "title": "Weather for Two",
+    "subtitle": "Mira Okonkwo-Hale, Niko Thessaly",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-weather-for-two",
+    "artists": [
+     {
+      "id": "a8",
+      "uri": "spotify:artist:a8",
+      "name": "Mira Okonkwo-Hale"
+     },
+     {
+      "id": "a2",
+      "uri": "spotify:artist:a2",
+      "name": "Niko Thessaly"
+     }
+    ],
+    "count": 2,
+    "year": "2025"
+   }
+  ],
+  "total": 1,
+  "next": null
+ }
+}

@@ -1,0 +1,187 @@
+{
+ "album": {
+  "kind": "album",
+  "id": "al-condensation",
+  "uri": "spotify:album:al-condensation",
+  "title": "Condensation",
+  "subtitle": "Glasshouse Weather",
+  "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+  "artists": [
+   {
+    "id": "a3",
+    "uri": "spotify:artist:a3",
+    "name": "Glasshouse Weather"
+   }
+  ],
+  "count": 7,
+  "year": "2025"
+ },
+ "tracks": {
+  "items": [
+   {
+    "kind": "track",
+    "id": "al-condensation-1",
+    "uri": "spotify:track:al-condensation-1",
+    "title": "Fogged Glass",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 192000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 1
+   },
+   {
+    "kind": "track",
+    "id": "al-condensation-2",
+    "uri": "spotify:track:al-condensation-2",
+    "title": "Greenhouse Hymn",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 280000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 2
+   },
+   {
+    "kind": "track",
+    "id": "al-condensation-3",
+    "uri": "spotify:track:al-condensation-3",
+    "title": "Petrichor Avenue",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 216000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 3
+   },
+   {
+    "kind": "track",
+    "id": "al-condensation-4",
+    "uri": "spotify:track:al-condensation-4",
+    "title": "Humidity",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 178000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 4
+   },
+   {
+    "kind": "track",
+    "id": "al-condensation-5",
+    "uri": "spotify:track:al-condensation-5",
+    "title": "Seedlings",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 224000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 5
+   },
+   {
+    "kind": "track",
+    "id": "al-condensation-6",
+    "uri": "spotify:track:al-condensation-6",
+    "title": "Dewpoint",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 249000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 6
+   },
+   {
+    "kind": "track",
+    "id": "al-condensation-7",
+    "uri": "spotify:track:al-condensation-7",
+    "title": "Cloud Nursery",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "durationMs": 315000,
+    "explicit": false,
+    "album": {
+     "id": "al-condensation",
+     "uri": "spotify:album:al-condensation",
+     "name": "Condensation"
+    },
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "trackNumber": 7
+   }
+  ],
+  "total": 7,
+  "next": null
+ },
+ "liked": false
+}

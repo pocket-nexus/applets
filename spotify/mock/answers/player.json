@@ -1,0 +1,45 @@
+{
+ "active": true,
+ "playing": true,
+ "item": {
+  "kind": "track",
+  "id": "al-harbor-lights-1",
+  "uri": "spotify:track:al-harbor-lights-1",
+  "title": "Lantern Swim",
+  "subtitle": "Coral Lantern Club",
+  "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+  "durationMs": 222000,
+  "explicit": false,
+  "album": {
+   "id": "al-harbor-lights",
+   "uri": "spotify:album:al-harbor-lights",
+   "name": "Harbor Lights at Low Tide"
+  },
+  "artists": [
+   {
+    "id": "a1",
+    "uri": "spotify:artist:a1",
+    "name": "Coral Lantern Club"
+   }
+  ],
+  "trackNumber": 1
+ },
+ "progressMs": 72000,
+ "at": 1790000000000,
+ "shuffle": false,
+ "repeat": "off",
+ "context": {
+  "uri": "spotify:album:al-harbor-lights",
+  "title": "Harbor Lights at Low Tide"
+ },
+ "device": {
+  "id": "dev-omarchy-pocket",
+  "name": "Omarchy Pocket",
+  "type": "GameConsole",
+  "volume": 64,
+  "active": true,
+  "local": true,
+  "restricted": false
+ },
+ "liked": true
+}
