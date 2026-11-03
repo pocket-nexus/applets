@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/weather/model.ts — what Weather shows: the saved places and the
+// weather/model.ts — what Weather shows: the saved places and the
 // units from the companion's store, a search's results, each place's
 // forecast and the place that is open, as signals over the API client.
 //

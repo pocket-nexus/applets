@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // pocket-applet: draws its own pixels because the sign-in page shows a QR code.
-// applets/github/pages/people.tsx — search, a user, gists and signing in.
+// github/pages/people.tsx — search, a user, gists and signing in.
 import { createSignal, For, type Accessor } from "solid-js";
 import { Text, View } from "@pocketjs/framework/components";
 import { ICONS, linesPage, listPage, type SourceLine } from "../../kit/app.tsx";

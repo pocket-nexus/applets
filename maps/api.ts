@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/maps/api.ts — the companion's maps and store services
+// maps/api.ts — the companion's maps and store services
 // (tools/companion/services/maps.ts and store.ts in PocketJS) over
 // ../lib/net.ts.
 //

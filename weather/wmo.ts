@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/weather/wmo.ts — the WMO 4677 weather codes Open-Meteo reports, as
+// weather/wmo.ts — the WMO 4677 weather codes Open-Meteo reports, as
 // the words a forecast shows and the glyph drawn for them (views.tsx
 // SkyGlyph). A code outside the table reads "Unknown" and draws a cloud.
 

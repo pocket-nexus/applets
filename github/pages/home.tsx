@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/github/pages/home.tsx — the first page, under five tabs: Inbox, Pulls,
+// github/pages/home.tsx — the first page, under five tabs: Inbox, Pulls,
 // Issues, Repos and Me.
 import { createSignal } from "solid-js";
 import { ICONS, listPage, type Tab } from "../../kit/app.tsx";

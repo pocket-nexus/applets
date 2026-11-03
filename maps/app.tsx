@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/maps/app.tsx — Maps for Pocket: OpenStreetMap in a window of
-// Omarchy Pocket's shell.
+// maps/app.tsx — Maps for Pocket: OpenStreetMap.
 //
-// One page holds the map; a search pushes the list of places found. The
-// pad's pointer drives it: a tap presses the field and the buttons, a
-// two-finger scroll or a Hold-and-slide pans (views.tsx). On a host whose
-// buttons reach the applet, L and R zoom, the d-pad pans, triangle locates
-// and square opens the search field.
+// One page holds the map; a search pushes the list of places found. A tap
+// presses the field and the buttons, a drag pans (the pad's two-finger
+// scroll or Hold-and-slide on Omarchy Pocket) and two fingers zoom
+// (views.tsx). On a host whose buttons reach the applet, L and R zoom, the
+// d-pad pans, triangle locates and square opens the search field.
 //
 // Tiles, geocodes and the position come from the maps service and the saved
-// view from the store service, both in omarchy-pocketd (daemon/companion.ts).
+// view from the store service, both the device's companion's (ui/companion.ts).
 
 import { createSignal } from "solid-js";
 import { AppletSurface } from "@pocketjs/framework/applet";

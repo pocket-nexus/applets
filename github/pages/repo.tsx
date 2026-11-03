@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/github/pages/repo.tsx — a repository and everything under it: its code,
+// github/pages/repo.tsx — a repository and everything under it: its code,
 // commits, issues and pull requests, releases, actions, branches and people.
 import { createMemo, createSignal } from "solid-js";
 import { after } from "@pocketjs/framework/clock";

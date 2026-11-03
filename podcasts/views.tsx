@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/podcasts/views.tsx — the pages of Podcasts: the library and the
+// podcasts/views.tsx — the pages of Podcasts: the library and the
 // search under a Library/Search segmented control, a show's page (artwork,
 // title, author, Subscribe, its episodes) and the player.
 //

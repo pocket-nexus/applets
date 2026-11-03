@@ -1,18 +1,20 @@
-# Discord on the 3DS
+# Discord on the 3DS and the Tab5
 
 The Discord applet (`discord/`) lists servers and channels, shows
 messages as they arrive and sends messages. It reaches Discord through
 **Pocket Companion** on the Mac with a **bot**: the applet fetches
 `https://companion.pocket/discord/…`, and the companion's discord service
 (PocketJS `tools/companion/services/discord.ts`) calls Discord's API with the
-bot's token. The console never holds the token.
+bot's token. The console never holds the token. On Omarchy Pocket the
+discord service runs in omarchy-pocketd on the device itself
+(`ui/companion.ts`); the setup below is the Mac's.
 
 ## What the bot can see
 
 - Servers the bot was invited to, and the text and announcement channels its
   roles let it view.
 - Not your direct messages, friends or servers it is not in.
-- Messages you send from the 3DS appear under **the bot's name**, not yours.
+- Messages you send from the console appear under **the bot's name**, not yours.
   They mention no one: the service sends them with mentions turned off.
 
 ## Setting it up
@@ -24,7 +26,9 @@ bot's token. The console never holds the token.
    the portal shows it once.
 3. On the same page, under **Privileged Gateway Intents**, turn on **Message
    Content Intent** and save. Without it, messages arrive with empty text.
-4. Give the token to the companion:
+4. Give the token to the companion: paste it on Pocket Companion's Discord
+   page (the app is at <https://studio.pocket.nexus/apps/companion>), or run
+   this in a PocketJS checkout:
 
    ```sh
    bun tools/companion.ts service discord token <bot-token>
@@ -32,7 +36,8 @@ bot's token. The console never holds the token.
 
    The companion checks it with Discord (a user token is refused), stores it
    and connects to Discord's gateway.
-5. Print the invite link:
+5. Print the invite link (the Discord page shows **Invite the Bot to a
+   Server…** instead):
 
    ```sh
    bun tools/companion.ts service discord status
@@ -43,7 +48,7 @@ bot's token. The console never holds the token.
    Send Messages (`permissions=68608`).
 6. Open the link in a browser, choose a server you manage and authorize. Repeat
    for each server the bot should join.
-7. On the 3DS, open Discord. If it shows **Set up Discord on your Mac**, tap
+7. On the console, open Discord. If it shows **Set up Discord on your Mac**, tap
    **Try Again**.
 
 ## Commands
@@ -69,6 +74,9 @@ token in the developer portal.
 | X, or **Write** | Write a message: the system keyboard opens; START or **Send** sends, B closes and keeps the draft |
 | Y | Reload |
 | B, or the back button | Back |
+
+On the Tab5, which has no buttons, a **Reload** button in the bar of the
+server and channel lists stands in for Y.
 
 New messages appear while a channel is open; leaving it stops the updates.
 Names and text in any script draw through glyphs the companion renders (the

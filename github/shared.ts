@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/github/shared.ts — what the pages have in common: the app's parts, page
+// github/shared.ts — what the pages have in common: the app's parts, page
 // ids, rows for an issue, a repository, a user, and failure and empty states.
 import type { App } from "../kit/app.tsx";
 import { ICONS } from "../kit/app.tsx";

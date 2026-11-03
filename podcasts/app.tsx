@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/podcasts/app.tsx — Podcasts in a window of Omarchy Pocket.
+// podcasts/app.tsx — Podcasts: the library, the search and the player.
 //
 // The library (subscriptions kept in the companion's store) and the search
 // (the iTunes directory) under a Library/Search segmented control, a show's
@@ -8,10 +8,11 @@
 // volume, and the track under the artwork scrubs. The deck's keyboard types
 // into the search field while it is open.
 //
-// Lists, artwork and the audio stream come from omarchy-pocketd's podcasts
-// service (ffmpeg on this device); the host plays the stream through
-// `globalThis.media`. The episode keeps playing when the player page is
-// left: the playback object outlives the pages and the window's resize.
+// Lists, artwork and the audio stream come from the podcasts service of the
+// device's companion (ui/companion.ts), whose ffmpeg makes the stream; the
+// host plays the stream through `globalThis.media`. The episode keeps
+// playing when the player page is left: the playback object outlives the
+// pages and the window's resize.
 
 import { createSignal } from "solid-js";
 import { AppletSurface } from "@pocketjs/framework/applet";

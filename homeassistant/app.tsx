@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/homeassistant/app.tsx — Home in a window of Omarchy Pocket's shell:
-// the owner's Home Assistant, read and driven through omarchy-pocketd's
-// homeassistant service.
+// homeassistant/app.tsx — Home: the owner's Home Assistant, read and driven
+// through the homeassistant service of the device's companion
+// (ui/companion.ts).
 //
 // The entities of the open tab as a table, the setup page where the URL and
 // a long-lived access token are typed on the deck's keyboard, and a light's

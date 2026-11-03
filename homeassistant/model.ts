@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/homeassistant/model.ts — what the Home app shows: whether this
+// homeassistant/model.ts — what the Home app shows: whether this
 // device holds a Home Assistant setup, the entities by tab, and the light
 // that is open; the service calls behind every control.
 //

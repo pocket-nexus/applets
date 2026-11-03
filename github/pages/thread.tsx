@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/github/pages/thread.tsx — an issue or a pull request: its body and
+// github/pages/thread.tsx — an issue or a pull request: its body and
 // comments, and what can be done to it.
 import { createMemo } from "solid-js";
 import { ICONS, listPage, markdownRows } from "../../kit/app.tsx";

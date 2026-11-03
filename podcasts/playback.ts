@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/podcasts/playback.ts — the episode playing, outside any page. The
+// podcasts/playback.ts — the episode playing, outside any page. The
 // player page shows it and the show page marks its row; both come and go
 // while the stream runs, and the object is kept across a remount
 // (ui/keep.ts), so an episode plays on while the reader browses or the

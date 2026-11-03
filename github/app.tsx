@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// github/app.tsx — GitHub on Omarchy Pocket, built from the design system
+// github/app.tsx — GitHub, built from the design system
 // in kit: this file routes page ids to their builders.
 import { createApp } from "../kit/app.tsx";
 import { keep } from "../ui/keep.ts";

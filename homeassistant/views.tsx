@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/homeassistant/views.tsx — the pages of Home: the entities of the
+// homeassistant/views.tsx — the pages of Home: the entities of the
 // open tab as a grouped table (ui/table.tsx), one section per domain, with
 // the control each domain takes; the setup page (URL, token, Connect,
 // Forget); and a light's page with its switch and brightness.
