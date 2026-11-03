@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/github/api.ts — GitHub's REST API: one queue of four requests, the
+// github/api.ts — GitHub's REST API: one queue of four requests, the
 // token from the store service, ETags so a repeat read costs no rate limit, and
 // the Link header's next page.
 import { createSignal } from "solid-js";

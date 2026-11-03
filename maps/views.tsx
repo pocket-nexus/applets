@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/maps/views.tsx — the pages of Maps: the map under the bar, and the
+// maps/views.tsx — the pages of Maps: the map under the bar, and the
 // list of places a search found.
 //
 // The map is two layers of tile slots, each a pool of COLS x ROWS (one more

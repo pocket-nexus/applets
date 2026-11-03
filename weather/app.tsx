@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/weather/app.tsx — Weather in a window of Omarchy Pocket's shell.
+// weather/app.tsx — Weather: its pages, the search field and the buttons.
 //
 // The saved places as a table, a place's forecast, and a search that adds a
 // place. The deck's keyboard types into the search field while it is open;
 // on a host whose buttons reach the applet, triangle reloads and square
-// opens the search. Open-Meteo answers the geocodes and forecasts through
-// omarchy-pocketd; the places and the units live in its store service.
+// opens the search. Open-Meteo answers the geocodes and forecasts through the
+// applet's worker; the places and the units live in the store service of the
+// device's companion (ui/companion.ts).
 
 import { createEffect, createSignal } from "solid-js";
 import { AppletSurface } from "@pocketjs/framework/applet";

@@ -1,20 +1,25 @@
-# X on the 3DS
+# X on the 3DS and the Tab5
 
 The X applet (`x/`) reads the Following and For You timelines and
 post threads, and likes, reposts and replies. It reaches X through **Pocket
 Companion** on the Mac: the applet fetches `https://companion.pocket/x/…`, and
 the companion's x service (PocketJS `tools/companion/services/x.ts`) calls
 x.com with a session signed in on that Mac. The console never holds the
-session.
+session. On Omarchy Pocket the x service runs in omarchy-pocketd on the
+device itself (`ui/companion.ts`); the sign-in below is the Mac's.
 
 ## What it needs
 
-- Pocket Companion running on a Mac paired with the console (Home > Settings
-  > Mac shows it linked). Commands below run in a PocketJS checkout:
-  `bun tools/companion.ts …`; they talk to the running companion.
+- Pocket Companion running on a Mac paired with the console (Settings > Mac
+  on the console shows it linked). The app is at
+  <https://studio.pocket.nexus/apps/companion>, and its X page signs in and
+  out. The commands below do the same from a PocketJS checkout
+  (`bun tools/companion.ts …`); they talk to the running companion.
 - An X account signed in once on that Mac.
 
 ## Signing in
+
+Choose **Sign In to X…** on Pocket Companion's X page, or run:
 
 ```sh
 bun tools/companion.ts service x login
@@ -89,6 +94,9 @@ The service uses x.com's web API, which X changes without notice:
 | Tap the heart | Like or unlike |
 | X | Reload |
 | B, or the back button | Back |
+
+On the Tab5, which has no buttons, the taps are the same and a **Reload**
+button in the bar stands in for X.
 
 A like or repost shows at once and is undone with a notice when X refuses it.
 Text in any script draws through glyphs the companion renders (the glyphs

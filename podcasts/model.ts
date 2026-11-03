@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/podcasts/model.ts — what the Podcasts applet shows: the tab
+// podcasts/model.ts — what the Podcasts applet shows: the tab
 // (Library or Search), the library from the companion's store, the search
 // words and their results, and the show that is open with its episodes.
 //

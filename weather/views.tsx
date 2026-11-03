@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/weather/views.tsx — the pages of Weather: the saved places as a
+// weather/views.tsx — the pages of Weather: the saved places as a
 // grouped table (ui/table.tsx) with each place's current reading, a place's
 // forecast (the conditions now, the next hours in a strip, seven days as
 // rows) and the search that adds a place.

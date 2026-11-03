@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/podcasts/api.ts — the companion's podcasts service
+// podcasts/api.ts — the companion's podcasts service
 // (tools/companion/services/podcasts.ts in PocketJS) and its store service
 // (services/store.ts) over lib/net.ts.
 //
 // Every request goes to https://companion.pocket/podcasts/... or
-// https://companion.pocket/store/..., which omarchy-pocketd answers on this
-// device. The NET module admits two requests at a time, so searches, feeds,
-// playback, the library and artwork share one queue; the first four go
-// ahead of artwork. Artwork arrives as an IMG entry (a square RGB565
+// https://companion.pocket/store/..., which the device's companion answers
+// (ui/companion.ts). The NET module admits two requests at a time, so
+// searches, feeds, playback, the library and artwork share one queue; the
+// first four go ahead of artwork. Artwork arrives as an IMG entry (a square RGB565
 // picture, 128 for a row or 256 for a page) and becomes a texture here; the
 // newest ART_TEXTURES stay uploaded and older ones are freed.
 

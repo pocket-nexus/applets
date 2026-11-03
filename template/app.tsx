@@ -1,6 +1,6 @@
 // TEMPLATE: __TITLE__ as a list and a detail page. Replace this with what the app
 // does, and delete this line. ../kit/README.md has every row and a recipe for each
-// common page; ../examples/github is a large app built the same way.
+// common page; ../github is a large app built the same way.
 import { createApp, ICONS, listPage, type App, type LayerContext } from "../kit/app.tsx";
 import { pageId, pageParts, plural, queryRows } from "../kit/page.ts";
 
@@ -14,7 +14,7 @@ interface Thing {
 /** Data comes from here. From the network:
  *    const reply = await fetch("https://api.example.com/things"); // fetch from ../lib/net.ts
  *    return reply.json<Thing[]>();
- *  and add the host to applet.hosts in pocket.json. */
+ *  and add the host to applet.hosts in pocket.app.json. */
 async function loadThings(): Promise<Thing[]> {
   return [
     { id: "one", name: "First thing", about: "What a row says about it, in a line or two.", parts: 1 },

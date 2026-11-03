@@ -89,7 +89,7 @@ A query is kept by its key, so going back does not reload. **Name every piece of
 | Confirm something that cannot be undone | `app.confirm({ title, message, action: "Delete", danger: true, run })`. Name what the button does, never "OK" |
 | How a write went | `write(app, job, "Saved", then)`, or `app.say("Saved")` and `app.say(message, true)` |
 
-A search is a page with a row that opens `compose`: `applets/github/pages/people.tsx`, `searchPage`.
+A search is a page with a row that opens `compose`: `../github/pages/people.tsx`, `searchPage`.
 
 ## Icons
 
@@ -123,4 +123,4 @@ A game, a map or a canvas draws its own pixels. That file opens with
 // pocket-applet: draws its own pixels because <the reason>
 ```
 
-and uses `@pocketjs/framework/components` directly; `../examples/maps` is one. An app's ordinary pages stay rows.
+and uses `@pocketjs/framework/components` directly; `../github/pages/people.tsx` is one, for its sign-in QR code. An app's ordinary pages stay rows.

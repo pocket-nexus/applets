@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// applets/maps/model.ts — what the Maps applet shows: the view (a centre and
+// maps/model.ts — what the Maps applet shows: the view (a centre and
 // a zoom in Web Mercator), the marker a search dropped, the search words and
 // their results, and a notice line. The model outlives a remount
 // (ui/keep.ts), so a drag's centre and a search's results carry over.
