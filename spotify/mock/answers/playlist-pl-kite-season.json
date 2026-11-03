@@ -1,0 +1,14 @@
+{
+ "playlist": {
+  "kind": "playlist",
+  "id": "pl-kite-season",
+  "uri": "spotify:playlist:pl-kite-season",
+  "title": "Kite Season",
+  "subtitle": "Harbor FM Curators",
+  "image": "https://i.scdn.co/image/pocket-sample-playlist-pl-kite-season",
+  "count": 50,
+  "description": "Bright, windy indie for the first warm weekend.",
+  "owner": "Harbor FM Curators"
+ },
+ "tracks": null
+}

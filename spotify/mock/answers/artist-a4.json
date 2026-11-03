@@ -1,0 +1,33 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a4",
+  "uri": "spotify:artist:a4",
+  "title": "夜光ポスト",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a4"
+ },
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-mayonaka",
+    "uri": "spotify:album:al-mayonaka",
+    "title": "真夜中の郵便配達",
+    "subtitle": "夜光ポスト",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+    "artists": [
+     {
+      "id": "a4",
+      "uri": "spotify:artist:a4",
+      "name": "夜光ポスト"
+     }
+    ],
+    "count": 8,
+    "year": "2022"
+   }
+  ],
+  "total": 1,
+  "next": null
+ }
+}

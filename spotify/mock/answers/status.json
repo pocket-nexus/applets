@@ -1,0 +1,17 @@
+{
+ "configured": true,
+ "signedIn": true,
+ "user": {
+  "id": "renarlo",
+  "name": "Ren Arlo",
+  "image": "https://i.scdn.co/image/pocket-sample-user-renarlo"
+ },
+ "signIn": null,
+ "error": "",
+ "speaker": {
+  "name": "Omarchy Pocket",
+  "state": "ready",
+  "id": "dev-omarchy-pocket",
+  "message": ""
+ }
+}

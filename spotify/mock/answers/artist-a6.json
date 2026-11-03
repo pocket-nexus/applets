@@ -1,0 +1,33 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a6",
+  "uri": "spotify:artist:a6",
+  "title": "Pine & Parallax",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a6"
+ },
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-coordinates",
+    "uri": "spotify:album:al-coordinates",
+    "title": "Coordinates",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "count": 6,
+    "year": "2020"
+   }
+  ],
+  "total": 1,
+  "next": null
+ }
+}

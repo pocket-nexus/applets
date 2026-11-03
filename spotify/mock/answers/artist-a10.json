@@ -1,0 +1,33 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a10",
+  "uri": "spotify:artist:a10",
+  "title": "Cobalt Picnic",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a10"
+ },
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-absolute-zero",
+    "uri": "spotify:album:al-absolute-zero",
+    "title": "Picnic at Absolute Zero",
+    "subtitle": "Cobalt Picnic",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+    "artists": [
+     {
+      "id": "a10",
+      "uri": "spotify:artist:a10",
+      "name": "Cobalt Picnic"
+     }
+    ],
+    "count": 6,
+    "year": "2023"
+   }
+  ],
+  "total": 1,
+  "next": null
+ }
+}

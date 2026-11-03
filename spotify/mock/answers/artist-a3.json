@@ -1,0 +1,33 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a3",
+  "uri": "spotify:artist:a3",
+  "title": "Glasshouse Weather",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a3"
+ },
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-condensation",
+    "uri": "spotify:album:al-condensation",
+    "title": "Condensation",
+    "subtitle": "Glasshouse Weather",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+    "artists": [
+     {
+      "id": "a3",
+      "uri": "spotify:artist:a3",
+      "name": "Glasshouse Weather"
+     }
+    ],
+    "count": 7,
+    "year": "2025"
+   }
+  ],
+  "total": 1,
+  "next": null
+ }
+}

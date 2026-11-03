@@ -20,6 +20,7 @@ export const APPS: readonly string[] = readdirSync(ROOT, { withFileTypes: true }
  *  contract admits them. */
 export const ONLY: Readonly<Record<string, { devices: readonly string[]; because: string }>> = {
   appstore: { devices: ["omarchy-pocket"], because: "its appstore service is omarchy-pocketd's; Pocket Shell installs from its paired Mac" },
+  spotify: { devices: ["omarchy-pocket"], because: "its spotify service and librespot run in omarchy-pocketd" },
 };
 
 export function isApp(name: string | undefined): name is string {

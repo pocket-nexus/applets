@@ -1,0 +1,157 @@
+{
+ "playlist": {
+  "kind": "playlist",
+  "id": "pl-morning-run",
+  "uri": "spotify:playlist:pl-morning-run",
+  "title": "Morning Run 5K",
+  "subtitle": "Ren Arlo",
+  "image": "https://i.scdn.co/image/pocket-sample-playlist-pl-morning-run",
+  "count": 6,
+  "description": "Thirty minutes, no slow songs.",
+  "owner": "Ren Arlo"
+ },
+ "tracks": {
+  "items": [
+   {
+    "kind": "track",
+    "id": "al-paper-satellites-3",
+    "uri": "spotify:track:al-paper-satellites-3",
+    "title": "Static Hearts",
+    "subtitle": "Niko Thessaly",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+    "durationMs": 201000,
+    "explicit": true,
+    "album": {
+     "id": "al-paper-satellites",
+     "uri": "spotify:album:al-paper-satellites",
+     "name": "Paper Satellites"
+    },
+    "artists": [
+     {
+      "id": "a2",
+      "uri": "spotify:artist:a2",
+      "name": "Niko Thessaly"
+     }
+    ],
+    "trackNumber": 3
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-4",
+    "uri": "spotify:track:al-coordinates-4",
+    "title": "Parallax Error",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 192000,
+    "explicit": true,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 4
+   },
+   {
+    "kind": "track",
+    "id": "al-absolute-zero-2",
+    "uri": "spotify:track:al-absolute-zero-2",
+    "title": "Thermos Blues",
+    "subtitle": "Cobalt Picnic",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-absolute-zero",
+    "durationMs": 227000,
+    "explicit": true,
+    "album": {
+     "id": "al-absolute-zero",
+     "uri": "spotify:album:al-absolute-zero",
+     "name": "Picnic at Absolute Zero"
+    },
+    "artists": [
+     {
+      "id": "a10",
+      "uri": "spotify:artist:a10",
+      "name": "Cobalt Picnic"
+     }
+    ],
+    "trackNumber": 2
+   },
+   {
+    "kind": "track",
+    "id": "al-harbor-lights-6",
+    "uri": "spotify:track:al-harbor-lights-6",
+    "title": "Night Ferry",
+    "subtitle": "Coral Lantern Club",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+    "durationMs": 213000,
+    "explicit": true,
+    "album": {
+     "id": "al-harbor-lights",
+     "uri": "spotify:album:al-harbor-lights",
+     "name": "Harbor Lights at Low Tide"
+    },
+    "artists": [
+     {
+      "id": "a1",
+      "uri": "spotify:artist:a1",
+      "name": "Coral Lantern Club"
+     }
+    ],
+    "trackNumber": 6
+   },
+   {
+    "kind": "track",
+    "id": "al-static-bloom-1",
+    "uri": "spotify:track:al-static-bloom-1",
+    "title": "Static Bloom",
+    "subtitle": "Tin Moth Radio",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-static-bloom",
+    "durationMs": 219000,
+    "explicit": false,
+    "album": {
+     "id": "al-static-bloom",
+     "uri": "spotify:album:al-static-bloom",
+     "name": "Static Bloom"
+    },
+    "artists": [
+     {
+      "id": "a7",
+      "uri": "spotify:artist:a7",
+      "name": "Tin Moth Radio"
+     }
+    ],
+    "trackNumber": 1
+   },
+   {
+    "kind": "track",
+    "id": "al-coordinates-6",
+    "uri": "spotify:track:al-coordinates-6",
+    "title": "Elevation Gain",
+    "subtitle": "Pine & Parallax",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+    "durationMs": 301000,
+    "explicit": false,
+    "album": {
+     "id": "al-coordinates",
+     "uri": "spotify:album:al-coordinates",
+     "name": "Coordinates"
+    },
+    "artists": [
+     {
+      "id": "a6",
+      "uri": "spotify:artist:a6",
+      "name": "Pine & Parallax"
+     }
+    ],
+    "trackNumber": 6
+   }
+  ],
+  "total": 6,
+  "next": null
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a7",
+  "uri": "spotify:artist:a7",
+  "title": "Tin Moth Radio",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a7"
+ },
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-static-bloom",
+    "uri": "spotify:album:al-static-bloom",
+    "title": "Static Bloom",
+    "subtitle": "Tin Moth Radio",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-static-bloom",
+    "artists": [
+     {
+      "id": "a7",
+      "uri": "spotify:artist:a7",
+      "name": "Tin Moth Radio"
+     }
+    ],
+    "count": 4,
+    "year": "2019"
+   }
+  ],
+  "total": 1,
+  "next": null
+ }
+}

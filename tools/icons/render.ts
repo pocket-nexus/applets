@@ -1,7 +1,8 @@
 // bun tools/icons/render.ts <name> <size> <out.png> — an icon drawn as SVG in
 // tools/icons/<name>.html (SIZE stands for its side), rendered to a
 // transparent PNG with headless Chrome. github.html draws GitHub's mark (the
-// Octicons mark-github path, MIT) on the applets' dark glass tile.
+// Octicons mark-github path, MIT) on the applets' dark glass tile;
+// spotify.html draws Spotify's mark (a green disc, three black arcs) on it.
 const [name, size, out] = process.argv.slice(2);
 const port = 9600 + Math.floor(Math.random() * 100);
 const dir = import.meta.dir;

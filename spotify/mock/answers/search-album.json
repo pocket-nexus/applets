@@ -1,0 +1,108 @@
+{
+ "items": [
+  {
+   "kind": "album",
+   "id": "al-harbor-lights",
+   "uri": "spotify:album:al-harbor-lights",
+   "title": "Harbor Lights at Low Tide",
+   "subtitle": "Coral Lantern Club",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+   "artists": [
+    {
+     "id": "a1",
+     "uri": "spotify:artist:a1",
+     "name": "Coral Lantern Club"
+    }
+   ],
+   "count": 10,
+   "year": "2024"
+  },
+  {
+   "kind": "album",
+   "id": "al-paper-satellites",
+   "uri": "spotify:album:al-paper-satellites",
+   "title": "Paper Satellites",
+   "subtitle": "Niko Thessaly",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-paper-satellites",
+   "artists": [
+    {
+     "id": "a2",
+     "uri": "spotify:artist:a2",
+     "name": "Niko Thessaly"
+    }
+   ],
+   "count": 8,
+   "year": "2023"
+  },
+  {
+   "kind": "album",
+   "id": "al-condensation",
+   "uri": "spotify:album:al-condensation",
+   "title": "Condensation",
+   "subtitle": "Glasshouse Weather",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-condensation",
+   "artists": [
+    {
+     "id": "a3",
+     "uri": "spotify:artist:a3",
+     "name": "Glasshouse Weather"
+    }
+   ],
+   "count": 7,
+   "year": "2025"
+  },
+  {
+   "kind": "album",
+   "id": "al-mayonaka",
+   "uri": "spotify:album:al-mayonaka",
+   "title": "真夜中の郵便配達",
+   "subtitle": "夜光ポスト",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-mayonaka",
+   "artists": [
+    {
+     "id": "a4",
+     "uri": "spotify:artist:a4",
+     "name": "夜光ポスト"
+    }
+   ],
+   "count": 8,
+   "year": "2022"
+  },
+  {
+   "kind": "album",
+   "id": "al-xingji",
+   "uri": "spotify:album:al-xingji",
+   "title": "星际慢车",
+   "subtitle": "银河邮差",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-xingji",
+   "artists": [
+    {
+     "id": "a5",
+     "uri": "spotify:artist:a5",
+     "name": "银河邮差"
+    }
+   ],
+   "count": 7,
+   "year": "2021"
+  },
+  {
+   "kind": "album",
+   "id": "al-coordinates",
+   "uri": "spotify:album:al-coordinates",
+   "title": "Coordinates",
+   "subtitle": "Pine & Parallax",
+   "image": "https://i.scdn.co/image/pocket-sample-album-al-coordinates",
+   "artists": [
+    {
+     "id": "a6",
+     "uri": "spotify:artist:a6",
+     "name": "Pine & Parallax"
+    }
+   ],
+   "count": 6,
+   "year": "2020"
+  }
+ ],
+ "total": 6,
+ "next": null
+}

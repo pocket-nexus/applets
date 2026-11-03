@@ -1,0 +1,50 @@
+{
+ "artist": {
+  "kind": "artist",
+  "id": "a1",
+  "uri": "spotify:artist:a1",
+  "title": "Coral Lantern Club",
+  "subtitle": "Artist",
+  "image": "https://i.scdn.co/image/pocket-sample-artist-a1"
+ },
+ "albums": {
+  "items": [
+   {
+    "kind": "album",
+    "id": "al-harbor-lights",
+    "uri": "spotify:album:al-harbor-lights",
+    "title": "Harbor Lights at Low Tide",
+    "subtitle": "Coral Lantern Club",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-harbor-lights",
+    "artists": [
+     {
+      "id": "a1",
+      "uri": "spotify:artist:a1",
+      "name": "Coral Lantern Club"
+     }
+    ],
+    "count": 10,
+    "year": "2024"
+   },
+   {
+    "kind": "album",
+    "id": "al-breakwater-live",
+    "uri": "spotify:album:al-breakwater-live",
+    "title": "Breakwater (Live at the Pier)",
+    "subtitle": "Coral Lantern Club",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-breakwater-live",
+    "artists": [
+     {
+      "id": "a1",
+      "uri": "spotify:artist:a1",
+      "name": "Coral Lantern Club"
+     }
+    ],
+    "count": 2,
+    "year": "2024"
+   }
+  ],
+  "total": 3,
+  "next": "2"
+ }
+}

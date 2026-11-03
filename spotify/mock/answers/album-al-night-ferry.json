@@ -1,0 +1,141 @@
+{
+ "album": {
+  "kind": "album",
+  "id": "al-night-ferry",
+  "uri": "spotify:album:al-night-ferry",
+  "title": "Night Ferry Sessions",
+  "subtitle": "Small Hours Ensemble",
+  "image": "https://i.scdn.co/image/pocket-sample-album-al-night-ferry",
+  "artists": [
+   {
+    "id": "a9",
+    "uri": "spotify:artist:a9",
+    "name": "Small Hours Ensemble"
+   }
+  ],
+  "count": 5,
+  "year": "2024"
+ },
+ "tracks": {
+  "items": [
+   {
+    "kind": "track",
+    "id": "al-night-ferry-1",
+    "uri": "spotify:track:al-night-ferry-1",
+    "title": "Overture for Deckhands",
+    "subtitle": "Small Hours Ensemble",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-night-ferry",
+    "durationMs": 169000,
+    "explicit": false,
+    "album": {
+     "id": "al-night-ferry",
+     "uri": "spotify:album:al-night-ferry",
+     "name": "Night Ferry Sessions"
+    },
+    "artists": [
+     {
+      "id": "a9",
+      "uri": "spotify:artist:a9",
+      "name": "Small Hours Ensemble"
+     }
+    ],
+    "trackNumber": 1
+   },
+   {
+    "kind": "track",
+    "id": "al-night-ferry-2",
+    "uri": "spotify:track:al-night-ferry-2",
+    "title": "Midnight Crossing",
+    "subtitle": "Small Hours Ensemble",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-night-ferry",
+    "durationMs": 372000,
+    "explicit": false,
+    "album": {
+     "id": "al-night-ferry",
+     "uri": "spotify:album:al-night-ferry",
+     "name": "Night Ferry Sessions"
+    },
+    "artists": [
+     {
+      "id": "a9",
+      "uri": "spotify:artist:a9",
+      "name": "Small Hours Ensemble"
+     }
+    ],
+    "trackNumber": 2
+   },
+   {
+    "kind": "track",
+    "id": "al-night-ferry-3",
+    "uri": "spotify:track:al-night-ferry-3",
+    "title": "Lighthouse Waltz",
+    "subtitle": "Small Hours Ensemble",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-night-ferry",
+    "durationMs": 270000,
+    "explicit": false,
+    "album": {
+     "id": "al-night-ferry",
+     "uri": "spotify:album:al-night-ferry",
+     "name": "Night Ferry Sessions"
+    },
+    "artists": [
+     {
+      "id": "a9",
+      "uri": "spotify:artist:a9",
+      "name": "Small Hours Ensemble"
+     }
+    ],
+    "trackNumber": 3
+   },
+   {
+    "kind": "track",
+    "id": "al-night-ferry-4",
+    "uri": "spotify:track:al-night-ferry-4",
+    "title": "Fog Signal",
+    "subtitle": "Small Hours Ensemble",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-night-ferry",
+    "durationMs": 235000,
+    "explicit": false,
+    "album": {
+     "id": "al-night-ferry",
+     "uri": "spotify:album:al-night-ferry",
+     "name": "Night Ferry Sessions"
+    },
+    "artists": [
+     {
+      "id": "a9",
+      "uri": "spotify:artist:a9",
+      "name": "Small Hours Ensemble"
+     }
+    ],
+    "trackNumber": 4
+   },
+   {
+    "kind": "track",
+    "id": "al-night-ferry-5",
+    "uri": "spotify:track:al-night-ferry-5",
+    "title": "Arrival",
+    "subtitle": "Small Hours Ensemble",
+    "image": "https://i.scdn.co/image/pocket-sample-album-al-night-ferry",
+    "durationMs": 340000,
+    "explicit": false,
+    "album": {
+     "id": "al-night-ferry",
+     "uri": "spotify:album:al-night-ferry",
+     "name": "Night Ferry Sessions"
+    },
+    "artists": [
+     {
+      "id": "a9",
+      "uri": "spotify:artist:a9",
+      "name": "Small Hours Ensemble"
+     }
+    ],
+    "trackNumber": 5
+   }
+  ],
+  "total": 5,
+  "next": null
+ },
+ "liked": false
+}
