@@ -8,7 +8,7 @@
 // composer with the system keyboard: START (or Reply) sends, B keeps the
 // draft and closes it.
 //
-// The X session lives on the linked Mac (Pocket Companion's x service); the
+// The X session lives on the linked Mac (Pocket Hub's x service); the
 // console asks it for pages over @pocketjs/framework/net. Text in any script
 // draws from glyph atlases the Mac renders (ui/glyphs.ts).
 

@@ -47,7 +47,7 @@ bun tools/build.ts omarchy-pocket --apps weather
 bun run check                                   # typecheck, the applet rules, the sims, the store
 ```
 
-Packages go to `dist/<device>/<output>.pocket`, and `dist/packages/<output>.pocket` holds every variant built. A device's host contract lives with its program: Omarchy Pocket's in [pocket-nexus/omarchy-pocket](https://github.com/pocket-nexus/omarchy-pocket) (`OMARCHY_POCKET_ROOT`, default `../omarchy-pocket`), the Tab5's in pocket-nexus/pocket-m5 (`POCKET_M5_ROOT`, default `../pocket-m5`), the 3DS's in PocketJS (`3ds-dev`). Omarchy Pocket and Pocket Shell take this repository as a submodule (`vendor/applets`) and build the applets from it. A Tab5 or a 3DS installs them from Pocket Companion on a paired Mac, which carries them ([studio.pocket.nexus/apps/companion](https://studio.pocket.nexus/apps/companion)).
+Packages go to `dist/<device>/<output>.pocket`, and `dist/packages/<output>.pocket` holds every variant built. A device's host contract lives with its program: Omarchy Pocket's in [pocket-nexus/omarchy-pocket](https://github.com/pocket-nexus/omarchy-pocket) (`OMARCHY_POCKET_ROOT`, default `../omarchy-pocket`), the Tab5's in pocket-nexus/pocket-m5 (`POCKET_M5_ROOT`, default `../pocket-m5`), the 3DS's in PocketJS (`3ds-dev`). Omarchy Pocket and Pocket Shell take this repository as a submodule (`vendor/applets`) and build the applets from it. A Tab5 or a 3DS installs them from Pocket Hub on a paired Mac, which carries them. Pocket Hub is not released yet.
 
 ## The store
 

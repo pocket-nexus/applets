@@ -2,7 +2,7 @@
 
 The Discord applet (`discord/`) lists servers and channels, shows
 messages as they arrive and sends messages. It reaches Discord through
-**Pocket Companion** on the Mac with a **bot**: the applet fetches
+**Pocket Hub** on the Mac with a **bot**: the applet fetches
 `https://companion.pocket/discord/…`, and the companion's discord service
 (PocketJS `tools/companion/services/discord.ts`) calls Discord's API with the
 bot's token. The console never holds the token. On Omarchy Pocket the
@@ -26,9 +26,8 @@ discord service runs in omarchy-pocketd on the device itself
    the portal shows it once.
 3. On the same page, under **Privileged Gateway Intents**, turn on **Message
    Content Intent** and save. Without it, messages arrive with empty text.
-4. Give the token to the companion: paste it on Pocket Companion's Discord
-   page (the app is at <https://studio.pocket.nexus/apps/companion>), or run
-   this in a PocketJS checkout:
+4. Give the token to the companion: paste it on Pocket Hub's Discord page
+   (Pocket Hub is not released yet), or run this in a PocketJS checkout:
 
    ```sh
    bun tools/companion.ts service discord token <bot-token>
@@ -60,10 +59,9 @@ discord service runs in omarchy-pocketd on the device itself
 | `service discord logout` | Deletes the token and disconnects. |
 
 The token is stored in `services/discord/token` under the companion's store,
-`~/Library/Application Support/Pocket Companion/` (or
-`$POCKET_COMPANION_HOME`), file **0600** in a **0700** folder. No response to
-the console, log line or command output contains it. To revoke it, reset the
-token in the developer portal.
+`~/Library/Application Support/Pocket Hub/` (or `$POCKET_HUB_HOME`), file
+**0600** in a **0700** folder. No response to the console, log line or command
+output contains it. To revoke it, reset the token in the developer portal.
 
 ## Using it on the 3DS
 

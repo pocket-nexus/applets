@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // ui/glyphs.ts — runtime text in any script, drawn from a font atlas the
-// companion's glyphs service renders (Pocket Companion on a console's Mac,
+// companion's glyphs service renders (Pocket Hub on a console's Mac,
 // omarchy-pocketd on Omarchy Pocket).
 //
 // The baked faces hold ASCII and the bundle's own literals, so a Chinese

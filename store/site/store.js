@@ -44,7 +44,7 @@ const DEVICES = {
 function companionInstall(title) {
   return [
     h("li", {}, "Download the package below."),
-    h("li", {}, "Put it in Pocket Companion's apps folder on the Mac the console is paired with (", h("code", {}, "~/Library/Application Support/Pocket Companion/apps"), " unless you chose another)."),
+    h("li", {}, "Put it in Pocket Hub's apps folder on the Mac the console is paired with (", h("code", {}, "~/Library/Application Support/Pocket Hub/apps"), " unless you chose another)."),
     h("li", {}, "On the console, Pocket Shell's store lists ", h("strong", {}, title), ". Install it there."),
   ];
 }
