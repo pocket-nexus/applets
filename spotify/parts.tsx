@@ -224,9 +224,4 @@ export function messageHeight(detail: string | undefined, w: number, button: boo
   return messageButtonY(0, detail, w, spinner) + (button ? 32 + 12 : 0);
 }
 
-/** A section's heading. */
-export function Heading(props: { x: number; y: number; w: number; text: string }) {
-  return <Text class="absolute text-lg font-bold" style={{ insetL: props.x, insetT: props.y, width: props.w, textColor: C.text }}>{props.text}</Text>;
-}
-
 export type Children = JSX.Element;
