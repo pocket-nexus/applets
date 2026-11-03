@@ -2,6 +2,7 @@
 // spotify/theme.ts — Spotify's dark palette and the sizes the pages share.
 // A page names what a thing is (C.muted, C.raised); the hex values live here.
 import type { BarColors } from "../ui/bar.tsx";
+import type { SetupPalette } from "../ui/setup.tsx";
 
 export const C = {
   bg: "#121212",
@@ -36,6 +37,22 @@ export const BAR: BarColors = {
   button: C.text,
   lit: C.faint,
   back: "art/spotify/back-white-16.svg",
+};
+
+/** The owner setup page (ui/setup.tsx) in these colours. */
+export const SETUP: SetupPalette = {
+  bg: C.bg,
+  surface: C.surface,
+  raised: C.raised,
+  line: "#3e3e3e",
+  text: C.text,
+  muted: C.muted,
+  link: C.accent,
+  primary: C.accent,
+  onPrimary: C.black,
+  ok: C.accent,
+  bad: C.red,
+  lit: C.lit,
 };
 
 /** Space, in logical px. */

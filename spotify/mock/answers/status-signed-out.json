@@ -6,8 +6,10 @@
  "error": "",
  "speaker": {
   "name": "Omarchy Pocket",
+  "engine": "librespot",
   "state": "off",
   "id": null,
-  "message": ""
+  "message": "",
+  "setup": true
  }
 }

@@ -122,3 +122,17 @@ export function spacedCode(code: string): string {
   for (let at = 0; at < plain.length; at += size) groups.push(plain.slice(at, at + size));
   return groups.join(" ");
 }
+
+/** Home's "Jump back in" grid: what was played lately, then the playlists
+ *  (Liked Songs first) it does not hold, `count` in all. */
+export function jumpBackIn(recent: readonly Item[], playlists: readonly Item[], count: number): Item[] {
+  const out: Item[] = [];
+  const seen = new Set<string>();
+  for (const item of [...recent, ...playlists]) {
+    if (out.length >= count) break;
+    if (seen.has(item.uri)) continue;
+    seen.add(item.uri);
+    out.push(item);
+  }
+  return out;
+}

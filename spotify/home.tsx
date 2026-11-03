@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // spotify/home.tsx — the three root pages' bar (the account's picture, then
-// Home, Search and Library as chips; L and R step through them) and Home:
-// what was played lately, the owner's playlists with Liked Songs first,
-// saved albums and followed artists, each a shelf of covers that pans
-// sideways under a finger and steps with the d-pad's left and right.
+// Home, Search and Library as small chips; L and R step through them) and
+// Home: a "Jump back in" grid of compact cards (what was played lately,
+// filled with the owner's playlists when that is short), then the
+// playlists with Liked Songs first, saved albums and followed artists as
+// shelves of small covers that pan sideways under a finger. The d-pad moves
+// through the grid and the shelves as one grid of rows.
 
 import { createMemo, For, Show } from "solid-js";
 import { jump } from "@pocketjs/framework/animation";
@@ -15,38 +17,52 @@ import { onFrame } from "@pocketjs/framework/lifecycle";
 import type { NodeMirror } from "@pocketjs/framework/renderer";
 import { NAV_H } from "../ui/bar.tsx";
 import { viewHeight, type LayerContext, type PageSpec } from "../ui/nav.tsx";
-import { appletSurfaceId, SCREEN_H, SCREEN_W } from "../ui/screen.ts";
+import { appletSurfaceId, SCREEN_W } from "../ui/screen.ts";
+import { FONT, measure } from "../ui/text.ts";
 import { coverSide } from "./api.ts";
+import { jumpBackIn } from "./format.ts";
 import type { Item } from "./contract.ts";
 import { listContent } from "./list.tsx";
-import { Cover, Heading, Lines, litFor, Message, messageButtonY, messageHeight, type Control, type Env } from "./parts.tsx";
+import { Cover, Lines, litFor, Message, messageButtonY, messageHeight, type Control, type Env } from "./parts.tsx";
 import { fit } from "./text.ts";
 import { BAR, C, F, S } from "./theme.ts";
 
 export type Tab = "home" | "search" | "library";
-export const TABS: readonly { id: Tab; label: string; w: number }[] = [
-  { id: "home", label: "Home", w: 58 },
-  { id: "search", label: "Search", w: 64 },
-  { id: "library", label: "Library", w: 66 },
+export const TABS: readonly { id: Tab; label: string }[] = [
+  { id: "home", label: "Home" },
+  { id: "search", label: "Search" },
+  { id: "library", label: "Library" },
 ];
-const AVATAR = 26;
-const TABS_X = 10 + AVATAR + 10;
+const AVATAR = 22;
+const TABS_X = 10 + AVATAR + 8;
+const PILL_H = 24;
+/** Each tab's left edge and width, measured once the faces are in. */
+function tabPlaces(): { x: number; w: number }[] {
+  let x = TABS_X;
+  return TABS.map((tab) => {
+    const w = Math.ceil(measure(tab.label, FONT.xsBold)) + 22;
+    const at = { x, w };
+    x += w + 5;
+    return at;
+  });
+}
 
 /** The bar of a root page: the account's picture and the three tabs. */
 function TabBar(props: { env: Env; tab: Tab }) {
   const user = () => props.env.model.status()?.user ?? null;
-  const x = (index: number) => TABS_X + TABS.slice(0, index).reduce((sum, tab) => sum + tab.w + 6, 0);
+  const places = tabPlaces();
+  const top = (NAV_H - PILL_H) / 2;
   return (
     <>
-      <Cover covers={props.env.covers} url={() => user()?.image ?? ""} x={10} y={5} size={AVATAR} side={coverSide(AVATAR)} round />
+      <Cover covers={props.env.covers} url={() => user()?.image ?? ""} x={10} y={(NAV_H - AVATAR) / 2} size={AVATAR} side={coverSide(AVATAR)} round />
       <Show when={props.env.press.is("tab.account")}>
-        <View class="absolute" style={{ insetL: 10, insetT: 5, width: AVATAR, height: AVATAR, radius: AVATAR / 2, bgColor: "#ffffff40" }} />
+        <View class="absolute" style={{ insetL: 10, insetT: (NAV_H - AVATAR) / 2, width: AVATAR, height: AVATAR, radius: AVATAR / 2, bgColor: "#ffffff40" }} />
       </Show>
       <For each={TABS}>
         {(tab, index) => (
           <>
-            <View class="absolute" style={{ insetL: x(index()), insetT: 5, width: tab.w, height: 26, radius: 13, bgColor: props.tab === tab.id ? C.accent : props.env.press.is(`tab.${tab.id}`) ? "#3e3e3e" : C.raised }} />
-            <Text class="absolute text-xs font-bold text-center" style={{ insetL: x(index()), insetT: 11, width: tab.w, textColor: props.tab === tab.id ? C.black : C.text }}>{tab.label}</Text>
+            <View class="absolute" style={{ insetL: places[index()]!.x, insetT: top, width: places[index()]!.w, height: PILL_H, radius: PILL_H / 2, bgColor: props.tab === tab.id ? C.accent : props.env.press.is(`tab.${tab.id}`) ? "#3e3e3e" : C.raised }} />
+            <Text class="absolute text-xs font-bold text-center" style={{ insetL: places[index()]!.x, insetT: top + (PILL_H - 15) / 2, width: places[index()]!.w, textColor: props.tab === tab.id ? C.black : C.text }}>{tab.label}</Text>
           </>
         )}
       </For>
@@ -56,7 +72,7 @@ function TabBar(props: { env: Env; tab: Tab }) {
 
 /** A root page: the tab bar over `spec`'s content, L and R to the next tab. */
 export function rootPage(env: Env, tab: Tab, spec: PageSpec, go: (tab: Tab) => void): PageSpec {
-  const x = (index: number) => TABS_X + TABS.slice(0, index).reduce((sum, item) => sum + item.w + 6, 0);
+  const places = tabPlaces();
   const step = (by: number) => {
     const at = TABS.findIndex((item) => item.id === tab);
     go(TABS[(at + by + TABS.length) % TABS.length]!.id);
@@ -72,7 +88,7 @@ export function rootPage(env: Env, tab: Tab, spec: PageSpec, go: (tab: Tab) => v
       ...(spec.fixedTargets?.() ?? []),
       { id: "tab.account", x: 4, y: 0, w: AVATAR + 12, h: NAV_H, run: () => env.stack.push("account") },
       // the tab that is open opens again: its page from the top
-      ...TABS.map((item, index) => ({ id: `tab.${item.id}`, x: x(index) - 3, y: 0, w: item.w + 6, h: NAV_H, run: () => go(item.id) })),
+      ...TABS.map((item, index) => ({ id: `tab.${item.id}`, x: places[index]!.x - 2, y: 0, w: places[index]!.w + 4, h: NAV_H, run: () => go(item.id) })),
     ],
     legend: () => [{ button: "lr", label: "Tab" }, ...(spec.legend?.() ?? [])],
     key(pressed) {
@@ -96,25 +112,44 @@ interface Shelf {
   scroller: Scroller;
 }
 
+/** A row the d-pad moves along: a row of the grid or a shelf. */
+interface Line {
+  ids: string[];
+  /** Each item's centre, in surface x now. */
+  centers(): number[];
+  top: number;
+  bottom: number;
+  shelf?: Shelf;
+}
+
+/** The grid's cards, its columns' gap, and the shelves' sizes. */
+const CARD_H = 40;
+const CARD_GAP = 6;
+const GRID_TOP = 8;
+const TILE = 72;
+const TILE_GAP = 10;
+const HEADER_H = 24;
+/** A tile's title and subtitle under its cover. */
+const TEXT_H = 32;
+const SHELF_GAP = 6;
+const SHELF_H = HEADER_H + TILE + TEXT_H + SHELF_GAP;
 
 export function homePage(env: Env, layer: LayerContext): PageSpec {
   const W = SCREEN_W;
   const VIEW_H = viewHeight(env.inset);
-  // a shelf fits the band between the bar and the mini player
-  const TILE = W >= 440 && SCREEN_H >= 300 ? 112 : SCREEN_H < 300 ? 80 : 92;
-  const HEADER_H = SCREEN_H < 300 ? 34 : 40;
-  /** A tile's title and subtitle under its cover. */
-  const TEXT_H = SCREEN_H < 300 ? 40 : 44;
-  const GAP = 12;
-  const SHELF_H = HEADER_H + TILE + TEXT_H;
-  const side = coverSide(TILE);
+  // two columns of cards on a wide tile, one on a narrow one
+  const COLUMNS = W >= 400 ? 2 : 1;
+  const CARDS = COLUMNS === 2 ? 8 : 4;
+  const cardW = (W - S.pad * 2 - CARD_GAP * (COLUMNS - 1)) / COLUMNS;
+  const cardSide = coverSide(CARD_H);
+  const tileSide = coverSide(TILE);
   const { model, client } = env;
   const home = model.answers.query("home", () => client.home());
   const scrollers = new Map<string, Scroller>();
   const scrollerFor = (id: string, count: number) => {
     let scroller = scrollers.get(id);
     if (!scroller) {
-      scroller = createScroller({ max: () => Math.max(0, S.pad * 2 + count * (TILE + GAP) - GAP - W), extent: () => W, overscroll: 40 });
+      scroller = createScroller({ max: () => Math.max(0, S.pad * 2 + count * (TILE + TILE_GAP) - TILE_GAP - W), extent: () => W, overscroll: 40 });
       scrollers.set(id, scroller);
     }
     return scroller;
@@ -122,24 +157,36 @@ export function homePage(env: Env, layer: LayerContext): PageSpec {
   onFrame(() => {
     for (const scroller of scrollers.values()) scroller.step();
   });
+  const cards = createMemo(() => {
+    const value = home.data();
+    return value ? jumpBackIn(value.recent, value.playlists, CARDS) : [];
+  });
+  const gridH = () => {
+    const rows = Math.ceil(cards().length / COLUMNS);
+    return rows ? GRID_TOP + rows * CARD_H + (rows - 1) * CARD_GAP + 10 : 0;
+  };
+  const cardX = (index: number) => S.pad + (index % COLUMNS) * (cardW + CARD_GAP);
+  const cardY = (index: number) => GRID_TOP + Math.floor(index / COLUMNS) * (CARD_H + CARD_GAP);
+  // a shelf with nothing in it is left out, heading and all
   const shelves = createMemo<Shelf[]>(() => {
     const value = home.data();
     if (!value) return [];
+    const top = gridH();
     const list = [
-      { id: "recent", title: "Recently played", items: value.recent, round: false },
       { id: "playlists", title: "Your playlists", items: value.playlists, round: false },
       { id: "albums", title: "Albums", items: value.albums, round: false },
       { id: "artists", title: "Artists", items: value.artists, round: true },
     ].filter((shelf) => shelf.items.length > 0);
-    return list.map((shelf, index) => ({ ...shelf, y: index * SHELF_H, scroller: scrollerFor(shelf.id, shelf.items.length) }));
+    return list.map((shelf, index) => ({ ...shelf, y: top + index * SHELF_H, scroller: scrollerFor(shelf.id, shelf.items.length) }));
   });
-  const tileX = (index: number) => S.pad + index * (TILE + GAP);
+  const tileX = (index: number) => S.pad + index * (TILE + TILE_GAP);
   const lit = litFor(env, layer.focus);
+  const cardId = (index: number) => `home.grid.${index}`;
   const tileId = (shelf: Shelf, index: number) => `home.${shelf.id}.${index}`;
   // A tile's x is read when a touch asks for targets: the shelf's offset
   // then, not a memo rerun on every frame of a pan.
   const controls = createMemo<Control[]>(() => {
-    const out: Control[] = [];
+    const out: Control[] = cards().map((item, index) => ({ id: cardId(index), x: cardX(index), y: cardY(index), w: cardW, h: CARD_H, run: () => env.open(item) }));
     for (const shelf of shelves()) {
       shelf.items.forEach((item, index) => {
         out.push({
@@ -149,14 +196,14 @@ export function homePage(env: Env, layer: LayerContext): PageSpec {
           },
           y: shelf.y + HEADER_H,
           w: TILE,
-          h: TILE + TEXT_H - 6,
+          h: TILE + TEXT_H,
           run: () => env.open(item),
         });
       });
     }
     return out;
   });
-  const empty = () => home.data() !== null && shelves().length === 0;
+  const empty = () => home.data() !== null && cards().length === 0 && shelves().length === 0;
   const problem = () => (home.data() === null ? home.problem() : null);
 
   // A sideways pan on a shelf moves that shelf; an up-and-down one goes on
@@ -186,32 +233,74 @@ export function homePage(env: Env, layer: LayerContext): PageSpec {
     },
   });
 
-  /** The d-pad: left and right along a shelf, up and down between shelves. */
+  /** The grid's rows and the shelves, top to bottom. */
+  const lines = createMemo<Line[]>(() => {
+    const out: Line[] = [];
+    const list = cards();
+    for (let row = 0; row * COLUMNS < list.length; row++) {
+      const indices = list.map((_, index) => index).filter((index) => Math.floor(index / COLUMNS) === row);
+      out.push({ ids: indices.map(cardId), centers: () => indices.map((index) => cardX(index) + cardW / 2), top: cardY(indices[0]!), bottom: cardY(indices[0]!) + CARD_H });
+    }
+    for (const shelf of shelves()) {
+      out.push({
+        ids: shelf.items.map((_, index) => tileId(shelf, index)),
+        centers: () => shelf.items.map((_, index) => tileX(index) + TILE / 2 - shelf.scroller.offset()),
+        top: shelf.y,
+        bottom: shelf.y + HEADER_H + TILE + TEXT_H,
+        shelf,
+      });
+    }
+    return out;
+  });
+
+  /** The d-pad: left and right along a row, up and down to the nearest item of the next. */
   const move = (dx: number, dy: number) => {
-    const list = shelves();
+    const list = lines();
     if (!list.length) return false;
     env.useKeys();
-    const [, shelfId, at] = layer.focus().split(".");
-    let row = list.findIndex((shelf) => shelf.id === shelfId);
-    let index = Number(at ?? 0);
+    let row = list.findIndex((line) => line.ids.includes(layer.focus()));
+    let index = row >= 0 ? list[row]!.ids.indexOf(layer.focus()) : 0;
     if (row < 0 || !env.keys()) {
-      row = Math.max(0, list.findIndex((shelf) => shelf.y + SHELF_H > layer.offset()));
+      row = Math.max(0, list.findIndex((line) => line.bottom > layer.offset()));
       index = 0;
     } else if (dy !== 0) {
+      const x = list[row]!.centers()[index]!;
       row = Math.max(0, Math.min(list.length - 1, row + dy));
-      index = Math.min(index, list[row]!.items.length - 1);
+      const centers = list[row]!.centers();
+      index = centers.reduce((best, center, at) => (Math.abs(center - x) < Math.abs(centers[best]! - x) ? at : best), 0);
     } else {
-      index = Math.max(0, Math.min(list[row]!.items.length - 1, index + dx));
+      index = Math.max(0, Math.min(list[row]!.ids.length - 1, index + dx));
     }
-    const shelf = list[row]!;
-    layer.setFocus(tileId(shelf, index));
-    // the whole shelf, its heading first (reveal keeps 8 px around a span)
-    layer.reveal(shelf.y + 8, shelf.y + SHELF_H - 8);
-    const left = tileX(index) - S.pad;
-    const offset = shelf.scroller.intent();
-    if (left < offset) shelf.scroller.chaseTo(left);
-    else if (tileX(index) + TILE + S.pad > offset + W) shelf.scroller.chaseTo(tileX(index) + TILE + S.pad - W);
+    const line = list[row]!;
+    layer.setFocus(line.ids[index]!);
+    // the whole row, a shelf with its heading (reveal keeps 8 px around a span)
+    layer.reveal(line.top + 8, line.bottom - 8);
+    const shelf = line.shelf;
+    if (shelf) {
+      const left = tileX(index) - S.pad;
+      const offset = shelf.scroller.intent();
+      if (left < offset) shelf.scroller.chaseTo(left);
+      else if (tileX(index) + TILE + S.pad > offset + W) shelf.scroller.chaseTo(tileX(index) + TILE + S.pad - W);
+    }
     return true;
+  };
+
+  const Grid = () => {
+    const titles = createMemo(() => {
+      env.faces.revision();
+      return cards().map((item) => fit(env.faces, item.title, F.smallBold, cardW - CARD_H - 16, 1));
+    });
+    return (
+      <For each={cards()}>
+        {(item, index) => (
+          <>
+            <View class="absolute" style={{ insetL: cardX(index()), insetT: cardY(index()), width: cardW, height: CARD_H, radius: 4, bgColor: lit(cardId(index())) ? "#3e3e3e" : C.raised }} />
+            <Cover covers={env.covers} url={() => item.image} x={cardX(index())} y={cardY(index())} size={CARD_H} side={cardSide} round={item.kind === "artist"} liked={item.kind === "liked"} />
+            <Lines fitted={titles()[index()]!} x={cardX(index()) + CARD_H + 9} y={cardY(index()) + (CARD_H - 15) / 2} w={cardW - CARD_H - 16} leading={15} color={C.text} />
+          </>
+        )}
+      </For>
+    );
   };
 
   const ShelfView = (props: { shelf: Shelf }) => {
@@ -230,7 +319,7 @@ export function homePage(env: Env, layer: LayerContext): PageSpec {
     });
     return (
       <>
-        <Heading x={S.pad} y={props.shelf.y + HEADER_H - 30} w={W - S.pad * 2} text={props.shelf.title} />
+        <Text class="absolute text-base font-bold" style={{ insetL: S.pad, insetT: props.shelf.y + 1, width: W - S.pad * 2, textColor: C.text }}>{props.shelf.title}</Text>
         <View ref={strip} class="absolute left-0" style={{ insetT: props.shelf.y + HEADER_H, width: tileX(props.shelf.items.length) + S.pad, height: TILE + TEXT_H }}>
           <For each={props.shelf.items}>
             {(item, index) => {
@@ -238,11 +327,11 @@ export function homePage(env: Env, layer: LayerContext): PageSpec {
               return (
                 <>
                   <Show when={lit(id)}>
-                    <View class="absolute" style={{ insetL: tileX(index()) - 6, insetT: -6, width: TILE + 12, height: TILE + TEXT_H, radius: 6, bgColor: C.lit }} />
+                    <View class="absolute" style={{ insetL: tileX(index()) - 4, insetT: -4, width: TILE + 8, height: TILE + TEXT_H + 4, radius: 6, bgColor: C.lit }} />
                   </Show>
-                  <Cover covers={env.covers} url={() => item.image} x={tileX(index())} y={0} size={TILE} side={side} round={props.shelf.round} liked={item.kind === "liked"} />
-                  <Lines fitted={texts()[index()]!.title} x={tileX(index())} y={TILE + 6} w={TILE} leading={18} color={C.text} align={props.shelf.round ? "center" : "left"} />
-                  <Lines fitted={texts()[index()]!.subtitle} x={tileX(index())} y={TILE + 24} w={TILE} leading={16} color={C.muted} align={props.shelf.round ? "center" : "left"} />
+                  <Cover covers={env.covers} url={() => item.image} x={tileX(index())} y={0} size={TILE} side={tileSide} round={props.shelf.round} liked={item.kind === "liked"} />
+                  <Lines fitted={texts()[index()]!.title} x={tileX(index())} y={TILE + 4} w={TILE} leading={15} color={C.text} align={props.shelf.round ? "center" : "left"} />
+                  <Lines fitted={texts()[index()]!.subtitle} x={tileX(index())} y={TILE + 18} w={TILE} leading={14} color={C.muted} align={props.shelf.round ? "center" : "left"} />
                 </>
               );
             }}
@@ -253,7 +342,7 @@ export function homePage(env: Env, layer: LayerContext): PageSpec {
   };
 
   const height = () => {
-    if (shelves().length) return shelves().length * SHELF_H;
+    if (cards().length || shelves().length) return gridH() + shelves().length * SHELF_H;
     return problem() ? 24 + messageHeight(problem()!.detail, W, true) : empty() ? 24 + messageHeight(EMPTY, W, false) : 160;
   };
   const content = listContent({
@@ -270,6 +359,7 @@ export function homePage(env: Env, layer: LayerContext): PageSpec {
       },
       view: () => (
         <>
+          <Grid />
           <For each={shelves()}>{(shelf) => <ShelfView shelf={shelf} />}</For>
           <Show when={problem()}>{(failed) => <Message w={W} top={24} title={failed().title} detail={failed().detail} button={{ id: "home.retry", label: "Try Again" }} lit={lit} />}</Show>
           <Show when={empty()}>

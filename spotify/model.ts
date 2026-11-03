@@ -268,8 +268,15 @@ export interface SpotifyModel {
   pendingSignIn: Accessor<Status["signIn"]>;
   cancelSignIn(): void;
   signOut(): void;
-  /** What keeps this device's speaker from playing (starting, stopped), else "". */
+  /** What keeps this device's speaker from playing (starting, refused by
+   *  Spotify, waiting to be picked, stopped), else "". */
   speakerNote: Accessor<string>;
+  /** Spotify refuses this speaker audio and Spotify's own player is not set
+   *  up yet: the pages offer its setup. */
+  offerSetup: Accessor<boolean>;
+  /** Open the setup of Spotify's own player (set by the app). */
+  openSetup(): void;
+  setOpenSetup(open: () => void): void;
   /** Said where playing would start while the account has no Premium, else "". */
   premiumNote: Accessor<string>;
   player: Accessor<Player | null>;
@@ -419,7 +426,7 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
     }
     if (reason === "nodevice") {
       // nothing plays anywhere: this device's speaker, when it is one of Spotify's devices
-      if (!localSpeaker()) return say(speakerNote() || failureText({ reason, error: "" }), true);
+      if (!localSpeaker() || speakerNote()) return say(speakerNote() || failureText({ reason, error: "" }), true, setupAction());
       return say(failureText({ reason, error: "" }), true, { label: "Play on this device", run: () => model.playHere() });
     }
     if (reason === "unavailable") return say(notLinked("Spotify").title, true);
@@ -492,9 +499,18 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
     if (!speaker || phase() !== "ready") return "";
     const name = speaker.name || "This device";
     if (speaker.state === "starting") return `${name}'s speaker is starting.`;
+    if (speaker.state === "refused") return speaker.setup ? "Spotify won't send this speaker audio for your account. Set up Spotify's own player." : speaker.message || "Spotify won't send this speaker audio for your account.";
+    if (speaker.state === "pair") return `Pick ${name} in Spotify on a phone or computer on this network, once.`;
     if (speaker.state === "error") return speaker.message || `${name}'s speaker stopped.`;
     return "";
   };
+  const offerSetup = () => {
+    const speaker = status()?.speaker;
+    return phase() === "ready" && !!speaker && speaker.state === "refused" && speaker.setup;
+  };
+  let openSetup = () => {};
+  /** A notice's way to the setup, when there is one to offer. */
+  const setupAction = (): Notice["action"] => (offerSetup() ? { label: "Set Up", run: () => openSetup() } : undefined);
   const premiumNote = () => (phase() === "ready" && status()?.premium === false ? "Spotify Premium is needed to play. Browsing works without it." : "");
 
   const model: SpotifyModel = {
@@ -533,6 +549,11 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
       client.signOut().then(applyStatus, fail);
     },
     speakerNote,
+    offerSetup,
+    openSetup: () => openSetup(),
+    setOpenSetup(open) {
+      openSetup = open;
+    },
     premiumNote,
     player,
     position() {
@@ -615,7 +636,7 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
     playHere() {
       const id = localSpeaker();
       if (premiumNote()) return say(failureText({ reason: "premium", error: "" }), true);
-      if (!id) return say(speakerNote() || "This device's speaker is not ready.", true);
+      if (!id || speakerNote()) return say(speakerNote() || "This device's speaker is not ready.", true, setupAction());
       command(() => client.transfer(id, true));
     },
     liked: (uri) => likes().get(uri) ?? null,

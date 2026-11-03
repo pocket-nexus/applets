@@ -20,7 +20,9 @@ import { onButtonPress, onFrame } from "@pocketjs/framework/lifecycle";
 import { createOsk, keyboardElsewhere, Osk, oskHeight } from "@pocketjs/framework/osk";
 import { keep } from "../ui/keep.ts";
 import { Legend, legendWhileTyping } from "../ui/legend.tsx";
-import { createNavStack, type NavStack } from "../ui/nav.tsx";
+import { createNavStack, viewHeight, type NavStack } from "../ui/nav.tsx";
+import { setupPage } from "../ui/setup.tsx";
+import { companionService } from "../lib/net.ts";
 import { appletSurfaceId, appletTouch, SCREEN_H, SCREEN_W } from "../ui/screen.ts";
 import { FONT, measure, wrap } from "../ui/text.ts";
 import { createPress, createTouchRouter, type Target, type TouchPage } from "../ui/touch.ts";
@@ -30,10 +32,10 @@ import { homePage, rootPage, type Tab } from "./home.tsx";
 import { createSpotifyModel } from "./model.ts";
 import { accountPage, albumPage, artistPage, devicesPage, libraryPage, likedPage, pageOf, partsOf, playlistPage, queuePage, remember, searchPage } from "./pages.tsx";
 import { Pill, type Env } from "./parts.tsx";
-import { bottomBar, miniHeight, MiniPlayer, miniTargets, playerPage, PremiumNote } from "./player.tsx";
+import { bottomBar, miniHeight, MiniPlayer, miniTargets, playerPage, PremiumNote, SpeakerNote, speakerTargets } from "./player.tsx";
 import { loadingPage, signInPage } from "./signin.tsx";
 import { createFaces } from "./text.ts";
-import { C } from "./theme.ts";
+import { BAR, C, SETUP } from "./theme.ts";
 
 const ALL_BUTTONS = 0xffff;
 const ROOTS: readonly string[] = ["home", "search", "library"];
@@ -55,21 +57,29 @@ export default function Spotify() {
   const [keys, setKeys] = createSignal(!appletTouch());
   const [alert, setAlert] = createSignal<Alert | null>(null);
 
-  // ---- the keyboard: the search words ----------------------------------------
-  const field = keep("typing", () => createSignal<"search" | null>(null));
+  // ---- the keyboard: the search words, a setup field --------------------------
+  type Editing = { kind: "search" } | { kind: "setup"; field: string; commit: (text: string) => void };
+  const field = keep("typing", () => createSignal<Editing | null>(null));
   const [editing, setEditing] = field;
   const [draft, setDraft] = createSignal("");
   const osk = createOsk({
     value: draft,
     setValue: setDraft,
-    maxLength: 80,
+    // a setup key runs long; the search words are cut to 80
+    maxLength: 512,
     onCommit: (text) => {
-      if (editing() === "search") model.setWords(text.trim());
+      const open = editing();
       setEditing(null);
+      if (open?.kind === "search") model.setWords(text.trim().slice(0, 80));
+      else if (open?.kind === "setup" && text.trim()) open.commit(text.trim());
     },
     onClose: () => setEditing(null),
   });
-  legendWhileTyping(osk.isOpen, "Search");
+  legendWhileTyping(osk.isOpen, "Done");
+  const setupDraft = (id: string) => {
+    const open = editing();
+    return osk.isOpen() && open?.kind === "setup" && open.field === id ? osk.display("|") : null;
+  };
 
   const env: Env = {
     model,
@@ -80,9 +90,9 @@ export default function Spotify() {
     keys,
     useKeys: () => setKeys(true),
     stack: null as unknown as NavStack,
-    draft: (which) => (osk.isOpen() && editing() === which ? osk.display("|") : null),
+    draft: (which) => (osk.isOpen() && editing()?.kind === which ? osk.display("|") : null),
     edit(which) {
-      setEditing(which);
+      setEditing({ kind: which });
       setDraft(model.words());
       osk.open();
     },
@@ -142,12 +152,34 @@ export default function Spotify() {
           return accountPage(env, layer);
         case "signin":
           return signInPage(env, layer);
+        case "setup":
+          // Spotify's own player: the service's owner setup, as every companion service answers it
+          return setupPage({
+            url: companionService("spotify", "/_setup"),
+            layer,
+            press,
+            keys,
+            width: SCREEN_W,
+            view: viewHeight(),
+            palette: SETUP,
+            barColors: BAR,
+            edit(entry, commit) {
+              setEditing({ kind: "setup", field: entry.id, commit });
+              setDraft("");
+              osk.open();
+            },
+            draft: setupDraft,
+            onReady: () => model.refreshStatus(),
+          });
         default:
           return loadingPage(env, layer);
       }
     },
   });
   env.stack = stack;
+  model.setOpenSetup(() => {
+    if (stack.top()?.page !== "setup") stack.push("setup");
+  });
 
   // The root page follows the status: a sign-out starts over.
   createEffect(() => {
@@ -203,7 +235,7 @@ export default function Spotify() {
       ...page,
       targets: () => [
         ...page.targets(),
-        ...(bar === "mini" ? miniTargets(env) : bar === "premium" ? [{ id: "premium", x: 0, y: cut, w: W, h: SCREEN_H - cut }] : []),
+        ...(bar === "mini" ? miniTargets(env) : bar === "speaker" ? speakerTargets(env) : bar === "premium" ? [{ id: "premium", x: 0, y: cut, w: W, h: SCREEN_H - cut }] : []),
         ...noticeTargets(),
       ],
       scroll: page.scroll ? { ...page.scroll, bottom: Math.min(page.scroll.bottom, cut) } : undefined,
@@ -239,6 +271,9 @@ export default function Spotify() {
         <Show when={bottom() === "premium"}>
           <PremiumNote env={env} />
         </Show>
+        <Show when={bottom() === "speaker"}>
+          <SpeakerNote env={env} />
+        </Show>
         <Show when={model.notice()}>
           {(shown) => (
             <>
@@ -251,8 +286,8 @@ export default function Spotify() {
                   </Text>
                 }
               >
-                <Text class="absolute text-2xs font-bold leading-[12]" style={{ insetL: 24, insetT: noticeY() + 7, width: W - 48, textColor: shown().failed ? C.white : C.black }}>
-                  {wrap(shown().text, FONT.xxsBold, W - 48, 2).join("\n")}
+                <Text class="absolute text-xs font-bold leading-[14]" style={{ insetL: 24, insetT: noticeY() + 5, width: W - 48, textColor: shown().failed ? C.white : C.black }}>
+                  {wrap(shown().text, FONT.xsBold, W - 48, 2).join("\n")}
                 </Text>
               </Show>
               <Show when={shown().action}>

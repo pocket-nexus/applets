@@ -33,9 +33,9 @@ import { C, F, S } from "./theme.ts";
 const PROP_FONT_SLOT = 97;
 const PROP_LINE_HEIGHT = 99;
 const OVERSCAN = 80;
-const MIN_ROW = 40;
+const MIN_ROW = 30;
 /** The classes that make the compiler bake every face a slot switches to. */
-const FACES = ["text-lg font-bold", "text-sm", "text-xs", "text-2xs font-bold"];
+const FACES = ["text-base font-bold", "text-sm", "text-xs", "text-xs font-bold"];
 void FACES;
 
 export type Lead = "number" | "cover" | "round" | "liked" | "none";
@@ -57,9 +57,17 @@ export interface Row extends PlacedRow {
   run?: () => void;
 }
 
-const ROW_H = { number: 50, cover: 56, round: 60, liked: 60, none: 50 } as const;
-const COVER = { number: 0, cover: 40, round: 44, liked: 44, none: 0 } as const;
-const SECTION_H = 42;
+/** Rows are dense, as on Spotify's desktop client: a 32 px cover, a 14 px
+ *  title over a 12 px subtitle; seven or eight show in a 346 px window. */
+const ROW_H = { number: 38, cover: 40, round: 40, liked: 40, none: 36 } as const;
+const COVER = { number: 0, cover: 32, round: 32, liked: 32, none: 0 } as const;
+const SECTION_H = 30;
+/** The title's line and the subtitle's under it. */
+const TITLE_LEADING = 16;
+const SUBTITLE_LEADING = 15;
+/** The explicit badge and the gap after it. */
+const BADGE = 14;
+const BADGE_W = BADGE + 4;
 /** The texture side for a row's cover. */
 let ROW_SIDE = 64;
 
@@ -80,8 +88,8 @@ export function itemRows(env: Env, items: readonly Item[], top: number, width: n
   const lead = options.lead;
   const h = ROW_H[lead];
   const cover = COVER[lead];
-  const textX = lead === "number" ? S.pad + 26 + 8 : lead === "none" ? S.pad : S.pad + cover + 12;
-  const titleY = Math.round((h - 35) / 2);
+  const textX = lead === "number" ? S.pad + 22 + 8 : lead === "none" ? S.pad : S.pad + cover + 10;
+  const titleY = Math.round((h - TITLE_LEADING - SUBTITLE_LEADING) / 2);
   return items.map((item, index): Row => {
     const trailing = item.kind === "track" || item.kind === "episode" ? clock(item.durationMs ?? 0) : "";
     const trailingW = trailing ? Math.ceil(measure(trailing, FONT.xs)) + 10 : 0;
@@ -95,7 +103,7 @@ export function itemRows(env: Env, items: readonly Item[], top: number, width: n
       lead: item.kind === "liked" ? "liked" : lead,
       number: options.numbered ? String(item.trackNumber ?? index + 1) : "",
       title: fit(env.faces, item.title, F.body, textW),
-      subtitle: fit(env.faces, subtitle, F.small, textW - (explicit ? 20 : 0)),
+      subtitle: fit(env.faces, subtitle, F.small, textW - (explicit ? BADGE_W : 0)),
       explicit,
       trailing,
       dim: item.playable === false,
@@ -124,13 +132,13 @@ export function sectionRow(env: Env, key: string, text: string, top: number, wid
     item: null,
     lead: "none",
     number: "",
-    title: fit(env.faces, text, F.h2, width - S.pad * 2),
+    title: fit(env.faces, text, F.h3, width - S.pad * 2),
     subtitle: { lines: [""], slot: F.small },
     explicit: false,
     trailing: "",
     dim: false,
     textX: S.pad,
-    titleY: 14,
+    titleY: 8,
     y: top,
     h: SECTION_H,
     content: "",
@@ -141,10 +149,10 @@ export function sectionRow(env: Env, key: string, text: string, top: number, wid
 
 /** A row's skeleton bars: the title's and the subtitle's. */
 function rowBars(row: Row): Bar[] {
-  const subX = row.textX + (row.explicit ? 20 : 0);
+  const subX = row.textX + (row.explicit ? BADGE_W : 0);
   return [
-    ...(row.title.skeleton ? barsFor(row.title.skeleton, row.textX, row.titleY, 18, 13) : []),
-    ...(row.subtitle.skeleton ? barsFor(row.subtitle.skeleton, subX, row.titleY + 19, 16, 13) : []),
+    ...(row.title.skeleton ? barsFor(row.title.skeleton, row.textX, row.titleY, TITLE_LEADING, 13) : []),
+    ...(row.subtitle.skeleton ? barsFor(row.subtitle.skeleton, subX, row.titleY + TITLE_LEADING, SUBTITLE_LEADING, 13) : []),
   ];
 }
 
@@ -212,19 +220,19 @@ function Slot(props: { env: Env; pool: SlotPool<Row>; slot: number; width: numbe
       // title
       jump(title, "insetL", row.textX);
       jump(title, "insetT", row.titleY);
-      setFont(title, row.title.slot, 18);
+      setFont(title, row.title.slot, section ? 20 : TITLE_LEADING);
       jump(title, "textColor", section ? C.text : playing() ? C.accent : row.dim ? C.faint : C.text);
       paintText(title, row.title.lines[0] ?? "");
       // subtitle, after the explicit badge
-      const subX = row.textX + (row.explicit ? 20 : 0);
+      const subX = row.textX + (row.explicit ? BADGE_W : 0);
       jump(subtitle, "insetL", subX);
-      jump(subtitle, "insetT", row.titleY + 19);
-      setFont(subtitle, row.subtitle.slot, 16);
+      jump(subtitle, "insetT", row.titleY + TITLE_LEADING);
+      setFont(subtitle, row.subtitle.slot, SUBTITLE_LEADING);
       paintText(subtitle, section ? "" : row.subtitle.lines[0] ?? "");
       show(badge, row.explicit);
       if (row.explicit) {
         jump(badge, "insetL", row.textX);
-        jump(badge, "insetT", row.titleY + 21);
+        jump(badge, "insetT", row.titleY + TITLE_LEADING);
       }
       // the lead: a number, a cover, or Liked Songs' heart
       paintText(number, row.lead === "number" ? row.number : "");
@@ -252,16 +260,16 @@ function Slot(props: { env: Env; pool: SlotPool<Row>; slot: number; width: numbe
   return (
     <View ref={box} class="absolute left-0 top-0 opacity-0" style={{ width: props.width, height: MIN_ROW }}>
       <View ref={wash} class="absolute left-0 top-0 opacity-0" style={{ width: props.width, height: MIN_ROW, bgColor: C.lit }} />
-      <Text ref={number} class="absolute text-sm text-center" style={{ insetL: S.pad, insetT: 16, width: 26, textColor: C.muted }}>{" "}</Text>
-      <View ref={back} class="absolute opacity-0" style={{ insetL: S.pad, insetT: 8, width: 40, height: 40, radius: 3, bgColor: C.placeholder }} />
+      <Text ref={number} class="absolute text-sm text-center" style={{ insetL: S.pad, insetT: 10, width: 22, textColor: C.muted }}>{" "}</Text>
+      <View ref={back} class="absolute opacity-0" style={{ insetL: S.pad, insetT: 4, width: 32, height: 32, radius: 3, bgColor: C.placeholder }} />
       <Show when={liked()}>
-        <View class="absolute" style={{ insetL: S.pad, insetT: 8, width: 44, height: 44, radius: 3, gradDir: 1, gradFrom: "#4b17e6", gradTo: "#8fc3cf" }} />
-        <Image class="absolute w-[20] h-[20]" src={ICON["heart-fill"].white24} style={{ insetL: S.pad + 12, insetT: 20 }} />
+        <View class="absolute" style={{ insetL: S.pad, insetT: 4, width: 32, height: 32, radius: 3, gradDir: 1, gradFrom: "#4b17e6", gradTo: "#8fc3cf" }} />
+        <Image class="absolute w-[16] h-[16]" src={ICON["heart-fill"].white24} style={{ insetL: S.pad + 8, insetT: 12 }} />
       </Show>
-      <Image ref={cover} class="absolute" style={{ insetL: S.pad, insetT: 8, width: 40, height: 40 }} />
+      <Image ref={cover} class="absolute" style={{ insetL: S.pad, insetT: 4, width: 32, height: 32 }} />
       <Text ref={title} class="absolute text-sm" style={{ textColor: C.text }}>{" "}</Text>
-      <View ref={badge} class="absolute opacity-0" style={{ width: 14, height: 14, radius: 2, bgColor: C.muted }}>
-        <Text class="absolute left-0 top-[1] w-[14] text-2xs font-bold text-center" style={{ textColor: C.black }}>E</Text>
+      <View ref={badge} class="absolute opacity-0" style={{ width: BADGE, height: BADGE, radius: 2, bgColor: C.muted }}>
+        <Text class="absolute left-0 top-[-1] w-[14] text-xs font-bold text-center" style={{ textColor: C.black }}>E</Text>
       </View>
       <Text ref={subtitle} class="absolute text-xs" style={{ textColor: C.muted }}>{" "}</Text>
       <Text ref={trailing} class="absolute text-xs" style={{ textColor: C.muted }}>{" "}</Text>

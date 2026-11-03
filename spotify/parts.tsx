@@ -163,12 +163,15 @@ export function Pill(props: { x: number; y: number; w: number; h?: number; label
   );
 }
 
-/** A chip of a row of choices (Playlists, Albums…): white when chosen. */
+/** A chip's height: a row of chips takes 30 px with its gap. */
+export const CHIP_H = 24;
+
+/** A chip of a row of choices (Playlists, Albums…): green when chosen. */
 export function Chip(props: { x: number; y: number; w: number; label: string; on: Accessor<boolean>; lit: Accessor<boolean> }) {
   return (
     <>
-      <View class="absolute" style={{ insetL: props.x, insetT: props.y, width: props.w, height: 28, radius: 14, bgColor: props.on() ? C.accent : props.lit() ? "#3e3e3e" : C.raised }} />
-      <Text class="absolute text-xs text-center" style={{ insetL: props.x, insetT: props.y + 7, width: props.w, textColor: props.on() ? C.black : C.text }}>{props.label}</Text>
+      <View class="absolute" style={{ insetL: props.x, insetT: props.y, width: props.w, height: CHIP_H, radius: CHIP_H / 2, bgColor: props.on() ? C.accent : props.lit() ? "#3e3e3e" : C.raised }} />
+      <Text class="absolute text-xs text-center" style={{ insetL: props.x, insetT: props.y + (CHIP_H - 15) / 2, width: props.w, textColor: props.on() ? C.black : C.text }}>{props.label}</Text>
     </>
   );
 }

@@ -1,0 +1,34 @@
+{
+ "service": "spotify",
+ "title": "Spotify's own player",
+ "fields": [
+  {
+   "id": "soloistKey",
+   "label": "Soloist API key",
+   "secret": true,
+   "help": "Spotify plays to Soloist where it refuses this device's speaker. Make a key in Spotify's developer dashboard.",
+   "link": {
+    "label": "developer.spotify.com/dashboard/soloist",
+    "url": "https://developer.spotify.com/dashboard/soloist"
+   },
+   "set": false
+  }
+ ],
+ "tools": [
+  {
+   "id": "soloist",
+   "title": "Spotify Soloist",
+   "vendor": "Spotify",
+   "terms": "https://developer.spotify.com/terms",
+   "note": "Spotify's headless player, fetched from Spotify for this device and never passed on.",
+   "state": "absent",
+   "consented": false,
+   "received": 0,
+   "total": 0,
+   "fetchedAt": null,
+   "message": ""
+  }
+ ],
+ "prompt": null,
+ "ready": false
+}

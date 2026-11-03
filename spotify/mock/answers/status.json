@@ -10,8 +10,10 @@
  "error": "",
  "speaker": {
   "name": "Omarchy Pocket",
+  "engine": "librespot",
   "state": "ready",
   "id": "dev-omarchy-pocket",
-  "message": ""
+  "message": "",
+  "setup": true
  }
 }

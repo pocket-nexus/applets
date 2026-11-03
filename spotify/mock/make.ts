@@ -15,6 +15,7 @@ import { bakeSlot } from "../../vendor/pocketjs/framework/compiler/bake-font.ts"
 import { COMPANION_ORIGIN } from "../../lib/net.ts";
 import { GLYPH_BOLD, GLYPH_TEXT } from "../../ui/glyphs.ts";
 import type { AlbumPage, ArtistPage, Device, Home, Item, Page, Player, PlaylistPage, Queue, Ref, Status } from "../contract.ts";
+import type { SetupState } from "../../ui/setup-state.ts";
 
 const DIR = import.meta.dir;
 const SERVICE = `${COMPANION_ORIGIN}/spotify`;
@@ -164,7 +165,8 @@ const PLAYLISTS: PlaylistSpec[] = [
 ];
 
 function playlistItem(spec: PlaylistSpec): Item {
-  return { kind: "playlist", id: spec.id, uri: `spotify:playlist:${spec.id}`, title: spec.title, subtitle: spec.owner, image: spec.mosaic ? MOSAIC(`playlist-${spec.id}`) : IMAGE(`playlist-${spec.id}`), count: spec.count };
+  // a playlist's subtitle names its owner as Spotify's own clients do
+  return { kind: "playlist", id: spec.id, uri: `spotify:playlist:${spec.id}`, title: spec.title, subtitle: `By ${spec.owner}`, image: spec.mosaic ? MOSAIC(`playlist-${spec.id}`) : IMAGE(`playlist-${spec.id}`), count: spec.count };
 }
 
 const LIKED_TRACKS = [
@@ -177,7 +179,47 @@ const LIKED: Item = { kind: "liked", id: "", uri: LIKED_URI, title: "Liked Songs
 
 // ---- the answers --------------------------------------------------------------------
 
-const SPEAKER: Status["speaker"] = { name: "Omarchy Pocket", state: "ready", id: "dev-omarchy-pocket", message: "" };
+const SPEAKER: Status["speaker"] = { name: "Omarchy Pocket", engine: "librespot", state: "ready", id: "dev-omarchy-pocket", message: "", setup: true };
+
+/** The owner setup of Spotify's own player, as omarchy-pocketd answers /_setup
+ *  (PocketJS tools/companion/setup.ts): the key not set, the build not fetched. */
+// shown, not fetched
+const SOLOIST_DASHBOARD = "https://developer.spotify.com/dashboard/soloist";
+// shown, not fetched
+const SPOTIFY_TERMS = "https://developer.spotify.com/terms";
+const SETUP: SetupState = {
+  service: "spotify",
+  title: "Spotify's own player",
+  fields: [{
+    id: "soloistKey",
+    label: "Soloist API key",
+    secret: true,
+    help: "Spotify plays to Soloist where it refuses this device's speaker. Make a key in Spotify's developer dashboard.",
+    link: { label: "developer.spotify.com/dashboard/soloist", url: SOLOIST_DASHBOARD },
+    set: false,
+  }],
+  tools: [{
+    id: "soloist",
+    title: "Spotify Soloist",
+    vendor: "Spotify",
+    terms: SPOTIFY_TERMS,
+    note: "Spotify's headless player, fetched from Spotify for this device and never passed on.",
+    state: "absent",
+    consented: false,
+    received: 0,
+    total: 0,
+    fetchedAt: null,
+    message: "",
+  }],
+  prompt: null,
+  ready: false,
+};
+/** After a change: the key set, the build on its way from Spotify. */
+const SETUP_FETCHING: SetupState = {
+  ...SETUP,
+  fields: SETUP.fields.map((field) => ({ ...field, set: true })),
+  tools: SETUP.tools.map((tool) => ({ ...tool, state: "fetching", consented: true, received: 18_400_000, total: 41_200_000, message: "Fetching Spotify Soloist from Spotify" })),
+};
 const STATUS: Status = { signedIn: true, user: USER, premium: true, signIn: null, error: "", speaker: SPEAKER };
 const SIGNED_OUT: Status = { ...STATUS, signedIn: false, user: null, premium: null, speaker: { ...SPEAKER, state: "off", id: null } };
 /** A made-up pairing code, and the page that confirms it with the code filled in. */
@@ -280,6 +322,8 @@ answer("GET", "/tracks/playlist/pl-late-train?next=*", "playlist-pl-late-train-2
 for (const spec of PLAYLISTS) answer("GET", `/playlist/${spec.id}`, `playlist-${spec.id}.json`, playlistPage(spec));
 answer("GET", "/albums/artist/a1?next=*", "artist-a1-2.json", page(ALBUMS.filter((spec) => spec.artists.includes("a1")).sort((a, b) => b.year.localeCompare(a.year)).slice(2).map(albumItem), null, 3));
 for (const id of Object.keys(ARTISTS)) answer("GET", `/artist/${id}`, `artist-${id}.json`, artistPage(id));
+answer("GET", "/_setup", "setup.json", SETUP);
+answer("POST", "/_setup", "setup-fetching.json", SETUP_FETCHING);
 answer("GET", "/player", "player.json", PLAYER);
 answer("GET", "/devices", "devices.json", DEVICES);
 answer("GET", "/queue", "queue.json", QUEUE);

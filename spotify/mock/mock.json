@@ -188,6 +188,15 @@
    "file": "answers/artist-a10.json"
   },
   {
+   "url": "https://companion.pocket/spotify/_setup",
+   "file": "answers/setup.json"
+  },
+  {
+   "method": "POST",
+   "url": "https://companion.pocket/spotify/_setup",
+   "file": "answers/setup-fetching.json"
+  },
+  {
    "url": "https://companion.pocket/spotify/player",
    "file": "answers/player.json"
   },

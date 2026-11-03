@@ -5,10 +5,11 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { appendPage, clock, CLOCK_TRUST_MS, facts, failureText, fractionAt, minutesLeft, nextRepeat, progressAt, searchPath, spacedCode, span, withNext } from "../spotify/format.ts";
+import { appendPage, clock, CLOCK_TRUST_MS, facts, failureText, fractionAt, jumpBackIn, minutesLeft, nextRepeat, progressAt, searchPath, spacedCode, span, withNext } from "../spotify/format.ts";
 import type { AlbumPage, ArtistPage, Home, Item, Page, Player, PlaylistPage, Status } from "../spotify/contract.ts";
 import { packMock } from "../tools/mock.ts";
 import { findRoute } from "../lib/mock.ts";
+import { readSetup } from "../ui/setup-state.ts";
 
 const track = (uri: string, durationMs = 200_000): Item => ({ kind: "track", id: uri.split(":").pop()!, uri, title: uri, subtitle: "", image: "", durationMs });
 
@@ -98,6 +99,25 @@ describe("controls", () => {
   });
 });
 
+describe("Jump back in", () => {
+  const item = (kind: Item["kind"], id: string): Item => ({ kind, id, uri: `spotify:${kind}:${id}`, title: id, subtitle: "", image: "" });
+  const liked: Item = { kind: "liked", id: "", uri: "spotify:user:u:collection", title: "Liked Songs", subtitle: "", image: "" };
+  const playlists = [liked, item("playlist", "a"), item("playlist", "b"), item("playlist", "c")];
+
+  test("what was played lately comes first", () => {
+    expect(jumpBackIn([item("album", "x"), item("album", "y")], playlists, 4).map((entry) => entry.title)).toEqual(["x", "y", "Liked Songs", "a"]);
+  });
+
+  test("with nothing played lately, the playlists fill it, Liked Songs first", () => {
+    expect(jumpBackIn([], playlists, 8).map((entry) => entry.title)).toEqual(["Liked Songs", "a", "b", "c"]);
+  });
+
+  test("an item in both lists shows once, and the grid holds at most its count", () => {
+    expect(jumpBackIn([item("playlist", "a")], playlists, 3).map((entry) => entry.title)).toEqual(["a", "Liked Songs", "b"]);
+    expect(jumpBackIn(playlists, playlists, 2).length).toBe(2);
+  });
+});
+
 describe("paging", () => {
   test("a page token rides as ?next= or &next=", () => {
     expect(withNext("/library/albums", null)).toBe("/library/albums");
@@ -168,8 +188,18 @@ describe("the sample data", () => {
     }
   });
 
+  test("the setup of Spotify's own player answers as every companion service's /_setup does", () => {
+    const setup = readSetup(json("GET", "/_setup"));
+    expect([setup?.service, setup?.ready, setup?.fields[0]?.id, setup?.fields[0]?.set, setup?.tools[0]?.state]).toEqual(["spotify", false, "soloistKey", false, "absent"]);
+    expect(setup?.fields[0]?.secret).toBe(true);
+    const after = readSetup(json("POST", "/_setup"));
+    expect([after?.fields[0]?.set, after?.tools[0]?.state, after?.tools[0]?.consented]).toEqual([true, "fetching", true]);
+    const speaker = json<Status>("GET", "/status").speaker;
+    expect([speaker.engine, speaker.setup]).toEqual(["librespot", true]);
+  });
+
   test("every POST has an answer", () => {
-    for (const path of ["/signin", "/cancel", "/signout", "/play", "/pause", "/resume", "/next", "/previous", "/seek", "/volume", "/shuffle", "/repeat", "/transfer", "/like"]) {
+    for (const path of ["/signin", "/cancel", "/signout", "/_setup", "/play", "/pause", "/resume", "/next", "/previous", "/seek", "/volume", "/shuffle", "/repeat", "/transfer", "/like"]) {
       expect([path, findRoute(packed.data, "POST", `https://companion.pocket/spotify${path}`) !== null]).toEqual([path, true]);
     }
   });

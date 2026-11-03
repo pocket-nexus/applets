@@ -34,6 +34,9 @@
 //   POST /repeat     {mode}            Player
 //   POST /transfer   {deviceId, play?} Player
 //   POST /like       {uri, liked}      {liked}
+//   GET|POST /_setup                   PocketJS SetupState: Spotify's own player
+//                                      (the owner setup every companion service
+//                                      answers the same way, tools/companion/setup.ts)
 //
 // Cover art is an https URL (i.scdn.co, mosaic.scdn.co, image-cdn-*.spotifycdn.com)
 // for the `images` service. A page's `next` is an opaque token: pass it back
@@ -97,12 +100,19 @@ export interface Status {
   /** this device's Spotify Connect speaker */
   speaker: {
     name: string;
+    /** librespot, or Spotify's own player (Soloist) once the owner set it up */
+    engine: "librespot" | "soloist";
     /** off: not signed in; starting; ready: in the account's devices;
+     *  refused: Spotify sends librespot no audio keys for this account, so
+     *  nothing plays until Soloist is set up (/_setup); pair: Soloist waits
+     *  for the owner to pick it once in Spotify on a phone on this network;
      *  error: see message */
-    state: "off" | "starting" | "ready" | "error";
+    state: "off" | "starting" | "ready" | "refused" | "pair" | "error";
     /** its Connect device id */
     id: string | null;
     message: string;
+    /** the owner setup at /_setup is not complete */
+    setup: boolean;
   };
 }
 
