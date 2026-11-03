@@ -15,10 +15,12 @@
 // The places and the units live in the companion's store service (PocketJS
 // tools/companion/services/store.ts) under the name `weather`:
 // GET /get?name=weather answers {value}, POST /set?name=weather with the
-// JSON document answers {ok: true}. omarchy-pocketd answers both on this
-// device.
+// JSON document answers {ok: true}. The device's companion answers both
+// (ui/companion.ts). A document longer than one request goes in parts
+// (lib/store.ts).
 
-import { companionService, DESCRIPTOR_BYTES, fetch, NetError, requestBytes, type NetResponse } from "../lib/net.ts";
+import { companionService, fetch, NetError, requestBytes, type NetResponse } from "../lib/net.ts";
+import { loadDocument, saveDocument, type StoreRequests } from "../lib/store.ts";
 import { notLinked, theComputer } from "../ui/companion.ts";
 
 export const GEOCODING_API = "https://geocoding-api.open-meteo.com/v1/search";
@@ -163,12 +165,12 @@ export function parsePlaces(body: unknown): Place[] {
 
 /** The document as the store keeps it: each place a row [id, name, region,
  *  country, latitude, longitude], the coordinates to three decimals (about
- *  100 m). A request carries its body in one 1020-byte descriptor
- *  (lib/net.ts), and rows fit about twice the places objects do. */
-export function packSaved(saved: Saved): string {
+ *  100 m). Rows take about half the bytes place objects do, so a save needs
+ *  fewer requests (lib/store.ts). */
+export function packSaved(saved: Saved): { rows: unknown[][]; units: Units; current?: number } {
   const round = (n: number) => Math.round(n * 1000) / 1000;
   const rows = saved.places.map((p) => [p.id, p.name, p.region, p.country, round(p.latitude), round(p.longitude)]);
-  return JSON.stringify({ rows, units: saved.units, ...(saved.current !== undefined ? { current: saved.current } : {}) });
+  return { rows, units: saved.units, ...(saved.current !== undefined ? { current: saved.current } : {}) };
 }
 
 /** The store's value as a document; null when nothing usable was saved. Reads
@@ -295,22 +297,25 @@ export function createWeatherClient(): WeatherClient {
     }
   };
 
+  const setRequest = (name: string, body: string) => ({ url: companionService("store", `/set?name=${name}`), method: "POST" as const, body, timeoutMs: 10_000, maxBytes: 4096 });
+  const store: StoreRequests = {
+    get: async (name) => (await json<{ value?: unknown }>({ url: companionService("store", `/get?name=${name}`), timeoutMs: 10_000, maxBytes: 64 * 1024 }, true)).value ?? null,
+    async set(name, body) {
+      const answer = await json<{ ok?: unknown }>(setRequest(name, body), true);
+      if (answer.ok !== true) throw new WeatherError("protocol", "The store did not confirm the save.");
+    },
+    bytes: (name, body) => {
+      const { url, ...task } = setRequest(name, body);
+      return requestBytes(url, { ...task, headers: { "content-type": "application/json" } });
+    },
+  };
+
   return {
     geocode: async (query) => parsePlaces(await json<unknown>({ url: geocodeUrl(query), timeoutMs: 20_000, maxBytes: 64 * 1024 }, true)),
     // Seven days of hours in three columns is about 25 KB of JSON.
     forecast: async (place, urgent = false) => parseForecast(await json<unknown>({ url: forecastUrl(place), timeoutMs: 20_000, maxBytes: 256 * 1024 }, urgent)),
-    async loadSaved() {
-      const body = await json<{ value?: unknown }>({ url: companionService("store", `/get?name=${STORE_NAME}`), timeoutMs: 10_000, maxBytes: 64 * 1024 }, true);
-      return parseSaved(body.value);
-    },
-    async save(saved) {
-      const request = { url: companionService("store", `/set?name=${STORE_NAME}`), method: "POST" as const, body: packSaved(saved), timeoutMs: 10_000, maxBytes: 4096 };
-      if (requestBytes(request.url, request) > DESCRIPTOR_BYTES - 64) {
-        throw new WeatherError("too_many", "Weather keeps as many places as one save carries. Remove one to add another.");
-      }
-      const body = await json<{ ok?: unknown }>(request, true);
-      if (body.ok !== true) throw new WeatherError("protocol", "The store did not confirm the save.");
-    },
+    loadSaved: async () => parseSaved(await loadDocument(store, STORE_NAME)),
+    save: (saved) => saveDocument(store, STORE_NAME, packSaved(saved)),
     inflight: () => running,
   };
 }
@@ -323,7 +328,6 @@ export function errorText(error: unknown): { title: string; detail: string } {
   if (code === "dns" || code === "connect" || code === "tls") {
     return { title: "Open-Meteo is out of reach", detail: `${theComputer()} could not connect to Open-Meteo. Check the network.` };
   }
-  if (code === "too_many") return { title: "Too many places", detail: error instanceof Error ? error.message : "" };
   const message = error instanceof Error ? error.message : String(error);
   return { title: "Could not load", detail: message || "The request failed." };
 }

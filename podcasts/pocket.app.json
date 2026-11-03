@@ -24,6 +24,7 @@
       ],
       "enhances": [
         "input.analog.left",
+        "media.playback",
         "system.agent"
       ]
     }

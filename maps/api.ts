@@ -4,7 +4,7 @@
 // ../lib/net.ts.
 //
 // Every request goes to https://companion.pocket/maps/... or /store/...,
-// which omarchy-pocketd answers on this device. The NET module admits two
+// which the device's companion answers (ui/companion.ts). The NET module admits two
 // requests at a time, so tiles, geocodes, the position and the saved view
 // share one queue; a geocode, a locate and the store go ahead of tiles, and
 // the tiles on screen go ahead of the ring around them. A tile arrives as an
@@ -14,7 +14,7 @@
 import { createSignal } from "solid-js";
 import { getOps } from "@pocketjs/framework/host";
 import { companionService, fetch, NetError, type NetResponse } from "../lib/net.ts";
-import { theComputer } from "../ui/companion.ts";
+import { notLinked, theComputer } from "../ui/companion.ts";
 
 export const MAX_INFLIGHT = 2;
 /** Tiles kept as textures: 128 KiB each, the least recently drawn go first. */
@@ -77,6 +77,8 @@ export interface MapsClient {
   /** The tile's texture handle, or -1 until it arrives; a drawn tile is the
    *  last to be freed. */
   tile(z: number, x: number, y: number): number;
+  /** Keep a tile that stays on screen last in line to be freed. */
+  touch(key: string): void;
   /** A tile is uploaded (no request needed). */
   has(z: number, x: number, y: number): boolean;
   /** Drop the queued (not started) requests for tiles outside `keep`. */
@@ -201,6 +203,12 @@ export function createMapsClient(): MapsClient {
       textures.set(key, handle);
       return handle;
     },
+    touch(key) {
+      const handle = textures.get(key);
+      if (handle === undefined) return;
+      textures.delete(key);
+      textures.set(key, handle);
+    },
     has: (z, x, y) => textures.has(tileKey(z, x, y)),
     prune(keep) {
       for (let index = queue.length - 1; index >= 0; index--) {
@@ -219,7 +227,7 @@ export function createMapsClient(): MapsClient {
 /** The message a viewer sees for a failed request. */
 export function errorText(error: unknown): string {
   const code = error instanceof MapsError ? error.code : "";
-  if (code === "unavailable") return "omarchy-pocketd is not answering.";
+  if (code === "unavailable") return notLinked("Maps").detail;
   if (code === "timeout") return `${theComputer()} or OpenStreetMap did not answer in time.`;
   const message = error instanceof Error ? error.message : String(error);
   return message || "The request failed.";

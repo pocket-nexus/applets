@@ -13,8 +13,9 @@
 
 import { createSignal } from "solid-js";
 import { getOps } from "@pocketjs/framework/host";
-import { companionService, fetch, NetError, type NetResponse } from "../lib/net.ts";
-import { theComputer } from "../ui/companion.ts";
+import { companionService, fetch, NetError, requestBytes, type NetResponse } from "../lib/net.ts";
+import { loadDocument, saveDocument, type StoreRequests } from "../lib/store.ts";
+import { tethered, theComputer } from "../ui/companion.ts";
 
 export const MAX_INFLIGHT = 2;
 export const ART_TEXTURES = 40;
@@ -175,6 +176,17 @@ export function createPodcastClient(): PodcastClient {
   const json = async <T>(service: string, path: string, timeoutMs = 60_000, body?: string): Promise<T> =>
     JSON.parse(await (await request(companionService(service, path), true, timeoutMs, 256 * 1024, body)).text()) as T;
 
+  // The library is one store document, in parts when it outgrows a request
+  // (lib/store.ts): a few subscriptions with their feed and artwork URLs do.
+  const store: StoreRequests = {
+    get: async (name) => (await json<{ value?: unknown }>("store", `/get?name=${name}`, 20_000)).value ?? null,
+    set: async (name, body) => {
+      await json<unknown>("store", `/set?name=${name}`, 20_000, body);
+    },
+    bytes: (name, body) =>
+      requestBytes(companionService("store", `/set?name=${name}`), { method: "POST", headers: { "content-type": "application/json" }, body, timeoutMs: 20_000, maxBytes: 256 * 1024 }),
+  };
+
   return {
     search: async (query) => {
       const value = await json<{ items?: Show[] }>("podcasts", `/search?q=${encodeURIComponent(query)}`);
@@ -184,15 +196,15 @@ export function createPodcastClient(): PodcastClient {
       const value = await json<Partial<Feed>>("podcasts", `/episodes?feed=${encodeURIComponent(feedUrl)}`);
       return { title: value.title ?? "", author: value.author ?? "", artwork: value.artwork ?? "", episodes: Array.isArray(value.episodes) ? value.episodes : [] };
     },
+    // A console's worker opens the companion's PAL8 stream (the 3DS's and
+    // the Tab5's media player both take it); omarchy-pocketd picks its own.
     play: (audioUrl, at, durationS) =>
-      json<PlayInfo>("podcasts", `/play?url=${encodeURIComponent(audioUrl)}&at=${Math.max(0, Math.floor(at))}&duration=${Math.max(0, Math.floor(durationS))}`, 90_000),
+      json<PlayInfo>("podcasts", `/play?url=${encodeURIComponent(audioUrl)}&at=${Math.max(0, Math.floor(at))}&duration=${Math.max(0, Math.floor(durationS))}${tethered() ? "" : "&codec=pal8"}`, 90_000),
     stop() {
       void request(companionService("podcasts", "/stop"), true, 10_000, 1024).catch(() => undefined);
     },
-    library: async () => readLibrary((await json<{ value?: unknown }>("store", `/get?name=${LIBRARY_NAME}`, 20_000)).value),
-    save: async (library) => {
-      await json<unknown>("store", `/set?name=${LIBRARY_NAME}`, 20_000, JSON.stringify(library));
-    },
+    library: async () => readLibrary(await loadDocument(store, LIBRARY_NAME)),
+    save: (library) => saveDocument(store, LIBRARY_NAME, library),
     want(url, size) {
       const key = `${size}:${url}`;
       if (!url || asked.has(key)) return;
