@@ -276,24 +276,25 @@ function utf8Length(cp: number): number {
 
 /** The atlas request bodies for `codepoints`, in order: each one's
  *  descriptor fits one request. At least one body, so an atlas of ASCII
- *  alone is asked for too. */
+ *  alone is asked for too. A part's text is made by one String.fromCodePoint,
+ *  not a string grown a codepoint at a time. */
 export function atlasBodies(face: GlyphFace, codepoints: readonly number[]): string[] {
-  const body = (text: string) => JSON.stringify({ px: face.px, bold: face.bold, slot: face.slot, density: DENSITY, text });
-  const room = DESCRIPTOR_BYTES - QUEUE_ROOM - requestBytes(GLYPH_ATLAS_URL, { ...ATLAS_REQUEST, body: body("") });
+  const body = (part: readonly number[]) => JSON.stringify({ px: face.px, bold: face.bold, slot: face.slot, density: DENSITY, text: String.fromCodePoint(...part) });
+  const room = DESCRIPTOR_BYTES - QUEUE_ROOM - requestBytes(GLYPH_ATLAS_URL, { ...ATLAS_REQUEST, body: body([]) });
   const bodies: string[] = [];
-  let text = "";
+  let part: number[] = [];
   let bytes = 0;
   for (const cp of codepoints) {
     const cost = utf8Length(cp);
-    if (text !== "" && bytes + cost > room) {
-      bodies.push(body(text));
-      text = "";
+    if (part.length > 0 && bytes + cost > room) {
+      bodies.push(body(part));
+      part = [];
       bytes = 0;
     }
-    text += String.fromCodePoint(cp);
+    part.push(cp);
     bytes += cost;
   }
-  bodies.push(body(text));
+  bodies.push(body(part));
   return bodies;
 }
 
@@ -356,12 +357,12 @@ export function mergeAtlases(parts: readonly Uint8Array[]): Uint8Array | null {
 
 export interface GlyphOptions {
   /** Atlases are asked for and loaded only in frames where this answers
-   *  true; want() meanwhile only records the codepoints, and an atlas that
-   *  arrives waits, the newest replacing an older. Building a request costs
-   *  QuickJS tens of milliseconds on an Old 3DS (the body is UTF-8 encoded
-   *  a byte at a time), and loading an atlas uploads its texture and lays
-   *  out every text in its slot again: a moving list shows both as dropped
-   *  frames. */
+   *  true: want() meanwhile only records the codepoints, and an atlas's next
+   *  part, or the atlas once its parts are in, waits for such a frame.
+   *  Building a request costs QuickJS tens of milliseconds on an Old 3DS
+   *  (the descriptor is UTF-8 encoded a byte at a time, lib/net-wire.ts),
+   *  and loading an atlas (its parts merged) uploads its texture and lays out
+   *  every text in its slot again: a moving list shows both as dropped frames. */
   when?: () => boolean;
 }
 
@@ -387,7 +388,6 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
     return w;
   };
 
-  let pending: { bytes: Uint8Array; holds: Set<number> } | null = null;
   /** The last request failed, or the host loads no atlas: texts fold. */
   let failed = false;
   const apply = (bytes: Uint8Array, holds: Set<number>) => {
@@ -411,6 +411,9 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
   /** A want() since the last request went out; a failed request waits for
    *  the next want() rather than retrying every frame. */
   let due = false;
+  /** The atlas being asked for, when its next part or its load waits for a
+   *  frame `when` allows. */
+  let paused: (() => void) | null = null;
   const request = () => {
     if (inFlight || !dirty || !due || (options.when && !options.when())) return;
     inFlight = true;
@@ -422,6 +425,10 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
     const bodies = atlasBodies(face, [...sending]);
     const parts: Uint8Array[] = [];
     const next = (): void => {
+      if (options.when && !options.when()) {
+        paused = next;
+        return;
+      }
       if (parts.length < bodies.length) {
         send(bodies[parts.length]!).then(
           (bytes) => {
@@ -447,13 +454,7 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
         failed = true;
         setRevision(revision() + 1);
       }
-      if (bytes) {
-        if (options.when && !options.when()) pending = { bytes, holds: sending };
-        else {
-          pending = null;
-          apply(bytes, sending);
-        }
-      }
+      if (bytes) apply(bytes, sending);
       request();
     };
     next();
@@ -462,12 +463,10 @@ export function createGlyphs(face: GlyphFace, send: GlyphSend = directSend, opti
     const when = options.when;
     onFrame(() => {
       if (!when()) return;
-      if (pending) {
-        const atlas = pending;
-        pending = null;
-        apply(atlas.bytes, atlas.holds);
-      }
-      request();
+      const resume = paused;
+      paused = null;
+      if (resume) resume();
+      else request();
     });
   }
 
