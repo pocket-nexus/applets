@@ -189,7 +189,7 @@ function CellView(props: { placed: PlacedCell; width: number; lit: Accessor<bool
         {(icon) => <Tile x={6} y={y + (h - 24) / 2} size={24} art={icon().art} />}
       </Show>
       <Show when={cell.tile}>
-        {(tile) => <Tile x={6} y={y + (h - 24) / 2} size={24} art={tile().art} from={tile().from} to={tile().to} letters={tile().letters} />}
+        {(tile) => <Tile x={6} y={y + (h - 24) / 2} size={24} art={tile().art} from={tile().from} to={tile().to} />}
       </Show>
       <Text
         class={cell.tone === "action"

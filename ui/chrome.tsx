@@ -173,7 +173,7 @@ const ART: Record<IconArt | "plain", readonly Variant[]> = {
   camera: [[24, 32, "art/icons/camera-24.png"], [46, 64, "art/icons/camera-46.png"], [64, 64, "art/icons/camera-64.png"]],
   photos: [[24, 32, "art/icons/photos-24.png"], [46, 64, "art/icons/photos-46.png"], [64, 64, "art/icons/photos-64.png"]],
   github: [[24, 32, "art/icons/github-24.png"], [46, 64, "art/icons/github-46.png"], [64, 64, "art/icons/github-64.png"]],
-  /** The finish alone, over the tint of an app that ships no icon. */
+  /** The finish alone, over the tint and glyph of an app that ships no icon. */
   plain: [[24, 32, "art/icons/plain-24.png"], [46, 64, "art/icons/plain-46.png"], [64, 64, "art/icons/plain-64.png"]],
 };
 
@@ -200,17 +200,18 @@ export interface TileProps {
   x: number;
   y: number;
   size: number;
-  /** A baked icon; without one the tile is the tint gradient and letters. */
+  /** A baked icon of the launcher's own. */
   art?: IconArt;
+  /** The tint of an app that ships no icon. */
   from?: string;
   to?: string;
-  letters?: string;
   /** Darkened while pressed. */
   dim?: Accessor<boolean>;
 }
 
-/** An iOS 6 icon: a baked picture, or a tint gradient with letters under the
- *  same baked gloss, rim and shadow; a darkening wash while pressed. */
+/** An iOS 6 icon: a baked picture, or for an app without one, the tint
+ *  gradient and the four-square applet glyph under the same baked gloss, rim
+ *  and shadow; a darkening wash while pressed. Never an app's initials. */
 export function Tile(props: TileProps) {
   const r = Math.round(props.size * ICON_RADIUS);
   const finish = (art: IconArt | "plain") => {
@@ -219,7 +220,18 @@ export function Tile(props: TileProps) {
     const pad = ((tex - icon) / 2) * scale;
     return <Image class="absolute" src={src} style={{ insetL: props.x - pad, insetT: props.y - pad, width: tex * scale, height: tex * scale }} />;
   };
-  const letterSlot = props.size >= 40 ? "large" : "small";
+  // The glyph: two by two rounded squares, 0.2 of the side each.
+  const cell = Math.round(props.size * 0.2), gap = Math.max(2, Math.round(props.size * 0.08));
+  const glyph = (column: number, row: number) => (
+    <View
+      class="absolute bg-[#ffffffd9]"
+      style={{
+        insetL: props.x + (props.size - 2 * cell - gap) / 2 + column * (cell + gap),
+        insetT: props.y + (props.size - 2 * cell - gap) / 2 + row * (cell + gap),
+        width: cell, height: cell, radius: Math.max(1, Math.round(cell * 0.3)),
+      }}
+    />
+  );
   return (
     <>
       <Show when={props.art} fallback={
@@ -228,18 +240,10 @@ export function Tile(props: TileProps) {
             class="absolute"
             style={{ insetL: props.x, insetT: props.y, width: props.size, height: props.size, radius: r, gradDir: 1, gradFrom: props.from ?? "#a9b0b9", gradTo: props.to ?? "#5b636d" }}
           />
-          <Text
-            class={letterSlot === "large" ? "absolute text-xl text-[#00000040] font-bold text-center" : "absolute text-sm text-[#00000040] font-bold text-center"}
-            style={{ insetL: props.x, insetT: props.y + (letterSlot === "large" ? props.size / 2 - 12 + 1 : props.size / 2 - 9 + 1), width: props.size }}
-          >
-            {props.letters ?? ""}
-          </Text>
-          <Text
-            class={letterSlot === "large" ? "absolute text-xl text-white font-bold text-center" : "absolute text-sm text-white font-bold text-center"}
-            style={{ insetL: props.x, insetT: props.y + (letterSlot === "large" ? props.size / 2 - 12 : props.size / 2 - 9), width: props.size }}
-          >
-            {props.letters ?? ""}
-          </Text>
+          {glyph(0, 0)}
+          {glyph(1, 0)}
+          {glyph(0, 1)}
+          {glyph(1, 1)}
           {finish("plain")}
         </>
       }>
@@ -257,23 +261,15 @@ export interface AppTint {
   art?: IconArt;
   from: string;
   to: string;
-  letters: string;
 }
 
-/** An app's icon: its baked art when Home has one, else a deterministic tint
- *  and letters. */
-export function appTint(id: string, title: string): AppTint {
+/** An app's icon: the launcher's baked art for its own applets, else a
+ *  deterministic tint of its id under the applet glyph. */
+export function appTint(id: string): AppTint {
   let hash = 0x811c9dc5;
   for (let index = 0; index < id.length; index++) hash = Math.imul(hash ^ id.charCodeAt(index), 0x01000193) >>> 0;
   const hue = hash % 360;
-  const letters = title
-    .replace(/[^A-Za-z0-9 ]/g, "")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0]!.toUpperCase())
-    .join("") || "?";
-  return { art: APP_ART[id], from: hsl(hue, 0.62, 0.62), to: hsl(hue, 0.7, 0.36), letters };
+  return { art: APP_ART[id], from: hsl(hue, 0.62, 0.62), to: hsl(hue, 0.7, 0.36) };
 }
 
 function hsl(h: number, s: number, l: number): string {
