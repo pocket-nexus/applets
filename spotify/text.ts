@@ -9,7 +9,7 @@
 // arrive. Music titles are often Japanese or Chinese.
 import { createGlyphs, GLYPH_BOLD, GLYPH_TEXT, richText, type Glyphs } from "../ui/glyphs.ts";
 import { skeletonLines } from "../ui/skeleton.tsx";
-import { ellipsize, measure, toAscii, wrap } from "../ui/text.ts";
+import { ellipsize, toAscii, wrap } from "../ui/text.ts";
 import type { SpotifyClient } from "./api.ts";
 import { F } from "./theme.ts";
 
@@ -56,16 +56,6 @@ export function fit(faces: Faces, value: string, slot: number, width: number, ma
   }
   const folded = toAscii(clean);
   return { lines: one ? [ellipsize(folded.replace(/\n/g, " "), slot, width)] : wrap(folded, slot, width, maxLines), slot };
-}
-
-/** How wide `value` draws on one line in `slot`. */
-export function widthOf(faces: Faces, value: string, slot: number): number {
-  if (BAKED.test(value)) return measure(value, slot);
-  const face = isBold(slot) ? faces.bold : faces.text;
-  const rich = richText(value);
-  if (face.covers(rich)) return face.measure(rich);
-  if (face.pending(rich)) return skeletonLines(rich, slot, face.face.px, Infinity, 1)[0]!;
-  return measure(toAscii(value), slot);
 }
 
 /** A page title for the bar, which draws from the baked faces: the name

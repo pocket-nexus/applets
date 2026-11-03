@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// ui/setup.tsx — the owner setup page any applet shows for any companion
-// service: what `/_setup` answers (ui/setup-state.ts, PocketJS
-// tools/companion/setup.ts), drawn as rows in the kit's manner.
+// ui/setup.tsx — the owner setup page an applet drawn with ../ui shows for
+// any companion service: what `/_setup` answers (ui/setup-state.ts, PocketJS
+// tools/companion/setup.ts), laid out top to bottom as positioned View and
+// Text in the palette the applet passes. An applet on ../kit cannot import it
+// (tools/check.ts holds those to ../kit).
 //
 //   the prompt     what the owner does elsewhere: pick this device in a
 //                  vendor's app (its title and detail), or confirm a code at
@@ -13,9 +15,17 @@
 //                  button that says it accepts them and downloads; the bytes
 //                  while it downloads, the failure with Retry, Ready
 //
-// The page asks for the state every 2 s while it is open and after every
-// change. An applet passes the service's `/_setup` URL, its palette (as it
-// passes ui/bar.tsx its BarColors) and its keyboard.
+// The page asks for the state every 2 s while it is open and no change is
+// out; a change's answer is the state after it. An answer is taken only when
+// no change was sent after its request went out: one the service gave before
+// a later change would undo that change on the page. An applet passes the
+// service's `/_setup` URL, its palette (as it passes ui/bar.tsx its
+// BarColors) and its keyboard.
+//
+// The words are drawn in the baked face (ui/text.ts), which holds the
+// bundle's literals and printable ASCII. What the service answers arrives at
+// run time and can hold any character, so each string goes through toAscii
+// before it reaches a <Text>.
 
 import { createMemo, createSignal, For, Show, type Accessor } from "solid-js";
 import { Image, Text, View } from "@pocketjs/framework/components";
@@ -49,22 +59,6 @@ export interface SetupPalette {
   lit: string;
 }
 
-/** The kit's colours (kit/theme.ts), for an applet that passes none. */
-export const KIT_SETUP: SetupPalette = {
-  bg: "#0d1117",
-  surface: "#161b22",
-  raised: "#21262d",
-  line: "#30363d",
-  text: "#e6edf3",
-  muted: "#8b949e",
-  link: "#58a6ff",
-  primary: "#238636",
-  onPrimary: "#ffffff",
-  ok: "#3fb950",
-  bad: "#f85149",
-  lit: "#30363d",
-};
-
 export interface SetupPageOptions {
   /** the service's `/_setup`: companionService("<service>", "/_setup") */
   url: string;
@@ -74,7 +68,7 @@ export interface SetupPageOptions {
   width: number;
   /** the scrolling view's height */
   view: number;
-  palette?: SetupPalette;
+  palette: SetupPalette;
   barColors?: BarColors;
   /** px along the bottom the applet keeps free (PageSpec.inset) */
   inset?: number;
@@ -130,16 +124,19 @@ interface Placed {
 }
 
 export function setupPage(options: SetupPageOptions): PageSpec {
-  const P = options.palette ?? KIT_SETUP;
+  const P = options.palette;
   const W = options.width;
   const { layer, press } = options;
   const [state, setState] = createSignal<SetupState | null>(known.get(options.url) ?? null);
   const [problem, setProblem] = createSignal("");
   /** the last change the service refused, by the field or tool it was for */
   const [refused, setRefused] = createSignal<{ id: string; message: string } | null>(null);
-  const [busy, setBusy] = createSignal("");
+  /** the control of each change out: a control says "Working" while one of its changes is out */
+  const [busy, setBusy] = createSignal<readonly string[]>([]);
   let asking = false;
   let nextAt = 0;
+  /** changes sent so far: an answer to a request that went out before the latest is dropped */
+  let sent = 0;
   let wasReady = state()?.ready ?? false;
   const take = (value: SetupState) => {
     known.set(options.url, value);
@@ -149,13 +146,14 @@ export function setupPage(options: SetupPageOptions): PageSpec {
     wasReady = value.ready;
   };
   const refresh = () => {
-    if (asking) return;
+    if (asking || busy().length > 0) return;
     asking = true;
+    const mine = sent;
     nextAt = Date.now() + POLL_MS;
     ask(options.url).then(
       (value) => {
         asking = false;
-        take(value);
+        if (mine === sent) take(value);
       },
       (error: unknown) => {
         asking = false;
@@ -163,19 +161,27 @@ export function setupPage(options: SetupPageOptions): PageSpec {
       },
     );
   };
-  const send = (id: string, change: SetupChange) => {
-    setBusy(id);
+  /** Send `change` from the control `control`; a refusal shows under the field or tool `id`. */
+  const send = (control: string, id: string, change: SetupChange) => {
+    const mine = ++sent;
+    setBusy((now) => [...now, control]);
     setRefused(null);
+    const landed = () =>
+      setBusy((now) => {
+        const at = now.indexOf(control);
+        return now.filter((_, index) => index !== at);
+      });
     // the change answers the state after it: the next look waits a full interval
     nextAt = Date.now() + POLL_MS;
     ask(options.url, change).then(
       (value) => {
-        setBusy("");
+        landed();
         nextAt = Date.now() + POLL_MS;
-        take(value);
+        // a later change's answer holds this one too
+        if (mine === sent) take(value);
       },
       (error: unknown) => {
-        setBusy("");
+        landed();
         setRefused({ id, message: error instanceof Error ? error.message : String(error) });
       },
     );
@@ -231,8 +237,8 @@ export function setupPage(options: SetupPageOptions): PageSpec {
       const entryY = Math.max(at + 6, qr ? top + qr + 8 : 0);
       const clearW = field.set ? 70 : 0;
       const entryW = textW - (clearW ? clearW + 8 : 0);
-      controls.push({ id: `setup.field.${field.id}`, x: PAD, y: entryY, w: entryW, h: ENTRY_H, run: () => options.edit(field, (text) => send(field.id, { field: field.id, value: text })) });
-      if (field.set) controls.push({ id: `setup.clear.${field.id}`, x: PAD + entryW + 8, y: entryY, w: clearW, h: ENTRY_H, run: () => send(field.id, { field: field.id, clear: true }) });
+      controls.push({ id: `setup.field.${field.id}`, x: PAD, y: entryY, w: entryW, h: ENTRY_H, run: () => options.edit(field, (text) => send(`setup.field.${field.id}`, field.id, { field: field.id, value: text })) });
+      if (field.set) controls.push({ id: `setup.clear.${field.id}`, x: PAD + entryW + 8, y: entryY, w: clearW, h: ENTRY_H, run: () => send(`setup.clear.${field.id}`, field.id, { field: field.id, clear: true }) });
       let bottom = entryY + ENTRY_H;
       const errorY = bottom + 4;
       const errorLines = refused()?.id === field.id ? wrap(toAscii(refused()!.message), FONT.xs, textW, 3) : [];
@@ -259,7 +265,7 @@ export function setupPage(options: SetupPageOptions): PageSpec {
       const buttonY = at + 8;
       const buttonW = action ? Math.min(textW, Math.ceil(measure(action.label, FONT.xsBold)) + 32) : 0;
       if (action) {
-        controls.push({ id: `setup.tool.${tool.id}`, x: PAD, y: buttonY, w: buttonW, h: BUTTON_H, run: () => send(tool.id, action.change) });
+        controls.push({ id: `setup.tool.${tool.id}`, x: PAD, y: buttonY, w: buttonW, h: BUTTON_H, run: () => send(`setup.tool.${tool.id}`, tool.id, action.change) });
         at = buttonY + BUTTON_H;
       }
       y = at + 16;
@@ -282,7 +288,7 @@ export function setupPage(options: SetupPageOptions): PageSpec {
         <View class="absolute" style={{ insetL: props.x, insetT: props.y, width: props.w, height: BUTTON_H, radius: BUTTON_H / 2, bgColor: lit(props.id) ? P.ok : P.primary }} />
       </Show>
       <Text class="absolute text-xs font-bold text-center" style={{ insetL: props.x, insetT: props.y + (BUTTON_H - 15) / 2, width: props.w, textColor: props.primary ? P.onPrimary : P.text }}>
-        {busy() && props.id.endsWith(busy()) ? "Working" : props.label}
+        {busy().includes(props.id) ? "Working" : props.label}
       </Text>
     </>
   );

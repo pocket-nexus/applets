@@ -189,11 +189,7 @@ export default function Spotify() {
     if (root !== want) untrack(() => stack.reset(want));
   });
   if (model.status() === null) model.refreshStatus();
-  onFrame(() => {
-    model.tick();
-    // what a test or the agent reads: the page on top
-    (globalThis as { __pocketSpotifyPage?: string }).__pocketSpotifyPage = stack.top()?.page ?? "";
-  });
+  onFrame(() => model.tick());
 
   // ---- touch: the page, the bar along the bottom, the notice, the alert --------
   const ALERT_W = Math.min(300, W - 32);

@@ -131,14 +131,6 @@ function geometry(): Geometry {
   };
 }
 
-/** What a test or the agent reads about the player. */
-export interface PlayerProbe {
-  playing: boolean;
-  positionMs: number;
-  durationMs: number;
-  uri: string;
-}
-
 export function playerPage(env: Env): PageSpec {
   const { model } = env;
   const g = geometry();
@@ -156,7 +148,6 @@ export function playerPage(env: Env): PageSpec {
   onFrame(() => {
     if (++frames % 6 === 0) setNow(model.position());
     if (volumeShown() > 0) setVolumeShown(volumeShown() - 1);
-    (globalThis as { __pocketSpotify?: PlayerProbe }).__pocketSpotify = { playing: !!player()?.playing, positionMs: model.position(), durationMs: duration(), uri: item()?.uri ?? "" };
   });
   model.setPlayerShown(true);
   onCleanup(() => model.setPlayerShown(false));

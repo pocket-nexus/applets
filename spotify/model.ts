@@ -541,7 +541,8 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
       return pending && pending.url !== hidden() ? pending : null;
     },
     cancelSignIn() {
-      // hidden at once; the service forgets it and stops asking the relay
+      // the pairing page goes at once (pendingSignIn hides this URL); POST
+      // /cancel has the service forget the pairing, and its Status is applied
       setHidden(status()?.signIn?.url ?? "");
       client.cancelSignIn().then(applyStatus, fail);
     },

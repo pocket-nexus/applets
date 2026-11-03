@@ -1,10 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // ui/setup-state.ts — a companion service's owner setup, as `/_setup`
-// answers it for every service (PocketJS tools/companion/setup.ts): the
+// answers it for every service (Pocket Hub's tools/companion/setup.ts): the
 // values the owner types once (fields), the vendor's own programs the
 // service fetches on the owner's consent (tools), and something the owner
 // does elsewhere (the prompt). These are the shapes and the words of the
-// setup page (ui/setup.tsx), apart from any view.
+// setup page (ui/setup.tsx), apart from any view. The wire types copy
+// PocketJS's contracts/spec/owner-setup.ts (pocketjs #673); they become an
+// `import type` from vendor/pocketjs once this repository's pin moves past
+// pocketjs #672, which moved tools/companion/glyphs.ts (test/net.test.ts
+// imports it) to Pocket Hub.
 
 export interface SetupFieldState {
   id: string;

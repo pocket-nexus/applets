@@ -15,22 +15,12 @@
 //   POST /v1/admin/review            Bearer ADMIN_TOKEN: {id, version, state}
 //   POST /v1/admin/mock              Bearer ADMIN_TOKEN: {id, version, mock}: a version's sample data
 //   POST /v1/admin/backfill          Bearer ADMIN_TOKEN: each version's targets read again from its package
-//   GET  /oauth/<provider>           an OAuth provider's redirect: ?code=&state= (or ?error=), kept for the device
-//   GET  /v1/oauth/<provider>/<state>  the device takes what came back for its state, once
 //
 // A publisher is an ed25519 key: the first to publish an app id owns it, and
 // every later version must be signed by the same key. A version from the
 // official key is listed at once; any other waits until an editor lists it,
 // and nothing unlisted can be downloaded. The store never runs what it holds:
 // the device checks the signature and asks before it installs (daemon/appstore.ts).
-//
-// The OAuth relay is for an applet's service on a device with no browser
-// (omarchy-pocketd's spotify service): the device shows the provider's
-// sign-in URL as a QR code, with this page as the redirect URI and a random
-// state; the phone comes back here with the code, which waits under that
-// state until the device asks for it, once, within RELAY_TTL_MS. The code is
-// worth nothing without the PKCE verifier, which never leaves the device;
-// the first answer for a state is the one kept.
 // The website runs a package in a sandboxed frame with no network (store/play),
 // against the version's sample data; the sample data is not signed, and an
 // editor reads it with the rest of a pending version.
@@ -343,47 +333,6 @@ async function admin(request: Request, env: Env, path: string): Promise<Response
   return refuse(404, "no such admin route");
 }
 
-/** Providers whose redirect URI is /oauth/<provider>. */
-const RELAY_PROVIDERS = new Set(["spotify"]);
-const RELAY_NAMES: Record<string, string> = { spotify: "Spotify" };
-const RELAY_TTL_MS = 10 * 60_000;
-/** a state the device made: at least 128 random bits in base64url */
-const RELAY_STATE = /^[A-Za-z0-9_-]{22,128}$/;
-const RELAY_VALUE_MAX = 2048;
-
-const relayPage = (title: string, line: string, status = 200) =>
-  new Response(
-    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title>` +
-      `<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#121212;color:#fff;font:16px/1.5 system-ui,-apple-system,sans-serif;text-align:center;padding:24px;box-sizing:border-box}h1{font-size:22px;margin:0 0 8px}p{margin:0;color:#b3b3b3}</style>` +
-      `</head><body><main><h1>${title}</h1><p>${line}</p></main></body></html>`,
-    { status, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "referrer-policy": "no-referrer", "x-robots-tag": "noindex" } },
-  );
-
-/** The provider's redirect: keep the code (or the error) under its state. */
-async function relayIn(env: Env, provider: string, url: URL): Promise<Response> {
-  const name = RELAY_NAMES[provider] ?? provider;
-  const state = url.searchParams.get("state") ?? "";
-  const code = url.searchParams.get("code") ?? "";
-  const error = url.searchParams.get("error") ?? (code ? "" : "no code");
-  if (!RELAY_STATE.test(state) || code.length > RELAY_VALUE_MAX || error.length > 200) return relayPage("That link is not from a device", "Start the sign-in again on your device.", 400);
-  const now = Date.now();
-  await env.DB.prepare("DELETE FROM oauth_relay WHERE created < ?").bind(now - RELAY_TTL_MS).run();
-  await env.DB.prepare("INSERT OR IGNORE INTO oauth_relay (state, provider, code, error, created) VALUES (?, ?, ?, ?, ?)").bind(state, provider, code, error, now).run();
-  return error
-    ? relayPage(`${name} was not connected`, error === "access_denied" ? "Access was not allowed. Start again on your device if you want to connect." : "Start the sign-in again on your device.")
-    : relayPage(`${name} is connected`, "Go back to your device. You can close this page.");
-}
-
-/** The device takes what came back for its state: 200 {code} or {error} once, 204 while nothing has. */
-async function relayOut(env: Env, provider: string, state: string): Promise<Response> {
-  if (!RELAY_STATE.test(state)) return refuse(400, "a state is base64url of at least 128 bits");
-  const row = await env.DB.prepare("DELETE FROM oauth_relay WHERE state = ? AND provider = ? RETURNING code, error, created")
-    .bind(state, provider).first<{ code: string; error: string; created: number }>();
-  if (!row) return new Response(null, { status: 204, headers: { "cache-control": "no-store", "access-control-allow-origin": "*" } });
-  if (Date.now() - row.created > RELAY_TTL_MS) return refuse(410, "that sign-in expired");
-  return json(row.error ? { error: row.error } : { code: row.code }, 200, { "cache-control": "no-store" });
-}
-
 /** The store's first name; its pages moved to omapocket.org, its API stays. */
 const FIRST_HOST = "oma.pocket.nexus";
 
@@ -396,11 +345,6 @@ export default {
       if (path.startsWith("/v1/admin/")) return await admin(request, env, path);
       if (path === "/v1/publish" && request.method === "POST") return await publish(request, env);
       if (request.method !== "GET" && request.method !== "HEAD") return refuse(405, "this route only reads");
-      const relayed = /^\/oauth\/([a-z]+)$/.exec(path);
-      if (relayed && RELAY_PROVIDERS.has(relayed[1]!)) return await relayIn(env, relayed[1]!, url);
-      const taken = /^\/v1\/oauth\/([a-z]+)\/([^/]+)$/.exec(path);
-      // a HEAD must not take the code
-      if (taken && RELAY_PROVIDERS.has(taken[1]!) && request.method === "GET") return await relayOut(env, taken[1]!, taken[2]!);
       if (path === "/v1/catalog") return await catalog(env, url);
       if (path === "/v1/apps") return await everyApp(env);
       const history = /^\/v1\/apps\/([^/]+)\/versions$/.exec(path);

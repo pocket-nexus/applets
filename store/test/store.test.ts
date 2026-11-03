@@ -191,30 +191,3 @@ test("a listed package's manifest and directory, and a version's sample data", a
   const pending = await publish(newKey(), manifest("io.github.someone.thing"), { author: "someone" });
   expect((await fetch(`${BASE}/v1/manifests/${pending.hash}`)).status).toBe(404);
 });
-
-test("the OAuth relay keeps the first code for a state until the device takes it once", async () => {
-  const state = "Zm9vYmFyYmF6cXV4cXV1eDEyMzQ1Njc4OTA";
-  const take = () => fetch(`${BASE}/v1/oauth/spotify/${state}`);
-  expect((await take()).status).toBe(204);
-  const back = await fetch(`${BASE}/oauth/spotify?code=first-code&state=${state}`);
-  expect(back.status).toBe(200);
-  expect(back.headers.get("cache-control")).toBe("no-store");
-  const page = await back.text();
-  expect(page).toContain("Spotify is connected");
-  expect(page).not.toContain("first-code");
-  // a second answer for the same state does not replace the first
-  await fetch(`${BASE}/oauth/spotify?code=second-code&state=${state}`);
-  // a HEAD does not take it
-  expect((await fetch(`${BASE}/v1/oauth/spotify/${state}`, { method: "HEAD" })).status).not.toBe(200);
-  expect(await (await take()).json()).toEqual({ code: "first-code" });
-  expect((await take()).status).toBe(204);
-
-  const denied = "ZGVuaWVkZGVuaWVkZGVuaWVkZGVuaWVkZGVu";
-  expect(await (await fetch(`${BASE}/oauth/spotify?error=access_denied&state=${denied}`)).text()).toContain("not connected");
-  expect(await (await fetch(`${BASE}/v1/oauth/spotify/${denied}`)).json()).toEqual({ error: "access_denied" });
-
-  // a state too short to be random, and a provider the relay does not serve
-  expect((await fetch(`${BASE}/oauth/spotify?code=x&state=short`)).status).toBe(400);
-  expect((await fetch(`${BASE}/v1/oauth/spotify/short`)).status).toBe(400);
-  expect((await fetch(`${BASE}/v1/oauth/other/${state}`)).status).toBe(404);
-});

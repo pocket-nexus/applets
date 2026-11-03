@@ -17,10 +17,6 @@ An applet is a PocketJS package that declares the `applet` section (PocketJS `do
 | `GET /v1/mocks/<sha256>` | a listed version's sample data, immutable |
 | `POST /v1/publish` | a signed package, icon, author and summary, and sample data when there is some |
 | `/v1/admin/*` | an editor's: pending, review, files, mock, backfill |
-| `GET /oauth/<provider>` | an OAuth provider's redirect URI (`spotify`): keeps `code` or `error` under `state` for ten minutes and tells the phone to go back to the device |
-| `GET /v1/oauth/<provider>/<state>` | the device takes what came back for its state, once: `{code}` or `{error}`, 204 while nothing has |
-
-**The OAuth relay** is for a service on a device with no browser. omarchy-pocketd's `spotify` service shows Spotify's sign-in URL as a QR code with `https://applets.pocket.nexus/oauth/spotify` as the redirect URI and a state of 256 random bits; the phone signs in and comes back to the relay, and the device polls `/v1/oauth/spotify/<state>` for the code. The first answer for a state is the one kept, and a code is worth nothing without the PKCE verifier, which stays on the device.
 
 **A publisher is an ed25519 key**, made on first publish (Omarchy Pocket keeps it at `~/.config/omarchy-pocket/publisher.pem`). The first key to publish an id or an author name owns it; a later version must come from the same key and be newer. The signature covers the id, version, package hash, icon hash, author and summary, and the device checks it again at install.
 

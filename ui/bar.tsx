@@ -208,7 +208,7 @@ export interface NavBarProps {
   titleView?: () => JSX.Element;
 }
 
-/** A flat bar's palette: an app with a look of its own (Spotify) passes it. */
+/** A flat bar's palette: an app with a look of its own passes it. */
 export interface BarColors {
   bg: string;
   /** The hairline under the bar. */
