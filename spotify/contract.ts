@@ -155,7 +155,7 @@ export interface Device {
   /** 0–100, null when it cannot be set */
   volume: number | null;
   active: boolean;
-  /** this device's own speaker (librespot) */
+  /** this device's own speaker (librespot, or Spotify's Soloist) */
   local: boolean;
   /** Spotify refuses commands to it */
   restricted: boolean;
@@ -191,7 +191,7 @@ export interface PlayRequest {
   /** where in the context to start: a track's uri or its place from 0 */
   offset?: { uri?: string; position?: number };
   positionMs?: number;
-  /** where to play; absent: the active device, or this device's speaker */
+  /** where to play; absent: this device's own speaker, whatever else is active */
   deviceId?: string;
 }
 
