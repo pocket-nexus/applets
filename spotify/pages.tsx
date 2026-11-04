@@ -695,7 +695,7 @@ export function devicesPage(env: Env, layer: LayerContext): PageSpec {
 
 // ---- the account ------------------------------------------------------------------
 
-const SPEAKER_STATES = { off: "Off", starting: "Starting", ready: "Ready", refused: "Refused by Spotify", pair: "Waiting to be picked", error: "Stopped" } as const;
+const SPEAKER_STATES = { off: "Off", starting: "Starting", ready: "Ready", refused: "Refused by Spotify", pair: "Waiting to be picked", conflict: "Taken by another account", error: "Stopped" } as const;
 /** The speaker's engine, as the Account says it. */
 const ENGINES = { librespot: "librespot", soloist: "Spotify's own player" } as const;
 
@@ -720,7 +720,7 @@ export function accountPage(env: Env, layer: LayerContext): PageSpec {
       out.push({ label: "Premium", value: value.premium ? "Yes" : "No", note: value.premium ? [] : wrap("Playing needs Spotify Premium. Browsing works without it.", FONT.xs, noteW, 3) });
     }
     const speaker = value.speaker;
-    const note = speaker.state === "refused" || speaker.state === "pair" ? model.speakerNote() : speaker.state === "error" ? speaker.message : "";
+    const note = speaker.state === "refused" || speaker.state === "pair" || speaker.state === "conflict" ? model.speakerNote() : speaker.state === "error" ? speaker.message : "";
     out.push({ label: "Speaker", value: `${speaker.name || "This device"}: ${SPEAKER_STATES[speaker.state] ?? speaker.state}`, note: note ? wrap(note, FONT.xs, noteW, 3) : [] });
     out.push({ label: "Plays through", value: ENGINES[speaker.engine] ?? speaker.engine, note: [] });
     let y = 0;

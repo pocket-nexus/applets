@@ -269,11 +269,15 @@ export interface SpotifyModel {
   cancelSignIn(): void;
   signOut(): void;
   /** What keeps this device's speaker from playing (starting, refused by
-   *  Spotify, waiting to be picked, stopped), else "". */
+   *  Spotify, waiting to be picked, playing for another account, stopped),
+   *  else "". */
   speakerNote: Accessor<string>;
   /** Spotify refuses this speaker audio and Spotify's own player is not set
-   *  up yet: the pages offer its setup. */
+   *  up yet, or the speaker plays for another account: the pages offer the
+   *  setup, whose prompt says what to do. */
   offerSetup: Accessor<boolean>;
+  /** the setup button's word: Fix for an account conflict, else Set Up */
+  setupLabel: Accessor<string>;
   /** Open the setup of Spotify's own player (set by the app). */
   openSetup(): void;
   setOpenSetup(open: () => void): void;
@@ -429,6 +433,11 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
       if (!localSpeaker() || speakerNote()) return say(speakerNote() || failureText({ reason, error: "" }), true, setupAction());
       return say(failureText({ reason, error: "" }), true, { label: "Play on this device", run: () => model.playHere() });
     }
+    if (reason === "conflict") {
+      // this device's speaker plays for another account: what to do, and the way to its steps
+      refreshStatus();
+      return say(speakerNote() || failureText({ reason, error: "" }), true, setupAction());
+    }
     if (reason === "unavailable") return say(notLinked("Spotify").title, true);
     say(error instanceof SpotifyError ? failureText({ reason: error.reason, error: error.message }) : String(error), true);
   };
@@ -501,16 +510,19 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
     if (speaker.state === "starting") return `${name}'s speaker is starting.`;
     if (speaker.state === "refused") return speaker.setup ? "Spotify won't send this speaker audio for your account. Set up Spotify's own player." : speaker.message || "Spotify won't send this speaker audio for your account.";
     if (speaker.state === "pair") return `Pick ${name} in Spotify on a phone or computer on this network, once.`;
+    if (speaker.state === "conflict") return `${name} is playing for another Spotify account. Pick it in Spotify signed in as ${status()?.user?.name || "this account"}.`;
     if (speaker.state === "error") return speaker.message || `${name}'s speaker stopped.`;
     return "";
   };
   const offerSetup = () => {
     const speaker = status()?.speaker;
-    return phase() === "ready" && !!speaker && speaker.state === "refused" && speaker.setup;
+    return phase() === "ready" && !!speaker && ((speaker.state === "refused" && speaker.setup) || speaker.state === "conflict");
   };
+  /** The setup's button: Fix for an account conflict (its steps are the setup's prompt), else Set Up. */
+  const setupLabel = () => (status()?.speaker.state === "conflict" ? "Fix" : "Set Up");
   let openSetup = () => {};
   /** A notice's way to the setup, when there is one to offer. */
-  const setupAction = (): Notice["action"] => (offerSetup() ? { label: "Set Up", run: () => openSetup() } : undefined);
+  const setupAction = (): Notice["action"] => (offerSetup() ? { label: setupLabel(), run: () => openSetup() } : undefined);
   const premiumNote = () => (phase() === "ready" && status()?.premium === false ? "Spotify Premium is needed to play. Browsing works without it." : "");
 
   const model: SpotifyModel = {
@@ -551,6 +563,7 @@ export function createSpotifyModel(client: SpotifyClient): SpotifyModel {
     },
     speakerNote,
     offerSetup,
+    setupLabel,
     openSetup: () => openSetup(),
     setOpenSetup(open) {
       openSetup = open;

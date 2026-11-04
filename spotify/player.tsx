@@ -308,7 +308,7 @@ export function playerPage(env: Env): PageSpec {
             <View class="absolute" style={{ insetL: g.nextX, insetT: g.nextY, width: g.nextW, height: localSetupY() - g.nextY + (model.offerSetup() ? 38 : 2), radius: 8, bgColor: C.raised }} />
             <Text class="absolute text-xs leading-[15]" style={{ insetL: g.nextX + 10, insetT: g.nextY + 10, width: g.nextW - 20, textColor: C.text }}>{localLines().join("\n")}</Text>
             <Show when={model.offerSetup()}>
-              <Pill x={g.nextX + 10} y={localSetupY()} w={150} h={30} label="Set Up" primary lit={() => lit("player.setup")} />
+              <Pill x={g.nextX + 10} y={localSetupY()} w={150} h={30} label={model.setupLabel()} primary lit={() => lit("player.setup")} />
             </Show>
           </Show>
           <Show when={nextUp().length && !localNote()}>
@@ -330,7 +330,7 @@ export function playerPage(env: Env): PageSpec {
         <Show when={!active()}>
           <Show
             when={hintLines().length === 0}
-            fallback={<Message w={W} top={emptyY} title="Nothing is playing anywhere" detail={hint()} button={!model.premiumNote() && model.offerSetup() ? { id: "player.setup", label: "Set Up", primary: true } : undefined} lit={lit} />}
+            fallback={<Message w={W} top={emptyY} title="Nothing is playing anywhere" detail={hint()} button={!model.premiumNote() && model.offerSetup() ? { id: "player.setup", label: model.setupLabel(), primary: true } : undefined} lit={lit} />}
           >
             <Message w={W} top={emptyY} title="Nothing is playing anywhere" detail="Start something on any device, or play here." button={{ id: "player.here", label: "Play on this device", primary: true }} lit={lit} />
           </Show>
@@ -401,7 +401,7 @@ export function SpeakerNote(props: { env: Env }) {
       <Text class="absolute text-xs leading-[14]" style={{ insetL: 16, insetT: y + (h - lines().length * 14) / 2 - 1, width: W - 32 - (buttonW() ? buttonW() + 8 : 0), textColor: C.text }}>{lines().join("\n")}</Text>
       <Show when={buttonW()}>
         <View class="absolute" style={{ insetL: W - 12 - buttonW(), insetT: y + (h - 24) / 2, width: buttonW(), height: 24, radius: 12, bgColor: props.env.press.is("speaker.setup") ? C.accentLit : C.accent }} />
-        <Text class="absolute text-xs font-bold text-center" style={{ insetL: W - 12 - buttonW(), insetT: y + (h - 24) / 2 + 4, width: buttonW(), textColor: C.black }}>Set Up</Text>
+        <Text class="absolute text-xs font-bold text-center" style={{ insetL: W - 12 - buttonW(), insetT: y + (h - 24) / 2 + 4, width: buttonW(), textColor: C.black }}>{model.setupLabel()}</Text>
       </Show>
     </>
   );
@@ -413,7 +413,7 @@ export function speakerTargets(env: Env): Target[] {
   const y = SCREEN_H - H + 3;
   const W = SCREEN_W;
   const status = env.model.status()?.speaker.state;
-  const opens = status === "refused" || status === "pair";
+  const opens = status === "refused" || status === "pair" || status === "conflict";
   return [
     { id: "speaker.bar", x: 6, y, w: W - 12, h: H - 6, ...(opens ? { run: () => env.model.openSetup() } : {}) },
     ...(env.model.offerSetup() ? [{ id: "speaker.setup", x: W - 12 - 72, y, w: 72, h: H - 6, run: () => env.model.openSetup() }] : []),
