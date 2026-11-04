@@ -52,7 +52,7 @@ export class SpotifyError extends Error {
   }
 }
 
-const REASONS: readonly Reason[] = ["signin", "premium", "nodevice", "rate", "restricted", "other"];
+const REASONS: readonly Reason[] = ["signin", "premium", "nodevice", "rate", "restricted", "conflict", "other"];
 
 /** The order requests leave the queue in. */
 const Lane = { command: 0, page: 1, glyphs: 2, cover: 3 } as const;

@@ -94,6 +94,7 @@ describe("controls", () => {
     expect(failureText({ reason: "nodevice", error: "x" })).toBe("Nothing is playing anywhere");
     expect(failureText({ reason: "rate", error: "x" })).toBe("Spotify asked to wait a moment");
     expect(failureText({ reason: "restricted", error: "x" })).toBe("That device does not take commands");
+    expect(failureText({ reason: "conflict", error: "x" })).toBe("Another Spotify account is playing on this device");
     expect(failureText({ reason: "other", error: "The service stopped" })).toBe("The service stopped");
     expect(failureText({ reason: "other", error: "" })).toBe("Spotify did not answer");
   });

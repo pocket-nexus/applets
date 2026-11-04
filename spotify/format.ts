@@ -97,6 +97,8 @@ export function failureText(failure: { reason: Failure["reason"] | string; error
       return "Spotify asked to wait a moment";
     case "restricted":
       return "That device does not take commands";
+    case "conflict":
+      return "Another Spotify account is playing on this device";
     case "signin":
       return "Sign in to Spotify again";
     default:

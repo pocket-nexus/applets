@@ -106,8 +106,12 @@ export interface Status {
      *  refused: Spotify sends librespot no audio keys for this account, so
      *  nothing plays until Soloist is set up (/_setup); pair: Soloist waits
      *  for the owner to pick it once in Spotify on a phone on this network;
+     *  conflict: Soloist plays for another Spotify account than this
+     *  device's (an app signed in to that account picked it), so a play
+     *  here is refused until it is picked again from Spotify signed in to
+     *  this device's account (`user`); /_setup's prompt says how;
      *  error: see message */
-    state: "off" | "starting" | "ready" | "refused" | "pair" | "error";
+    state: "off" | "starting" | "ready" | "refused" | "pair" | "conflict" | "error";
     /** its Connect device id */
     id: string | null;
     message: string;
@@ -199,6 +203,7 @@ export interface Failure {
   error: string;
   /** what the applet can do about it: signin, premium (the account cannot
    *  play), nodevice (nothing to play on), rate (Spotify asked to wait),
-   *  restricted (the device refuses), other */
-  reason: "signin" | "premium" | "nodevice" | "rate" | "restricted" | "other";
+   *  restricted (the device refuses), conflict (this device's speaker plays
+   *  for another account: speaker.state conflict), other */
+  reason: "signin" | "premium" | "nodevice" | "rate" | "restricted" | "conflict" | "other";
 }
