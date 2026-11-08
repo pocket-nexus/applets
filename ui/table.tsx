@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // ui/table.tsx — the iOS 6 grouped table: white rounded sections
-// on pinstripes, embossed section headers, footers, 1 px separators, icons,
-// values, chevrons, checkmarks and switches.
+// on pinstripes, embossed section headers, footers, 1 px separators, a
+// picture at a row's left, values, chevrons, checkmarks and switches.
 //
 // layoutTable() turns section data into absolute offsets once; the same
 // offsets place the nodes and name the hit targets, so a row is never a
 // wrapper View and the tree stays two levels deep under a section.
 
-import { createMemo, For, Show, type Accessor } from "solid-js";
+import { createMemo, For, Show, type Accessor, type JSX } from "solid-js";
 import { Image, Text, View } from "@pocketjs/framework/components";
 import { ClassicSpinner } from "@pocketjs/framework/classic";
-import { Bars, Switch, SWITCH_H, SWITCH_W, Tile, type AppTint, type IconArt } from "./chrome.tsx";
+import { Bars, Switch, SWITCH_H, SWITCH_W } from "./chrome.tsx";
 import { ellipsize, FONT, measure, wrap } from "./text.ts";
 import type { Press, Target } from "./touch.ts";
 
@@ -21,19 +21,15 @@ const HEADER_H = 26;
 const GAP = 14;
 const FOOTER_LINE = 15;
 
-export interface CellIcon {
-  art: IconArt;
-}
-
 export interface Cell {
   id: string;
   label: string;
   value?: string;
   /** Second line under the label (smaller, grey). */
   detail?: string;
-  icon?: CellIcon;
-  /** An app's icon (appTint) instead of a system icon. */
-  tile?: AppTint;
+  /** A 24 px picture at the row's left, drawn by the caller at the top-left
+   *  the table gives (the launcher's icon tiles, ui/icons.tsx). */
+  leading?: (x: number, y: number) => JSX.Element;
   accessory?: "chevron" | "check" | "switch" | "spinner" | "bars";
   /** Switch position or check visibility. */
   on?: boolean;
@@ -155,7 +151,7 @@ function CellView(props: { placed: PlacedCell; width: number; lit: Accessor<bool
   const y = props.placed.y;
   const h = props.placed.h;
   const groupW = props.width - INSET * 2;
-  const iconW = cell.icon || cell.tile ? 32 : 0;
+  const iconW = cell.leading ? 32 : 0;
   const right = accessoryRoom(cell) + (cell.button ? 66 : 0);
   const labelX = 10 + iconW;
   const textTop = cell.detail ? y + 5 : y + (h - 18) / 2;
@@ -185,12 +181,7 @@ function CellView(props: { placed: PlacedCell; width: number; lit: Accessor<bool
       <Show when={!props.placed.last}>
         <View class="absolute h-[1] bg-[#d9dce0]" style={{ insetL: 0, insetT: y + h - 1, width: groupW }} />
       </Show>
-      <Show when={cell.icon}>
-        {(icon) => <Tile x={6} y={y + (h - 24) / 2} size={24} art={icon().art} />}
-      </Show>
-      <Show when={cell.tile}>
-        {(tile) => <Tile x={6} y={y + (h - 24) / 2} size={24} art={tile().art} from={tile().from} to={tile().to} />}
-      </Show>
+      {cell.leading?.(6, y + (h - 24) / 2)}
       <Text
         class={cell.tone === "action"
           ? props.lit() ? "absolute text-sm text-white font-bold text-center" : "absolute text-sm text-[#385487] font-bold text-center"

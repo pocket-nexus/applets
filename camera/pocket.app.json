@@ -4,6 +4,7 @@
   "id": "dev.pocket-nexus.camera",
   "title": "Camera",
   "version": "0.2.0",
+  "icon": "./icon.png",
   "applet": {
     "version": 1,
     "summary": "Photos and QR codes from the camera."

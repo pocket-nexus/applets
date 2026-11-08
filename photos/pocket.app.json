@@ -4,6 +4,7 @@
   "id": "dev.pocket-nexus.photos",
   "title": "Photos",
   "version": "0.2.0",
+  "icon": "./icon.png",
   "applet": {
     "version": 1,
     "summary": "The photos the camera took."

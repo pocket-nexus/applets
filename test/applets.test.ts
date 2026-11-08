@@ -6,13 +6,14 @@
 // applet with net.http declares alike.
 
 import { describe, expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { resolve } from "node:path";
 import { validateAndResolveBuildPlan } from "../vendor/pocketjs/framework/src/manifest/resolve.ts";
 import { checkApplet, formatAppletDiagnostics } from "../vendor/pocketjs/tools/applet-check.ts";
 import { APPS, appContract } from "../tools/apps.ts";
 import { ROOT } from "../tools/paths.ts";
 import { NET_WORKER } from "../lib/net-wire.ts";
+import { appTint } from "../ui/icons.tsx";
 
 
 describe("Pocket Applets", () => {
@@ -31,12 +32,25 @@ describe("Pocket Applets", () => {
     }
   });
 
-  test("an applet's package icon is a 128 px PNG", () => {
+  // One picture per applet: icon.png (what the store lists and the package
+  // carries) is a link to the family's 64@2x texture in ui/art/icons, made by
+  // tools/icons, and the launcher draws the same family at 24, 46 and 64 px.
+  test("every applet's icon is the family texture the launcher draws", () => {
+    const icons = realpathSync(resolve(ROOT, "ui/art/icons"));
     for (const app of APPS) {
-      const icon = (JSON.parse(readFileSync(appContract(app), "utf8")) as { icon?: string }).icon;
-      if (!icon) continue;
-      const png = readFileSync(resolve(ROOT, app, icon));
+      const manifest = JSON.parse(readFileSync(appContract(app), "utf8")) as { id: string; icon?: string };
+      expect([app, manifest.icon]).toEqual([app, "./icon.png"]);
+      const icon = resolve(ROOT, app, "icon.png");
+      expect([app, realpathSync(icon)]).toEqual([app, resolve(icons, `${app}-64@2x.png`)]);
+      const png = readFileSync(icon);
       expect([app, png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([app, 128, 128]);
+      expect([app, appTint(manifest.id).art]).toEqual([app, app]);
+      for (const size of [24, 46, 64]) {
+        for (const scale of ["", "@2x"]) {
+          const texture = `${app}-${size}${scale}.png`;
+          expect([texture, existsSync(resolve(icons, texture))]).toEqual([texture, true]);
+        }
+      }
     }
   });
 

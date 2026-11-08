@@ -4,6 +4,7 @@
   "id": "dev.pocket-nexus.store",
   "title": "Store",
   "version": "0.3.0",
+  "icon": "./icon.png",
   "applet": {
     "version": 1,
     "summary": "Applets for this device, from applets.pocket.nexus.",
