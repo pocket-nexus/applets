@@ -35,6 +35,7 @@ Hacker News, X, YouTube, Discord and GitHub also declare the applet **full-scree
 | `lib/store.ts` | A JSON document in the companion's `store` service, whatever its size: saved whole when one `/set` fits a request's 1020-byte descriptor, else in parts `<name>.0…` and then `{"parts": n}` under `<name>`. Weather's places and Podcasts' library use it. |
 | `lib/mock.ts` | Sample data in place of the worker: the same channel bridge, answered from `mock/mock.json`. The store's player and the tests run applets on it. |
 | `ui/companion.ts` | Where an applet's services run, as its text names them: on the device itself on Omarchy Pocket, on the paired Mac elsewhere. |
+| `ui/art/icons/`, `ui/icons.tsx` | **The one icon family**: every applet's icon and the launcher's own (Settings, Mac, Wi-Fi, Apps), baked at 24, 46 and 64 px and at `@2x`. `ui/icons.tsx` maps an app id to its icon and draws the tile; Pocket Shell's launcher imports it, applets never do, so no applet package carries the family. Each applet's `icon.png`, the picture the store lists and `pocket compile` stores in the package, is a link to its `<name>-64@2x.png`. |
 
 The applets read the device from PocketJS (`@pocketjs/framework/applet`, `platform`, `link`, `osk`), so no file here is per device.
 
@@ -46,6 +47,14 @@ bun tools/build.ts                              # every applet, for every device
 bun tools/build.ts omarchy-pocket --apps weather
 bun run check                                   # typecheck, the applet rules, the sims, the store
 ```
+
+### Icons
+
+```sh
+bun run icons --only notes,github               # render in Blender, bake into ui/art/icons
+```
+
+`tools/icons/icons.py` models each icon in Blender as an iOS 6 tile: a lacquered or metal plate with a raised, bevelled object on it, lit from above. `tools/icons/nexus.ts` draws Pocket Nexus's (the PocketJS mark). `tools/icons/bake.ts` gives every render the same finish (the rounded-square mask, the gloss, the rim and, at 46 px, the drop shadow) and writes the textures and a contact sheet in `.pocket-build/validation/icons`. Builds read the committed PNGs and never need Blender. Cycles output differs between runs, so `--only` re-renders the icons that changed and the sheet is reviewed before a commit. A new applet adds its scene to `icons.py`, its sizes to `bake.ts`, its id to `APP_ART` in `ui/icons.tsx`, and links `icon.png`; `test/applets.test.ts` fails an applet without all four.
 
 Packages go to `dist/<device>/<output>.pocket`, and `dist/packages/<output>.pocket` holds every variant built. A device's host contract lives with its program: Omarchy Pocket's in [pocket-nexus/omarchy-pocket](https://github.com/pocket-nexus/omarchy-pocket) (`OMARCHY_POCKET_ROOT`, default `../omarchy-pocket`), the Tab5's in pocket-nexus/pocket-m5 (`POCKET_M5_ROOT`, default `../pocket-m5`), the 3DS's in PocketJS (`3ds-dev`). Omarchy Pocket and Pocket Shell take this repository as a submodule (`vendor/applets`) and build the applets from it. A Tab5 or a 3DS installs them from Pocket Hub on a paired Mac, which carries them. Pocket Hub is not released yet.
 

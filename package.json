@@ -12,6 +12,7 @@
   "scripts": {
     "setup": "git submodule update --init vendor/pocketjs && bun install --cwd vendor/pocketjs --frozen-lockfile && bun tools/setup.ts",
     "build": "bun tools/build.ts",
+    "icons": "bun tools/icons/build.ts",
     "typecheck": "bun vendor/pocketjs/node_modules/typescript/bin/tsc --noEmit",
     "test": "bun vendor/pocketjs/tools/wasm.ts && bun test --conditions=browser ./test ./lib ./tools ./store/test",
     "check": "bun run typecheck && bun run test"

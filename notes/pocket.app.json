@@ -4,6 +4,7 @@
   "id": "dev.pocket-nexus.notes",
   "title": "Notes",
   "version": "0.2.0",
+  "icon": "./icon.png",
   "applet": {
     "version": 1,
     "summary": "Notes kept on this device.",
