@@ -44,6 +44,8 @@ bun run site:build      # store/site/dist
 bun run typecheck:site
 ```
 
+**The site speaks English and Simplified Chinese** (vue-i18n; `store/site/src/i18n/`). A visitor gets the first of their browser's languages the site has, English when it has none of them, and from then on the one they pick in the header, which the browser keeps. What is translated is the site's own words. An app's title and summary are the publisher's: the store holds one of each, and the page shows them as they were published. `en.ts` is the measure: another language's file must have exactly its keys (the `Wording` type), and a page asks for a message through `useLanguage().t`, which takes only a key `en.ts` has and exactly the values its message names, so a mistyped key or a forgotten value fails `bun run typecheck:site` instead of reaching a visitor. A new language is a file beside `en.ts` and a line in `LOCALES`.
+
 `wrangler dev` and `wrangler deploy` in `store/` run the build themselves (`build` in `store/wrangler.jsonc`), so `store/site/dist` is never committed. What the build copies as it is lives in `store/site/public/`: the response headers (`_headers`), the favicons and the applet player.
 
 **An app's page says what the app is and nothing about which device it fits.** It has the icon, title, summary and publisher, a button that installs it, the app running on its sample data when it has some, and its version, size and date. **Installing is Pocket Hub's**: the button opens Hub, and Hub decides whether a device can run the app and installs it. That hand-off is not open yet, so `hubInstallLink` in `store/site/src/hub.ts` returns no link and the button reads "Not open yet". The page gives no install steps of its own.

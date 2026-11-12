@@ -1,17 +1,21 @@
 <script setup lang="ts">
-// A round "more" button and the short menu under it.
+// A button and the short menu under it: the "more" of an app's page, the
+// languages in the header. The button shows what is put in it, three dots
+// when nothing is.
 import { nextTick, onBeforeUnmount, ref, watch } from "vue";
 import UiIcon, { type Glyph } from "./UiIcon.vue";
 
 export interface MenuItem {
   id: string;
   label: string;
-  glyph: Glyph;
+  glyph?: Glyph;
   /** Starts a new group: a rule is drawn above it. */
   ruled?: boolean;
+  /** One of a set to pick from, and whether it is the one picked. */
+  checked?: boolean;
 }
 
-defineProps<{ label: string; items: MenuItem[] }>();
+defineProps<{ label: string; items: MenuItem[]; small?: boolean }>();
 const emit = defineEmits<{ choose: [id: string] }>();
 
 const root = ref<HTMLElement>();
@@ -20,7 +24,7 @@ const open = ref(false);
 /** Hang from the trigger's right edge when it sits in the right half of the page. */
 const fromRight = ref(false);
 
-const options = () => [...(root.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? [])];
+const options = () => [...(root.value?.querySelectorAll<HTMLElement>("[role^=menuitem]") ?? [])];
 
 async function toggle() {
   open.value = !open.value;
@@ -28,7 +32,7 @@ async function toggle() {
   const box = trigger.value!.getBoundingClientRect();
   fromRight.value = box.left + box.width / 2 > innerWidth / 2;
   await nextTick();
-  options()[0]?.focus();
+  (options().find((option) => option.ariaChecked === "true") ?? options()[0])?.focus();
 }
 
 function close(refocus = false) {
@@ -66,16 +70,18 @@ onBeforeUnmount(() => removeEventListener("pointerdown", outside));
 </script>
 
 <template>
-  <div ref="root" class="more">
-    <button ref="trigger" class="trigger" type="button" aria-haspopup="menu" :aria-expanded="open" :aria-label="label" :title="label" @click="toggle">
-      <UiIcon name="more" :size="22" />
+  <div ref="root" class="menu-button">
+    <button ref="trigger" class="trigger" :class="{ small }" type="button" aria-haspopup="menu" :aria-expanded="open" :aria-label="label" :title="label" @click="toggle">
+      <slot><UiIcon name="more" :size="22" /></slot>
     </button>
     <Transition name="pop">
       <div v-if="open" class="menu" :class="{ 'from-right': fromRight }" role="menu" :aria-label="label" @keydown="keys">
         <template v-for="item in items" :key="item.id">
           <hr v-if="item.ruled">
-          <button type="button" role="menuitem" tabindex="-1" @click="choose(item.id)">
-            <UiIcon :name="item.glyph" :size="18" />{{ item.label }}
+          <button type="button" :role="item.checked === undefined ? 'menuitem' : 'menuitemradio'" :aria-checked="item.checked" tabindex="-1" @click="choose(item.id)">
+            <UiIcon v-if="item.glyph" :name="item.glyph" :size="18" />
+            <span>{{ item.label }}</span>
+            <UiIcon v-if="item.checked" class="tick" name="check" :size="17" />
           </button>
         </template>
       </div>
@@ -84,7 +90,7 @@ onBeforeUnmount(() => removeEventListener("pointerdown", outside));
 </template>
 
 <style scoped>
-.more {
+.menu-button {
   position: relative;
 }
 
@@ -97,6 +103,18 @@ onBeforeUnmount(() => removeEventListener("pointerdown", outside));
   background: var(--fill);
   color: var(--text-2);
   transition: background 0.15s, color 0.15s;
+}
+
+.trigger.small {
+  display: flex;
+  gap: 6px;
+  width: auto;
+  height: 36px;
+  padding: 0 11px 0 9px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 550;
+  white-space: nowrap;
 }
 
 .trigger:hover,
@@ -118,6 +136,10 @@ onBeforeUnmount(() => removeEventListener("pointerdown", outside));
   transform-origin: top left;
 }
 
+.small + .menu {
+  min-width: 176px;
+}
+
 .menu.from-right {
   left: auto;
   right: 0;
@@ -137,8 +159,16 @@ onBeforeUnmount(() => removeEventListener("pointerdown", outside));
   white-space: nowrap;
 }
 
+.menu button span {
+  flex: 1;
+}
+
 .menu button .glyph {
   color: var(--text-3);
+}
+
+.menu button .tick {
+  color: var(--accent-ink);
 }
 
 .menu button:hover,

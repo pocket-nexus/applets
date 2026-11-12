@@ -4,6 +4,7 @@
 // behind brings it forward; the one in front opens its page. Left alone, the
 // fan turns by itself, and waits while a pointer or the keyboard is on it.
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useLanguage } from "../i18n/index.ts";
 import { RouterLink } from "vue-router";
 import { appPath, iconUrl, type StoreApp } from "../api.ts";
 import { shotOf } from "../shots.ts";
@@ -18,6 +19,7 @@ const TURN_MS = 6000;
 const SWIPE = 40;
 
 const props = defineProps<{ apps: StoreApp[] }>();
+const { t } = useLanguage();
 
 const hand = ref<HTMLElement>();
 const front = ref(0);
@@ -103,7 +105,7 @@ watch(() => props.apps.length, () => show(0));
 
 <template>
   <section
-    class="fan" aria-roledescription="carousel" aria-label="Featured applets"
+    class="fan" aria-roledescription="carousel" :aria-label="t('home.featured')"
     @pointerenter="held = true" @pointerleave="held = false" @focusin="held = true" @focusout="held = false"
     @keydown.left.prevent="show(front - 1)" @keydown.right.prevent="show(front + 1)"
   >
@@ -123,7 +125,7 @@ watch(() => props.apps.length, () => show(0));
     </ul>
 
     <div class="caption" :aria-live="held ? 'polite' : 'off'">
-      <button v-if="apps.length > 1" class="turn" type="button" aria-label="Previous" @click="show(front - 1)"><UiIcon name="chevron-left" /></button>
+      <button v-if="apps.length > 1" class="turn" type="button" :aria-label="t('common.previous')" @click="show(front - 1)"><UiIcon name="chevron-left" /></button>
       <Transition name="swap" mode="out-in">
         <RouterLink v-if="current" :key="current.id" class="now" :to="appPath(current)">
           <AppIcon :app="current" :size="52" eager />
@@ -131,10 +133,10 @@ watch(() => props.apps.length, () => show(0));
             <strong>{{ current.title }}</strong>
             <span>{{ current.summary }}</span>
           </span>
-          <span class="pill" aria-hidden="true">View</span>
+          <span class="pill" aria-hidden="true">{{ t("common.view") }}</span>
         </RouterLink>
       </Transition>
-      <button v-if="apps.length > 1" class="turn" type="button" aria-label="Next" @click="show(front + 1)"><UiIcon name="chevron-right" /></button>
+      <button v-if="apps.length > 1" class="turn" type="button" :aria-label="t('common.next')" @click="show(front + 1)"><UiIcon name="chevron-right" /></button>
     </div>
   </section>
 </template>

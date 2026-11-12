@@ -5,6 +5,7 @@
 // PocketJS's core, and hears back what the app asked for. Every request is
 // answered from the sample data, so nothing here reaches a device or an account.
 import { onBeforeUnmount, ref } from "vue";
+import { useLanguage } from "../i18n/index.ts";
 import { packageUrl, type StoreApp } from "../api.ts";
 import { shotOf } from "../shots.ts";
 import AmbientBackdrop from "./AmbientBackdrop.vue";
@@ -20,7 +21,8 @@ const KEPT = 200;
 interface Asked {
   n: number;
   line: string;
-  /** What answered it, or nothing when the sample data has no answer. */
+  status?: number;
+  /** What answered it ("route" is the sample data's own answer), or nothing when the sample data has none. */
   answer?: string;
 }
 
@@ -35,9 +37,11 @@ interface Heard {
 }
 
 const props = defineProps<{ app: StoreApp }>();
+const { t } = useLanguage();
 
 const state = ref<"still" | "starting" | "running" | "failed">("still");
-const problem = ref("");
+/** Why it failed: the store sent no package, or the app stopped and said this. */
+const problem = ref<{ stopped?: string }>({});
 /** Each start makes a new frame. */
 const run = ref(0);
 const frame = ref<HTMLIFrameElement>();
@@ -48,7 +52,7 @@ const shot = shotOf(props.app.id);
 
 const bytes = (url: string) => fetch(url).then((answer) => (answer.ok ? answer.arrayBuffer() : Promise.reject(new Error(String(answer.status)))));
 
-function fail(why: string) {
+function fail(why: { stopped?: string } = {}) {
   problem.value = why;
   state.value = "failed";
 }
@@ -68,19 +72,15 @@ async function hear(event: MessageEvent<Heard | null>) {
       if (frame.value?.contentWindow !== to) return;
       to.postMessage({ type: "boot", package: pkg, wasm, mock, size: SURFACE, target: TARGET }, "*", [pkg, wasm]);
     } catch {
-      fail("The store did not send the package.");
+      fail();
     }
   } else if (heard.type === "running") {
     state.value = "running";
   } else if (heard.type === "error") {
-    fail(`It stopped: ${heard.message}`);
+    fail({ stopped: heard.message ?? "" });
   } else if (heard.type === "request") {
     total.value++;
-    asked.value.push({
-      n: total.value,
-      line: `${heard.method} ${heard.url}`,
-      answer: heard.answer ? `${heard.status} · ${heard.answer === "route" ? "sample" : heard.answer}` : undefined,
-    });
+    asked.value.push({ n: total.value, line: `${heard.method} ${heard.url}`, status: heard.status, answer: heard.answer });
     if (asked.value.length > KEPT) asked.value.shift();
   }
 }
@@ -111,39 +111,39 @@ onBeforeUnmount(() => removeEventListener("message", hear));
   <figure class="player">
     <div class="screen">
       <button v-if="state === 'still'" class="poster" type="button" @click="start">
-        <img v-if="shot" class="shot" :src="shot" :alt="`${app.title}'s first screen`" width="1024" height="768" decoding="async">
+        <img v-if="shot" class="shot" :src="shot" :alt="t('player.firstScreen', { title: app.title })" width="1024" height="768" decoding="async">
         <template v-else>
           <AmbientBackdrop :app="app" />
           <AppIcon :app="app" :size="96" eager />
         </template>
-        <span class="try"><UiIcon name="play" :size="16" />Try it here</span>
+        <span class="try"><UiIcon name="play" :size="16" />{{ t("player.try") }}</span>
       </button>
       <template v-else>
-        <iframe :key="run" ref="frame" sandbox="allow-scripts" src="/play/" allow="" :title="`${app.title}, running on sample data`" />
-        <div v-if="state === 'starting'" class="veil"><span class="spinner" />Starting {{ app.title }}</div>
+        <iframe :key="run" ref="frame" sandbox="allow-scripts" src="/play/" allow="" :title="t('player.running', { title: app.title })" />
+        <div v-if="state === 'starting'" class="veil"><span class="spinner" />{{ t("player.starting", { title: app.title }) }}</div>
         <div v-else-if="state === 'failed'" class="veil" role="alert">
-          <p>{{ problem }}</p>
-          <button class="again" type="button" @click="start">Start again</button>
+          <p>{{ problem.stopped === undefined ? t("player.notSent") : t("player.stopped", { message: problem.stopped }) }}</p>
+          <button class="again" type="button" @click="start">{{ t("player.startAgain") }}</button>
         </div>
       </template>
     </div>
 
     <!-- what sits under the screen is one block, so a page can lay the screen out on its own -->
     <figcaption class="under">
-      <p v-if="state === 'still'" class="note">Runs in your browser on sample data. Nothing it does here reaches a device or an account.</p>
+      <p v-if="state === 'still'" class="note">{{ t("player.note") }}</p>
       <template v-else>
         <div class="controls">
-          <button class="pill" type="button" :disabled="state !== 'running'" @click="back"><UiIcon name="chevron-left" :size="16" />Back</button>
-          <button class="pill" type="button" @click="start"><UiIcon name="restart" :size="15" />Restart</button>
-          <button class="pill" type="button" @click="stop"><UiIcon name="stop" :size="15" />Stop</button>
-          <button class="pill log" type="button" :aria-expanded="listed" @click="listed = !listed">Requests<span>{{ total }}</span></button>
+          <button class="pill" type="button" :disabled="state !== 'running'" @click="back"><UiIcon name="chevron-left" :size="16" />{{ t("player.back") }}</button>
+          <button class="pill" type="button" @click="start"><UiIcon name="restart" :size="15" />{{ t("player.restart") }}</button>
+          <button class="pill" type="button" @click="stop"><UiIcon name="stop" :size="15" />{{ t("player.stop") }}</button>
+          <button class="pill log" type="button" :aria-expanded="listed" @click="listed = !listed">{{ t("player.requests") }}<span>{{ total }}</span></button>
         </div>
-        <p v-if="!listed" class="note">Click to touch, scroll to drag. Arrows, Enter and Esc are the buttons.</p>
+        <p v-if="!listed" class="note">{{ t("player.hint") }}</p>
         <div v-else class="requests">
-          <p>Each request the app made, answered from its sample data here and never from the network.</p>
+          <p>{{ t("player.requestsNote") }}</p>
           <ol v-if="asked.length">
             <li v-for="request in asked" :key="request.n" :class="{ unanswered: !request.answer }">
-              <span>{{ request.line }}</span><em>{{ request.answer ?? "no sample data" }}</em>
+              <span>{{ request.line }}</span><em>{{ request.answer ? `${request.status} · ${request.answer === "route" ? t("player.sample") : request.answer}` : t("player.unanswered") }}</em>
             </li>
           </ol>
         </div>

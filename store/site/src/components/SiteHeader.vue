@@ -1,14 +1,21 @@
 <script setup lang="ts">
-// The bar every page keeps: the way home and the search. A search is the
-// home page's ?q=, so the address holds it. The field searches once the typing
+// The bar every page keeps: the way home, the search and the language. A
+// search is the home page's ?q=, so the address holds it. The field searches once the typing
 // pauses, not at every letter: each search redraws the page under the visitor,
 // and the first letter of a word is not what they are looking for.
-import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
+import { LOCALES, chooseLocale, useLanguage, type Locale } from "../i18n/index.ts";
+import MenuButton, { type MenuItem } from "./MenuButton.vue";
 import UiIcon from "./UiIcon.vue";
 
 const route = useRoute();
 const router = useRouter();
+const { t, locale } = useLanguage();
+
+/** The languages, each under its own name, the one in use ticked. */
+const languages = computed<MenuItem[]>(() => LOCALES.map(({ id, name }) => ({ id, label: name, checked: id === locale.value })));
+const spoken = computed(() => LOCALES.find(({ id }) => id === locale.value)?.short);
 /** How long the typing has to rest before the field searches. */
 const PAUSE_MS = 250;
 
@@ -77,7 +84,7 @@ onBeforeUnmount(() => {
 <template>
   <header class="bar">
     <div class="inner">
-      <RouterLink class="logo" to="/" aria-label="Pocket Applets, home">
+      <RouterLink class="logo" to="/" :aria-label="t('site.home')">
         <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
           <defs>
             <linearGradient id="logo-sky" x1="0" y1="0" x2="0" y2="1">
@@ -92,9 +99,12 @@ onBeforeUnmount(() => {
       </RouterLink>
       <form class="search" role="search" @submit.prevent="search">
         <UiIcon name="search" :size="17" />
-        <input ref="field" v-model="text" type="search" placeholder="Search" aria-label="Search applets" autocomplete="off" spellcheck="false" enterkeyhint="search" @input="typed" @compositionend="typed" @keydown.esc="clear">
+        <input ref="field" v-model="text" type="search" :placeholder="t('search.placeholder')" :aria-label="t('search.label')" autocomplete="off" spellcheck="false" enterkeyhint="search" @input="typed" @compositionend="typed" @keydown.esc="clear">
         <kbd aria-hidden="true">/</kbd>
       </form>
+      <MenuButton class="language" small :label="t('language')" :items="languages" @choose="chooseLocale($event as Locale)">
+        <UiIcon name="globe" :size="17" />{{ spoken }}
+      </MenuButton>
     </div>
   </header>
 </template>
@@ -113,7 +123,7 @@ onBeforeUnmount(() => {
 .inner {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 10px;
   max-width: calc(var(--page) + 2 * var(--gutter));
   min-height: var(--header-height);
   margin: 0 auto;
@@ -218,7 +228,9 @@ kbd {
     min-height: 40px;
   }
 
+  /* the language beside the name, the search on a line of its own under both */
   .search {
+    order: 1;
     width: 100%;
     margin-top: 6px;
   }

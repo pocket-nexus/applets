@@ -4,10 +4,11 @@
 // settles that at install, and the curious find it one level down, in the
 // details sheet the "more" menu opens (?details=<section>).
 import { computed, onBeforeUnmount, ref } from "vue";
+import { useLanguage } from "../i18n/index.ts";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { NotListed, authorPath, findApp, iconUrl, listApps } from "../api.ts";
 import { SECTIONS, sectionOf, type Section } from "../details.ts";
-import { day, size } from "../format.ts";
+import { size } from "../format.ts";
 import { useLoad } from "../load.ts";
 import { usePage } from "../page.ts";
 import AppGrid from "../components/AppGrid.vue";
@@ -15,7 +16,7 @@ import AppIcon from "../components/AppIcon.vue";
 import AppPlayer from "../components/AppPlayer.vue";
 import DetailsSheet from "../components/DetailsSheet.vue";
 import InstallButton from "../components/InstallButton.vue";
-import MoreMenu, { type MenuItem } from "../components/MoreMenu.vue";
+import MenuButton, { type MenuItem } from "../components/MenuButton.vue";
 import UiIcon from "../components/UiIcon.vue";
 
 /** How many of the publisher's other apps the page offers. */
@@ -24,6 +25,7 @@ const OTHERS = 6;
 const props = defineProps<{ id: string }>();
 const route = useRoute();
 const router = useRouter();
+const { t, day } = useLanguage();
 
 const { data: app, error, reload } = useLoad(() => props.id, findApp);
 const everyone = useLoad(() => null, listApps);
@@ -32,13 +34,16 @@ const others = computed(() => everyone.data.value?.filter((other) => other.autho
 usePage(() => app.value?.title, () => app.value?.summary);
 
 const facts = computed(() => app.value && [
-  { name: "Version", value: app.value.version },
-  { name: "Size", value: size(app.value.bytes) },
-  { name: "Updated", value: day(app.value.created) },
-  { name: "Publisher", value: app.value.author, to: authorPath(app.value.author) },
+  { name: t("app.facts.version"), value: app.value.version },
+  { name: t("app.facts.size"), value: size(app.value.bytes) },
+  { name: t("app.facts.updated"), value: day(app.value.created) },
+  { name: t("app.facts.publisher"), value: app.value.author, to: authorPath(app.value.author) },
 ]);
 
-const MENU: MenuItem[] = [...SECTIONS, { id: "link", label: "Copy link", glyph: "link", ruled: true }];
+const menu = computed<MenuItem[]>(() => [
+  ...SECTIONS.map(({ id, glyph }) => ({ id, glyph, label: t(`details.sections.${id}`) })),
+  { id: "link", label: t("app.copyLink"), glyph: "link", ruled: true },
+]);
 const section = computed(() => sectionOf(route.query.details));
 
 /** Whether this visit opened the sheet, so closing it can go back to the page under it. */
@@ -77,17 +82,17 @@ onBeforeUnmount(() => clearTimeout(fading));
   <div class="app-page">
     <span v-if="app" class="aura" aria-hidden="true"><img :src="iconUrl(app)" alt=""></span>
     <div class="page">
-      <RouterLink class="crumb" to="/"><UiIcon name="chevron-left" :size="17" />All applets</RouterLink>
+      <RouterLink class="crumb" to="/"><UiIcon name="chevron-left" :size="17" />{{ t("common.allApplets") }}</RouterLink>
 
       <div v-if="error instanceof NotListed" class="notice">
-        <h1>Not in the store.</h1>
-        <p>There is no listed applet called {{ id }}.</p>
-        <RouterLink class="pill" to="/">See every applet</RouterLink>
+        <h1>{{ t("app.notListed") }}</h1>
+        <p>{{ t("app.notListedDetail", { id }) }}</p>
+        <RouterLink class="pill" to="/">{{ t("common.seeEvery") }}</RouterLink>
       </div>
       <div v-else-if="error" class="notice">
-        <h1>The store did not answer.</h1>
-        <p>This applet could not be read just now.</p>
-        <button class="pill" type="button" @click="reload">Try again</button>
+        <h1>{{ t("common.storeDown") }}</h1>
+        <p>{{ t("app.down") }}</p>
+        <button class="pill" type="button" @click="reload">{{ t("common.tryAgain") }}</button>
       </div>
 
       <div v-else-if="!app" class="hero" aria-busy="true">
@@ -108,11 +113,11 @@ onBeforeUnmount(() => clearTimeout(fading));
             <p class="summary">{{ app.summary }}</p>
             <RouterLink class="author" :to="authorPath(app.author)">
               {{ app.author }}<UiIcon v-if="app.official" name="verified" :size="16" />
-              <span v-if="app.official" class="visually-hidden">, the official publisher</span>
+              <span v-if="app.official" class="visually-hidden">{{ t("app.official") }}</span>
             </RouterLink>
             <div class="actions">
               <InstallButton :app="app" />
-              <MoreMenu label="More about this applet" :items="MENU" @choose="choose" />
+              <MenuButton :label="t('app.more')" :items="menu" @choose="choose" />
             </div>
           </div>
           <AppPlayer v-if="app.mock" :app="app" />
@@ -130,15 +135,15 @@ onBeforeUnmount(() => clearTimeout(fading));
 
         <section v-if="others.length" class="others">
           <div class="section-head">
-            <h2>More from {{ app.author }}</h2>
-            <RouterLink v-if="others.length > OTHERS" class="aside" :to="authorPath(app.author)">See all</RouterLink>
+            <h2>{{ t("app.moreFrom", { author: app.author }) }}</h2>
+            <RouterLink v-if="others.length > OTHERS" class="aside" :to="authorPath(app.author)">{{ t("app.seeAll") }}</RouterLink>
           </div>
           <AppGrid :apps="others.slice(0, OTHERS)" />
         </section>
 
         <DetailsSheet v-if="section" :app="app" :section="section" @close="shut" @show="show" />
         <Transition name="toast">
-          <p v-if="copied" class="toast" role="status"><UiIcon name="check" :size="16" />Link copied</p>
+          <p v-if="copied" class="toast" role="status"><UiIcon name="check" :size="16" />{{ t("app.linkCopied") }}</p>
         </Transition>
       </template>
     </div>

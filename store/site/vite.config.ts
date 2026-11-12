@@ -23,6 +23,15 @@ const playerFrame: Plugin = {
 
 export default defineConfig({
   plugins: [vue(), playerFrame],
+  // vue-i18n, without what the site does not use: its old API, the components
+  // it would register everywhere, its devtools. Its message compiler stays:
+  // the messages (src/i18n) are compiled in the page, without eval.
+  define: {
+    __VUE_I18N_LEGACY_API__: false,
+    __VUE_I18N_FULL_INSTALL__: false,
+    __INTLIFY_PROD_DEVTOOLS__: false,
+    __INTLIFY_DROP_MESSAGE_COMPILER__: false,
+  },
   build: { target: "es2022" },
   server: {
     proxy: { "/v1": { target: process.env.STORE ?? "https://applets.pocket.nexus", changeOrigin: true } },
