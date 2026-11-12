@@ -18,9 +18,6 @@ export default {
   },
   footer: {
     credit: "© 2026 {nexus}. Applets are built with {pocketjs}.",
-    more: "More",
-    source: "Source",
-    api: "API",
   },
   common: {
     view: "View",
