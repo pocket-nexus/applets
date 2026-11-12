@@ -1,0 +1,80 @@
+# The store (store/: the Worker and its website) goes to applets.pocket.nexus
+# when main changes it. A pull request that touches it gets the same checks and
+# no deploy.
+#
+# The deploy needs two repository secrets: CLOUDFLARE_API_TOKEN (Workers
+# Scripts, Workers Routes and D1, edit) and CLOUDFLARE_ACCOUNT_ID.
+#
+# Database migrations run first, then the Worker: whatever a merge carries in
+# store/migrations is applied to the live database with no one asked. Write a
+# migration so the Worker that is live can run on it (docs/applets.md).
+name: store
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "store/**"
+      - "lib/**"
+      - package.json
+      - bun.lock
+      - .bun-version
+      - .github/workflows/store.yml
+  pull_request:
+    paths:
+      - "store/**"
+      - "lib/**"
+      - package.json
+      - bun.lock
+      - .bun-version
+      - .github/workflows/store.yml
+  # to deploy main again by hand
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  WRANGLER_SEND_METRICS: "false"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - name: Type-check the website
+        run: bun run typecheck:site
+      # the Worker's rules, against `wrangler dev` with a local database; it builds the website too
+      - name: Test the store
+        run: bun test ./store/test
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: check
+    runs-on: ubuntu-latest
+    # one deploy at a time, in the order the merges came
+    concurrency:
+      group: store-deploy
+      cancel-in-progress: false
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    defaults:
+      run:
+        working-directory: store
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+        working-directory: .
+      - name: Apply database migrations
+        run: bunx wrangler d1 migrations apply omarchy-pocket-store --remote
+      # builds the website first (build in wrangler.jsonc)
+      - name: Deploy the Worker and the website
+        run: bunx wrangler deploy --message "main ${GITHUB_SHA::7}"
