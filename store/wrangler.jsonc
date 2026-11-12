@@ -1,13 +1,15 @@
 {
   // applets.pocket.nexus: the store of Pocket Applets. /v1/* is this Worker
-  // (src/index.ts); every other path is the website in site/, a page that
-  // draws what those routes answer. oma.pocket.nexus, the store's first name,
-  // still answers /v1/* for devices that ask there, and sends its pages to
+  // (src/index.ts); every other path is the website, a Vue app in site/ that
+  // draws what those routes answer. Its build (site/dist) is made before the
+  // Worker starts or deploys. oma.pocket.nexus, the store's first name, still
+  // answers /v1/* for devices that ask there, and sends its pages to
   // omapocket.org, so the Worker runs first for every path.
   "name": "omarchy-pocket-store",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
-  "assets": { "directory": "./site", "binding": "ASSETS", "run_worker_first": true, "not_found_handling": "single-page-application" },
+  "build": { "command": "bun run site:build", "cwd": "..", "watch_dir": "site/src" },
+  "assets": { "directory": "./site/dist", "binding": "ASSETS", "run_worker_first": true, "not_found_handling": "single-page-application" },
   "routes": [
     { "pattern": "applets.pocket.nexus", "custom_domain": true },
     { "pattern": "oma.pocket.nexus", "custom_domain": true }

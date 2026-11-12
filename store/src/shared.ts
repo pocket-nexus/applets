@@ -1,5 +1,8 @@
 // What the store, the device's daemon and `pocket-applet publish` agree on:
 // the bytes a publisher signs, and what a store reads out of a `.pocket`.
+import type { PackageDescription, PackageVariant } from "./wire.ts";
+
+export type { PackageDescription, PackageVariant, StoreEntry } from "./wire.ts";
 
 export const SIGNED_PREFIX = "omarchy-pocket-store/1";
 
@@ -61,21 +64,6 @@ const strings = (value: unknown): string[] => (Array.isArray(value) ? value.filt
 
 /** Section kinds by name (PocketJS contracts/spec/pocket-package.ts POCKET_SECTION). */
 export const SECTION_NAMES: Record<number, string> = { 1: "identity", 2: "plan", 3: "js", 4: "pak", 5: "cover", 6: "bytecode", 7: "hostInputs", 8: "workerJs", 9: "workerBytecode" };
-
-export interface PackageVariant {
-  target: string;
-  hostAbi: number;
-  /** SHA-256 of the build profile, hex */
-  profile: string;
-  /** FNV-1a64 of the sections' payloads, hex */
-  hash: string;
-  sections: { kind: number; name: string; bytes: number }[];
-}
-
-export interface PackageDescription {
-  manifest: Record<string, unknown>;
-  variants: PackageVariant[];
-}
 
 /** The bytes from the start of a package that hold its manifest and directory,
  *  or more than `head` holds. */

@@ -1,5 +1,5 @@
 // An applet in a browser on its sample data, before it is published: the store
-// website's player (store/site/play) framed by a page that posts it a package
+// website's player (store/site/public/play) framed by a page that posts it a package
 // built here and the applet's mock/ packed again on every load, so an edit to
 // the sample data shows on a reload. Each request the applet makes is listed
 // under the surface, with what answered it.
@@ -13,8 +13,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { packMock } from "../../tools/mock.ts";
 
-const PLAY = resolve(import.meta.dir, "..", "site", "play");
-/** The frame's policy, as store/site/_headers gives it on applets.pocket.nexus. */
+const PLAY = resolve(import.meta.dir, "..", "site", "public", "play");
+/** The frame's policy, as store/site/public/_headers gives it on applets.pocket.nexus. */
 export const PLAYER_POLICY = "default-src 'none'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; frame-ancestors 'self'";
 
 const PAGE = `<!doctype html>
