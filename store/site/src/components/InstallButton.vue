@@ -1,7 +1,8 @@
 <script setup lang="ts">
-// The way an app reaches a device: this button opens Pocket Hub, and Hub does
-// the rest. Until that hand-off opens (hub.ts) the button holds its place and
-// says it is not open yet.
+// The way an app reaches a device: this button is a link that opens Pocket
+// Hub on the app (hub.ts), and Hub does the rest. The browser follows it like
+// any link to another program, asking the visitor first, and tells the page
+// nothing of what came of it, so the page is only told that it was followed.
 import { computed } from "vue";
 import { useLanguage } from "../i18n/index.ts";
 import type { StoreApp } from "../api.ts";
@@ -9,19 +10,16 @@ import { hubInstallLink } from "../hub.ts";
 import UiIcon from "./UiIcon.vue";
 
 const props = defineProps<{ app: StoreApp }>();
+defineEmits<{ follow: [] }>();
 const link = computed(() => hubInstallLink(props.app));
 const { t } = useLanguage();
 </script>
 
 <template>
-  <a v-if="link" class="install" :href="link">
+  <a class="install" :href="link" @click="$emit('follow')">
     <UiIcon name="download" :size="22" />
-    <span class="words"><strong>{{ t("install.withHub") }}</strong></span>
+    <strong>{{ t("install.withHub") }}</strong>
   </a>
-  <button v-else class="install" type="button" disabled>
-    <UiIcon name="download" :size="22" />
-    <span class="words"><small>{{ t("install.notOpen") }}</small><strong>{{ t("install.withHub") }}</strong></span>
-  </button>
 </template>
 
 <style scoped>
@@ -34,38 +32,15 @@ const { t } = useLanguage();
   border-radius: 16px;
   background: var(--accent);
   color: var(--on-accent);
-  text-align: left;
   transition: background 0.15s, transform 0.15s var(--ease);
 }
 
-a.install:hover {
+.install:hover {
   background: var(--accent-hover);
 }
 
-a.install:active {
+.install:active {
   transform: scale(0.98);
-}
-
-.install:disabled {
-  background: var(--fill);
-  color: var(--text-2);
-}
-
-.install:disabled .glyph {
-  color: var(--text-3);
-}
-
-.words {
-  display: grid;
-}
-
-small {
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-3);
 }
 
 strong {

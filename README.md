@@ -69,7 +69,7 @@ bun run site:build                              # store/site/dist, which the Wor
 
 A merge to `main` that touches the store deploys it, migrations first (`.github/workflows/store.yml`); `main` takes changes through pull requests only.
 
-An app's page there has one way to install it, a button that opens Pocket Hub; that hand-off is not open yet, and the button says so. [docs/applets.md](docs/applets.md) has the store's routes, the website, the publishing rules, the sample data format and what an installed app can reach.
+An app's page there has one way to install it, a button that opens Pocket Hub on the app (a `pocket-hub://store/app/<id>` link); Hub installs it from there. [docs/applets.md](docs/applets.md) has the store's routes, the website, the publishing rules, the sample data format and what an installed app can reach.
 
 ## License
 

@@ -59,7 +59,7 @@ const zhCN: Wording = {
   },
   install: {
     withHub: "通过 Pocket Hub 安装",
-    notOpen: "暂未开放",
+    followed: "Pocket Hub 现在应该会打开并显示这个 Applet。如果没有反应，说明这台电脑上还没有 Pocket Hub：它是一款 Mac 应用，目前尚未发布。",
   },
   player: {
     firstScreen: "{title} 的首屏",
