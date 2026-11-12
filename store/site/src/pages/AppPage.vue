@@ -3,6 +3,11 @@
 // Nothing here says which devices it fits or what it asks of them: Pocket Hub
 // settles that at install, and the curious find it one level down, in the
 // details sheet the "more" menu opens (?details=<section>).
+//
+// The button opens Pocket Hub on the app (hub.ts). A browser does not say
+// whether a link to another program opened one, so once the visitor has
+// followed it the page says what should have happened, and what is missing
+// when nothing did.
 import { computed, onBeforeUnmount, ref } from "vue";
 import { useLanguage } from "../i18n/index.ts";
 import { RouterLink, useRoute, useRouter } from "vue-router";
@@ -63,6 +68,9 @@ function shut() {
   else void router.replace({ query: {} });
 }
 
+/** The visitor followed the button's link into Pocket Hub. */
+const followed = ref(false);
+
 const copied = ref(false);
 let fading: ReturnType<typeof setTimeout> | undefined;
 async function copyLink() {
@@ -116,10 +124,11 @@ onBeforeUnmount(() => clearTimeout(fading));
               <span v-if="app.official" class="visually-hidden">{{ t("app.official") }}</span>
             </RouterLink>
             <div class="actions">
-              <InstallButton :app="app" />
+              <InstallButton :app="app" @follow="followed = true" />
               <MenuButton :label="t('app.more')" :items="menu" @choose="choose" />
             </div>
           </div>
+          <p v-if="followed" class="followed" role="status">{{ t("install.followed") }}</p>
           <AppPlayer v-if="app.mock" :app="app" />
         </section>
 
@@ -273,6 +282,26 @@ h1 {
   display: flex;
   gap: 10px;
   margin-top: 30px;
+}
+
+/* What the page says once the button was followed goes in the row under the
+   screen, like what the player opens there: the name above it does not move. */
+.followed {
+  grid-area: 2 / 1;
+  align-self: start;
+  max-width: 31em;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+  text-wrap: pretty;
+  animation: followed-in 0.3s var(--ease) both;
+}
+
+@keyframes followed-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 
 .facts {
@@ -431,6 +460,13 @@ h1 {
   .actions :deep(.install) {
     flex: 1;
     justify-content: center;
+  }
+
+  /* one column: under the buttons, nearer to them than to the screen */
+  .followed {
+    grid-area: auto;
+    max-width: none;
+    margin: -14px 0 16px;
   }
 
   .ghost-title,

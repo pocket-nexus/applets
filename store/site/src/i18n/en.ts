@@ -61,7 +61,7 @@ export default {
   },
   install: {
     withHub: "Install with Pocket Hub",
-    notOpen: "Not open yet",
+    followed: "Pocket Hub should open on this applet now. If nothing happens, this computer has no Pocket Hub: it is a Mac app, and it is not released yet.",
   },
   player: {
     firstScreen: "{title}'s first screen",
