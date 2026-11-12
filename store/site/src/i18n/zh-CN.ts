@@ -16,9 +16,6 @@ const zhCN: Wording = {
   },
   footer: {
     credit: "© 2026 {nexus}。Applet 基于 {pocketjs} 构建。",
-    more: "更多",
-    source: "源代码",
-    api: "API",
   },
   common: {
     view: "查看",
