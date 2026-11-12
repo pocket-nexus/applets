@@ -27,6 +27,7 @@
 import {
   DIRECTORY_HEAD, HANDLE, HOST, ICON_MAX, ICON_SIDE, ID, OPEN_SERVICES, PACKAGE_MAX, RESERVED_HANDLE, RESERVED_ID, SUMMARY_MAX, TITLE_MAX,
   describePackage, packageFacts, sha256, signatureValid, versionOrder,
+  type StoreEntry,
 } from "./shared.ts";
 import { MOCK_MAX_BYTES, mockErrors } from "../../lib/mock.ts";
 
@@ -52,7 +53,7 @@ interface VersionRow {
   variants: string;
 }
 
-const entry = (row: VersionRow, official: string) => ({
+const entry = (row: VersionRow, official: string): StoreEntry => ({
   id: row.id,
   version: row.version,
   title: row.title,
@@ -69,7 +70,6 @@ const entry = (row: VersionRow, official: string) => ({
   signature: row.signature,
   created: row.created,
   target: row.target,
-  /** the targets of every variant: the devices it runs on */
   targets: variantsOf(row).map((v) => v.target),
   mock: row.mock || null,
 });

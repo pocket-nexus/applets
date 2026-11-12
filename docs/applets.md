@@ -4,7 +4,7 @@ An applet is a PocketJS package that declares the `applet` section (PocketJS `do
 
 ## The store
 
-`store/` is a Cloudflare Worker on `applets.pocket.nexus` with D1 (publishers, apps, versions) and R2 (packages, icons and sample data, named by SHA-256). `/v1/*` is the Worker's; every other path is the website in `store/site/`. The store's first host, `oma.pocket.nexus`, answers `/v1/*` for devices that still ask there and sends every page to omapocket.org with a 301.
+`store/` is a Cloudflare Worker on `applets.pocket.nexus` with D1 (publishers, apps, versions) and R2 (packages, icons and sample data, named by SHA-256). `/v1/*` is the Worker's; every other path is the website, a Vue app in `store/site/` whose build (`store/site/dist`) the Worker serves as its assets. The store's first host, `oma.pocket.nexus`, answers `/v1/*` for devices that still ask there and sends every page to omapocket.org with a 301.
 
 | Route | Answer |
 |---|---|
@@ -34,7 +34,21 @@ bun store/admin.ts backfill
 
 The store never runs what it holds, and it cannot read a package's source for review: `fetch` and running it on a device are the review. A publish is limited to 16 MiB, 20 a day from one address and 5 versions waiting per key. There is no account system: `dev.pocket-nexus.*` and author names beginning `pocket-nexus`, `omarchy`, `official`, `admin` or `store` belong to the official key.
 
-**An app's page shows the devices it runs on and what the package asks of them**, from its directory and manifest: a chip per variant (`rg-ds-plus` is Omarchy Pocket, `tab5-home` the M5Stack Tab5, `3ds-dev` the Nintendo 3DS) and how each installs it, the capabilities it needs and the ones it uses where a device has them, each with what it lets the app do, the surface it lays out for, its framework and applet API version, and for each build the target, host ABI, profile hash, build hash and the size of its bundle and assets.
+## The website
+
+`store/site/` is a Vue app (Vite, vue-router) that draws what `/v1/*` answers. `/` is the front of the store and, with `?q=`, a search; `/app/<id>` is one app; and `/author/<name>` is everything one publisher has listed. The store has no notion of a featured app: the front fans out up to five of the apps that have a still (below) as a hand of cards, by title, with a different one in front each day.
+
+```
+bun run site            # the pages with hot reload; /v1/* comes from the live store, or from STORE=http://127.0.0.1:8787
+bun run site:build      # store/site/dist
+bun run typecheck:site
+```
+
+`wrangler dev` and `wrangler deploy` in `store/` run the build themselves (`build` in `store/wrangler.jsonc`), so `store/site/dist` is never committed. What the build copies as it is lives in `store/site/public/`: the response headers (`_headers`), the favicons and the applet player.
+
+**An app's page says what the app is and nothing about which device it fits.** It has the icon, title, summary and publisher, a button that installs it, the app running on its sample data when it has some, and its version, size and date. **Installing is Pocket Hub's**: the button opens Hub, and Hub decides whether a device can run the app and installs it. That hand-off is not open yet, so `hubInstallLink` in `store/site/src/hub.ts` returns no link and the button reads "Not open yet". The page gives no install steps of its own.
+
+**What a package says about itself is one level down**, in a sheet the page's "more" menu opens (`?details=compatibility`, `access`, `versions` or `package`), read from `/v1/manifests` and `/v1/apps/<id>/versions` when it opens: the device of each variant (`rg-ds-plus` is Omarchy Pocket, `tab5-home` the M5Stack Tab5, `3ds-dev` the Nintendo 3DS) with its host ABI, the capabilities the app needs and the ones it uses where a device has them, each with what it lets the app do, and the surface it lays out for; the hosts and services it reaches; every listed version with its package to download; and the id, publisher key, package hash, framework, applet API version and, for each build, its sections' sizes, build hash and profile hash.
 
 ## Sample data, and an app in a browser
 
@@ -48,7 +62,7 @@ An applet's every request goes through its worker's channels (`lib/net.ts`, reco
 
 A request nothing answers fails as a connection error does on a device. `tools/check.ts` refuses sample data it cannot pack; the store takes 4 MiB packed. **Every sample is made up** (people, accounts, servers, channels, videos, podcasts, a house) except Weather's, which holds real Open-Meteo answers for six places, and Hacker News's, a snapshot of its public feeds. Maps draws a made-up island town from tiles generated for it, under the attribution the applet always shows.
 
-**The store's page runs a version that has sample data.** `store/play/player.ts` (built by `bun store/build-player.ts` into `store/site/play/`) runs the package's own bundle and pak for its `rg-ds-plus` variant on PocketJS's core in WebAssembly, draws the touch surface at 512 × 384 on a canvas at density 2, turns each pointer into a contact and a wheel or a two-finger trackpad swipe into one dragging contact that lifts once the wheel rests, and takes arrows, Enter and Escape as the D-pad, A and B. It runs in an iframe sandboxed with `allow-scripts` alone, under a policy with `connect-src 'none'` and `img-src 'none'` (`store/site/_headers`): the frame has no origin and no network, and the page posts it the package, the sample data and the core. The stand-in worker answers through a response ring of the variant's size, up to the variant's response limit, both read from the variant's plan (`planDevice` in `lib/mock.ts`). A failure inside the frame reaches the page with its message and the first lines of its stack. The page lists every request the app made and what answered it. The sample data is not signed: an editor reads it with the rest of a pending version, and it reaches nothing but the frame. `bun store/play/serve.ts <package> <applet dir>` serves the same player with the sample data packed again on each load, and `bun store/shots.ts` writes each applet's first screen in it as the store's stills.
+**The store's page runs a version that has sample data.** `store/play/player.ts` (built by `bun store/build-player.ts` into `store/site/public/play/`) runs the package's own bundle and pak for its `rg-ds-plus` variant on PocketJS's core in WebAssembly, draws the touch surface at 512 × 384 on a canvas at density 2, turns each pointer into a contact and a wheel or a two-finger trackpad swipe into one dragging contact that lifts once the wheel rests, and takes arrows, Enter and Escape as the D-pad, A and B. It runs in an iframe sandboxed with `allow-scripts` alone, under a policy with `connect-src 'none'` and `img-src 'none'` (`store/site/public/_headers`): the frame has no origin and no network, and the page posts it the package, the sample data and the core. The stand-in worker answers through a response ring of the variant's size, up to the variant's response limit, both read from the variant's plan (`planDevice` in `lib/mock.ts`). A failure inside the frame reaches the page with its message and the first lines of its stack. The page lists every request the app made and what answered it. The sample data is not signed: an editor reads it with the rest of a pending version, and it reaches nothing but the frame. `bun store/play/serve.ts <package> <applet dir>` serves the same player with the sample data packed again on each load, and `bun store/shots.ts` writes each applet's first screen in it as the store's stills (`store/site/src/assets/shots/<id>.webp`): an applet with a file there is shown with it, and may be featured on the front page.
 
 ## What an installed app can reach
 

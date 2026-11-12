@@ -1,6 +1,8 @@
 // bun store/shots.ts [app…] — the store's stills: each applet's first screen
-// in the player (store/play) on its sample data, as store/site/shots/<id>.webp
-// at 1024 x 768, the surface at density 2. The packages are dist/omarchy-pocket's
+// in the player (store/play) on its sample data, as
+// store/site/src/assets/shots/<id>.webp at 1024 x 768, the surface at density
+// 2. The website shows a still for every applet that has a file there
+// (store/site/src/shots.ts). The packages are dist/omarchy-pocket's
 // (bun tools/build.ts omarchy-pocket), the variant the website's player runs.
 // Needs Google Chrome.
 import { existsSync, readFileSync, rmSync } from "node:fs";
@@ -10,7 +12,7 @@ import { APPS, readContract } from "../tools/apps.ts";
 import { DIST, ROOT } from "../tools/paths.ts";
 
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const OUT = resolve(import.meta.dir, "site", "shots");
+const OUT = resolve(import.meta.dir, "site", "src", "assets", "shots");
 /** Seconds an applet takes to settle on its first screen in the player. */
 const SETTLE: Record<string, number> = { maps: 7, x: 5, youtube: 5, podcasts: 5, github: 5 };
 

@@ -3,7 +3,7 @@
 // makes answered from the version's sample data (lib/mock.ts): the bundle's
 // worker channels reach a stand-in worker in this page in place of the
 // applet's worker. It runs in a sandboxed frame with no origin and no network
-// (store/site/_headers): the page that frames it posts the package, the
+// (store/site/public/_headers): the page that frames it posts the package, the
 // sample data and the core, and hears back what the applet asked for.
 //
 //   parent → frame   {type: "boot", package, wasm, mock, size: [w, h], target}

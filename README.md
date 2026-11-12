@@ -45,7 +45,7 @@ The applets read the device from PocketJS (`@pocketjs/framework/applet`, `platfo
 bun run setup                                   # the pocketjs submodule, its packages, the runtime links
 bun tools/build.ts                              # every applet, for every device whose host contract is at hand
 bun tools/build.ts omarchy-pocket --apps weather
-bun run check                                   # typecheck, the applet rules, the sims, the store
+bun run check                                   # typecheck (the applets, the store's website), the applet rules, the sims, the store
 ```
 
 ### Icons
@@ -60,7 +60,14 @@ Packages go to `dist/<device>/<output>.pocket`, and `dist/packages/<output>.pock
 
 ## The store
 
-`store/` is the Cloudflare Worker and website at applets.pocket.nexus: D1 for publishers and versions, R2 for packages, icons and sample data. [docs/applets.md](docs/applets.md) has its routes, the publishing rules, the sample data format and what an installed app can reach.
+`store/` is the Cloudflare Worker and website at applets.pocket.nexus: D1 for publishers and versions, R2 for packages, icons and sample data. The website is a Vue app in `store/site/`:
+
+```sh
+bun run site                                    # the store's pages with hot reload, on the live store's data
+bun run site:build                              # store/site/dist, which the Worker serves
+```
+
+An app's page there has one way to install it, a button that opens Pocket Hub; that hand-off is not open yet, and the button says so. [docs/applets.md](docs/applets.md) has the store's routes, the website, the publishing rules, the sample data format and what an installed app can reach.
 
 ## License
 

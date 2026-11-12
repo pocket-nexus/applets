@@ -1,6 +1,8 @@
 // Builds the store's applet player (store/play/player.ts) as one classic
-// script, and copies PocketJS's core in WebAssembly beside it. The frame that
-// runs it has no origin, so neither may be a module or a fetch.
+// script, and copies PocketJS's core in WebAssembly beside it, into the
+// website's public files (store/site/public/play), which its build copies as
+// they are. The frame that runs it has no origin, so neither may be a module
+// or a fetch.
 //
 //   bun store/build-player.ts     (the core comes from pocketjs: bun tools/wasm.ts there)
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -8,7 +10,7 @@ import { join, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dir, "..");
 const POCKETJS = join(ROOT, "vendor", "pocketjs");
-const OUT = join(ROOT, "store", "site", "play");
+const OUT = join(ROOT, "store", "site", "public", "play");
 mkdirSync(OUT, { recursive: true });
 
 const built = await Bun.build({
