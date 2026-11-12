@@ -1,6 +1,10 @@
 // The words for what a package names by id: the devices its variants target,
 // the services and capabilities its manifest lists, the sections of a build.
-// They are read in an app's details sheet and nowhere else.
+// They are read in an app's details sheet and nowhere else. A device's name is
+// its own in every language; the rest are said in the visitor's (i18n/, under
+// labels).
+import en from "./i18n/en.ts";
+import { useLanguage } from "./i18n/index.ts";
 
 /** The device behind a variant's target id. */
 const DEVICES: Record<string, string> = {
@@ -21,55 +25,23 @@ export function byDevice<T>(items: readonly T[], target: (item: T) => string): T
   return [...items].sort((a, b) => rank(a) - rank(b));
 }
 
-/** What a companion service does for the app that lists it. */
-const SERVICES: Record<string, string> = {
-  store: "Keeps its own settings on the device",
-  glyphs: "Draws characters the package did not bake",
-  maps: "Fetches map tiles",
-  images: "Fetches images",
-  x: "Acts as your X account",
-  discord: "Acts as your Discord account",
-  homeassistant: "Acts on your Home Assistant",
-  github: "Acts as your GitHub account",
-  youtube: "Fetches video for you",
-  podcasts: "Fetches feeds and audio for you",
-  spotify: "Acts as your Spotify account",
-  weather: "Fetches the forecast",
-  hn: "Fetches Hacker News",
-};
+// An id comes out of a publisher's package, so whether the page has words for
+// it is asked of the list of ids it knows, never of the id as a path.
+const { services, capabilities, sections } = en.labels;
+const known = <T extends object>(table: T, id: string): id is Extract<keyof T, string> => Object.hasOwn(table, id);
 
-export const serviceRole = (service: string) => SERVICES[service] ?? "A service on the device";
-
-/** What each capability an applet may declare lets it do (PocketJS contracts/spec/applet.ts). */
-const CAPABILITIES: Record<string, string> = {
-  "text.glyphs.baked": "Text from glyphs baked into the package",
-  "text.glyphs.runtime": "Characters it did not bake, from the device's fonts",
-  "input.buttons": "The gamepad's buttons",
-  "input.analog.left": "The left stick",
-  "input.text": "A keyboard's typing",
-  "display.auxiliary": "A touch surface of its own",
-  "input.touch.auxiliary": "Touch on that surface",
-  "net.http": "HTTP requests, made by the device on its behalf",
-  "ui.physics": "The core's 2D physics",
-  "audio.pcm": "Sound it makes itself",
-  "media.playback": "Audio and video streams",
-  "data.fs": "Files of its own",
-  "system.agent": "The device's coding agent can operate it",
-};
-
-export const capabilityRole = (id: string) =>
-  CAPABILITIES[id] ?? (id.startsWith("camera.") ? "The camera" : "A capability this page does not describe yet");
-
-/** A build's sections by name (store/src/shared.ts SECTION_NAMES). */
-const SECTIONS: Record<string, string> = {
-  js: "Bundle",
-  pak: "Assets",
-  plan: "Build plan",
-  cover: "Cover",
-  bytecode: "Bytecode",
-  workerJs: "Worker bundle",
-  workerBytecode: "Worker bytecode",
-  hostInputs: "Host inputs",
-};
-
-export const sectionName = (name: string) => SECTIONS[name] ?? name;
+export function useLabels() {
+  const { t } = useLanguage();
+  return {
+    /** What a companion service does for the app that lists it. */
+    serviceRole: (id: string) => (known(services, id) ? t(`labels.services.${id}`) : t("labels.unknownService")),
+    /** What a capability an applet declares lets it do (PocketJS contracts/spec/applet.ts). */
+    capabilityRole(id: string) {
+      const key = id.replaceAll(".", "_");
+      if (known(capabilities, key)) return t(`labels.capabilities.${key}`);
+      return id.startsWith("camera.") ? t("labels.camera") : t("labels.unknownCapability");
+    },
+    /** A build's section by name (store/src/shared.ts SECTION_NAMES). */
+    sectionName: (name: string) => (known(sections, name) ? t(`labels.sections.${name}`) : name),
+  };
+}

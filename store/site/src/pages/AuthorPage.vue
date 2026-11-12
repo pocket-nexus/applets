@@ -1,41 +1,42 @@
 <script setup lang="ts">
 // Everything one publisher has in the store.
 import { computed } from "vue";
+import { useLanguage } from "../i18n/index.ts";
 import { RouterLink } from "vue-router";
 import { listApps } from "../api.ts";
-import { count } from "../format.ts";
 import { useLoad } from "../load.ts";
 import { usePage } from "../page.ts";
 import AppGrid from "../components/AppGrid.vue";
 import UiIcon from "../components/UiIcon.vue";
 
 const props = defineProps<{ name: string }>();
+const { t } = useLanguage();
 const { data: apps, error, reload } = useLoad(() => null, listApps);
 const theirs = computed(() => apps.value?.filter((app) => app.author === props.name));
 const official = computed(() => theirs.value?.some((app) => app.official) ?? false);
 
-usePage(() => props.name, () => `Pocket Applets published by ${props.name}.`);
+usePage(() => props.name, () => t("author.about", { name: props.name }));
 </script>
 
 <template>
   <div class="page">
-    <RouterLink class="crumb" to="/"><UiIcon name="chevron-left" :size="17" />All applets</RouterLink>
+    <RouterLink class="crumb" to="/"><UiIcon name="chevron-left" :size="17" />{{ t("common.allApplets") }}</RouterLink>
 
     <div v-if="error" class="notice">
-      <h1>The store did not answer.</h1>
-      <button class="pill" type="button" @click="reload">Try again</button>
+      <h1>{{ t("common.storeDown") }}</h1>
+      <button class="pill" type="button" @click="reload">{{ t("common.tryAgain") }}</button>
     </div>
     <div v-else-if="theirs && !theirs.length" class="notice">
-      <h1>Nobody here by that name.</h1>
-      <p>No listed applet was published by {{ name }}.</p>
-      <RouterLink class="pill" to="/">See every applet</RouterLink>
+      <h1>{{ t("author.nobody") }}</h1>
+      <p>{{ t("author.nobodyDetail", { name }) }}</p>
+      <RouterLink class="pill" to="/">{{ t("common.seeEvery") }}</RouterLink>
     </div>
     <template v-else>
       <header class="who">
         <span class="monogram" aria-hidden="true">{{ name.slice(0, 1) }}</span>
         <div>
           <h1>{{ name }}<UiIcon v-if="official" name="verified" :size="22" /></h1>
-          <p v-if="theirs">{{ official ? "Official publisher · " : "" }}{{ count(theirs.length, "applet") }}</p>
+          <p v-if="theirs">{{ official ? `${t("author.official")} · ` : "" }}{{ t("common.applets", theirs.length) }}</p>
         </div>
       </header>
       <AppGrid :apps="theirs" />

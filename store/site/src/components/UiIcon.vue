@@ -2,6 +2,7 @@
 // The page's own glyphs, drawn on a 24 px grid in the text's colour.
 const GLYPHS = {
   search: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
+  globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.7 2.3 2.7 14.7 0 17M12 3.5c-2.7 2.3-2.7 14.7 0 17"/>',
   "chevron-left": '<path d="m14.5 6-6 6 6 6"/>',
   "chevron-right": '<path d="m9.5 6 6 6-6 6"/>',
   more: '<g fill="currentColor" stroke="none"><circle cx="5.5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18.5" cy="12" r="1.7"/></g>',

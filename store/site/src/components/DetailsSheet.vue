@@ -4,10 +4,11 @@
 // versions, and the package itself. The package's manifest and the version
 // history are read when the sheet opens, not with the page.
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useLanguage } from "../i18n/index.ts";
 import { listVersions, packageName, packageUrl, readManifest, type StoreApp } from "../api.ts";
 import { SECTIONS, type Section } from "../details.ts";
-import { day, size } from "../format.ts";
-import { byDevice, capabilityRole, deviceName, sectionName, serviceRole } from "../labels.ts";
+import { size } from "../format.ts";
+import { byDevice, deviceName, useLabels } from "../labels.ts";
 import { useLoad } from "../load.ts";
 import AppIcon from "./AppIcon.vue";
 import UiIcon from "./UiIcon.vue";
@@ -27,6 +28,8 @@ interface Manifest {
 
 const props = defineProps<{ app: StoreApp; section: Section }>();
 const emit = defineEmits<{ close: []; show: [section: Section] }>();
+const { t, day } = useLanguage();
+const { serviceRole, capabilityRole, sectionName } = useLabels();
 
 const dialog = ref<HTMLDialogElement>();
 onMounted(() => {
@@ -56,77 +59,78 @@ const surface = computed(() => {
   const adaptive = manifest.value?.app?.surfaces?.auxiliary?.adaptive;
   const touch = manifest.value?.app?.modality?.touch ?? (needs.value.includes("input.touch.auxiliary") ? "auxiliary" : undefined);
   if (!adaptive && !touch) return "";
-  const kind = touch === "auxiliary" ? "A touch app on a surface of its own" : "It draws on the device's screen";
-  return adaptive?.min && adaptive.max ? `${kind}, laid out for ${adaptive.min.join(" × ")} up to ${adaptive.max.join(" × ")} points.` : `${kind}.`;
+  const kind = touch === "auxiliary" ? "surfaceTouch" : "surfaceScreen";
+  return adaptive?.min && adaptive.max
+    ? t(`details.compatibility.${kind}Sized`, { min: adaptive.min.join(" × "), max: adaptive.max.join(" × ") })
+    : t(`details.compatibility.${kind}`);
 });
 const facts = computed(() => [
-  ["Identifier", props.app.id],
-  ["Publisher", props.app.author],
-  ["Publisher key", props.app.key],
-  ["SHA-256", props.app.package],
-  ["Framework", manifest.value?.app?.framework],
-  ["Applet API", manifest.value?.applet?.version === undefined ? undefined : `v${manifest.value.applet.version}`],
+  [t("details.package.identifier"), props.app.id],
+  [t("details.package.publisher"), props.app.author],
+  [t("details.package.key"), props.app.key],
+  [t("details.package.sha"), props.app.package],
+  [t("details.package.framework"), manifest.value?.app?.framework],
+  [t("details.package.api"), manifest.value?.applet?.version === undefined ? undefined : `v${manifest.value.applet.version}`],
 ].filter((fact): fact is [string, string] => Boolean(fact[1])));
 </script>
 
 <template>
-  <dialog ref="dialog" class="sheet" :aria-label="`${app.title}: details`" @close="emit('close')" @click="pressed">
+  <dialog ref="dialog" class="sheet" :aria-label="t('details.label', { title: app.title })" @close="emit('close')" @click="pressed">
     <header>
       <AppIcon :app="app" :size="40" eager />
       <div class="title">
         <strong>{{ app.title }}</strong>
-        <span>Version {{ app.version }}</span>
+        <span>{{ t("common.version", { version: app.version }) }}</span>
       </div>
-      <button class="shut" type="button" aria-label="Close" @click="dialog?.close()"><UiIcon name="close" :size="18" /></button>
+      <button class="shut" type="button" :aria-label="t('common.close')" @click="dialog?.close()"><UiIcon name="close" :size="18" /></button>
     </header>
-    <div class="tabs" role="tablist" aria-label="Details">
+    <div class="tabs" role="tablist" :aria-label="t('details.tabs')">
       <button v-for="tab in SECTIONS" :id="`tab-${tab.id}`" :key="tab.id" type="button" role="tab" :aria-selected="tab.id === section" :aria-controls="`panel-${tab.id}`" @click="emit('show', tab.id)">
-        {{ tab.label }}
+        {{ t(`details.sections.${tab.id}`) }}
       </button>
     </div>
 
     <div :id="`panel-${section}`" :key="section" class="panel" role="tabpanel" :aria-labelledby="`tab-${section}`" tabindex="0">
       <template v-if="section === 'compatibility'">
-        <p class="lede">Pocket Hub checks your device when you install. This is what the package was built for, and what it asks of a device.</p>
-        <h3>Built for</h3>
+        <p class="lede">{{ t("details.compatibility.lede") }}</p>
+        <h3>{{ t("details.compatibility.builtFor") }}</h3>
         <ul class="rows">
           <li v-for="device in devices" :key="device.target">
             <span class="what">{{ device.name }}<code>{{ device.target }}</code></span>
-            <span v-if="device.abi !== undefined" class="value">Host ABI {{ device.abi }}</span>
+            <span v-if="device.abi !== undefined" class="value">{{ t("details.compatibility.hostAbi", { abi: device.abi }) }}</span>
           </li>
         </ul>
-        <p v-if="described.loading.value" class="quiet">Reading the package…</p>
-        <p v-else-if="described.error.value" class="quiet">The package could not be read. <button class="link" type="button" @click="described.reload()">Try again</button></p>
+        <p v-if="described.loading.value" class="quiet">{{ t("details.reading") }}</p>
+        <p v-else-if="described.error.value" class="quiet">{{ t("details.unreadable") }} <button class="link" type="button" @click="described.reload()">{{ t("common.tryAgain") }}</button></p>
         <template v-else>
           <template v-if="needs.length">
-            <h3>Needs</h3>
+            <h3>{{ t("details.compatibility.needs") }}</h3>
             <ul class="rows">
               <li v-for="id in needs" :key="id"><span class="what">{{ capabilityRole(id) }}<code>{{ id }}</code></span></li>
             </ul>
           </template>
           <template v-if="uses.length">
-            <h3>Uses where a device has it</h3>
+            <h3>{{ t("details.compatibility.uses") }}</h3>
             <ul class="rows">
               <li v-for="id in uses" :key="id"><span class="what">{{ capabilityRole(id) }}<code>{{ id }}</code></span></li>
             </ul>
           </template>
           <template v-if="surface">
-            <h3>Screen</h3>
+            <h3>{{ t("details.compatibility.screen") }}</h3>
             <p class="plain">{{ surface }}</p>
           </template>
         </template>
       </template>
 
       <template v-else-if="section === 'access'">
-        <p v-if="app.official" class="lede">Published by Pocket Nexus. It may use the services of the device it names here.</p>
-        <p v-else class="lede">It can reach only what it names here. It cannot see your accounts or another app's data.</p>
-        <h3>On the internet</h3>
+        <p class="lede">{{ app.official ? t("details.access.official") : t("details.access.community") }}</p>
+        <h3>{{ t("details.access.internet") }}</h3>
         <ul v-if="app.hosts.length" class="rows">
           <li v-for="host in app.hosts" :key="host"><code class="host">{{ host }}</code></li>
         </ul>
-        <p v-else class="plain">{{ app.official ? "It names no host of its own." : "It reaches nothing on the internet." }}</p>
+        <p v-else class="plain">{{ app.official ? t("details.access.noHostOfficial") : t("details.access.noHostCommunity") }}</p>
         <template v-if="app.services.length">
-          <h3>On the device</h3>
+          <h3>{{ t("details.access.device") }}</h3>
           <ul class="rows">
             <li v-for="service in app.services" :key="service"><span class="what">{{ serviceRole(service) }}<code>{{ service }}</code></span></li>
           </ul>
@@ -134,15 +138,15 @@ const facts = computed(() => [
       </template>
 
       <template v-else-if="section === 'versions'">
-        <p v-if="history.loading.value" class="quiet">Reading the versions…</p>
-        <p v-else-if="history.error.value" class="quiet">The store did not answer. <button class="link" type="button" @click="history.reload()">Try again</button></p>
+        <p v-if="history.loading.value" class="quiet">{{ t("details.versions.reading") }}</p>
+        <p v-else-if="history.error.value" class="quiet">{{ t("common.storeDown") }} <button class="link" type="button" @click="history.reload()">{{ t("common.tryAgain") }}</button></p>
         <ul v-else class="rows">
           <li v-for="(version, index) in history.data.value" :key="version.version">
             <span class="what">
-              <span>Version {{ version.version }}<small v-if="index === 0" class="tag">Latest</small></span>
+              <span>{{ t("common.version", { version: version.version }) }}<small v-if="index === 0" class="tag">{{ t("details.versions.latest") }}</small></span>
               <span class="sub">{{ day(version.created) }} · {{ size(version.bytes) }}</span>
             </span>
-            <a class="get" :href="packageUrl(version)" :download="packageName(version)" :aria-label="`Download version ${version.version}`" title="Download the package"><UiIcon name="download" :size="18" /></a>
+            <a class="get" :href="packageUrl(version)" :download="packageName(version)" :aria-label="t('details.versions.download', { version: version.version })" :title="t('details.versions.downloadTitle')"><UiIcon name="download" :size="18" /></a>
           </li>
         </ul>
       </template>
@@ -154,18 +158,18 @@ const facts = computed(() => [
             <dd>{{ value }}</dd>
           </template>
         </dl>
-        <p v-if="described.loading.value" class="quiet">Reading the package…</p>
+        <p v-if="described.loading.value" class="quiet">{{ t("details.reading") }}</p>
         <template v-for="build in builds" :key="build.target">
-          <h3>{{ deviceName(build.target) }} build</h3>
+          <h3>{{ t("details.package.build", { device: deviceName(build.target) }) }}</h3>
           <ul class="rows compact">
             <li v-for="part in build.sections.filter((part) => part.name !== 'identity')" :key="part.kind">
               <span class="what">{{ sectionName(part.name) }}</span><span class="value">{{ size(part.bytes) }}</span>
             </li>
-            <li><span class="what">Build hash</span><code class="value">{{ build.hash }}</code></li>
-            <li><span class="what">Profile</span><code class="value">{{ build.profile.slice(0, 16) }}</code></li>
+            <li><span class="what">{{ t("details.package.hash") }}</span><code class="value">{{ build.hash }}</code></li>
+            <li><span class="what">{{ t("details.package.profile") }}</span><code class="value">{{ build.profile.slice(0, 16) }}</code></li>
           </ul>
         </template>
-        <a class="pill download" :href="packageUrl(app)" :download="packageName(app)"><UiIcon name="download" :size="17" />Download the package · {{ size(app.bytes) }}</a>
+        <a class="pill download" :href="packageUrl(app)" :download="packageName(app)"><UiIcon name="download" :size="17" />{{ t("details.package.download", { size: size(app.bytes) }) }}</a>
       </template>
     </div>
   </dialog>

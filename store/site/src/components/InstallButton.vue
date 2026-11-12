@@ -3,22 +3,24 @@
 // the rest. Until that hand-off opens (hub.ts) the button holds its place and
 // says it is not open yet.
 import { computed } from "vue";
+import { useLanguage } from "../i18n/index.ts";
 import type { StoreApp } from "../api.ts";
 import { hubInstallLink } from "../hub.ts";
 import UiIcon from "./UiIcon.vue";
 
 const props = defineProps<{ app: StoreApp }>();
 const link = computed(() => hubInstallLink(props.app));
+const { t } = useLanguage();
 </script>
 
 <template>
   <a v-if="link" class="install" :href="link">
     <UiIcon name="download" :size="22" />
-    <span class="words"><strong>Install with Pocket Hub</strong></span>
+    <span class="words"><strong>{{ t("install.withHub") }}</strong></span>
   </a>
   <button v-else class="install" type="button" disabled>
     <UiIcon name="download" :size="22" />
-    <span class="words"><small>Not open yet</small><strong>Install with Pocket Hub</strong></span>
+    <span class="words"><small>{{ t("install.notOpen") }}</small><strong>{{ t("install.withHub") }}</strong></span>
   </button>
 </template>
 

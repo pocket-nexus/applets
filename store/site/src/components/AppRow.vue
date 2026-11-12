@@ -1,10 +1,12 @@
 <script setup lang="ts">
 // An app in a list: its icon, what it is called, what it does, and the way in.
+import { useLanguage } from "../i18n/index.ts";
 import { RouterLink } from "vue-router";
 import { appPath, type StoreApp } from "../api.ts";
 import AppIcon from "./AppIcon.vue";
 
 defineProps<{ app: StoreApp }>();
+const { t } = useLanguage();
 </script>
 
 <template>
@@ -15,7 +17,7 @@ defineProps<{ app: StoreApp }>();
         <strong>{{ app.title }}</strong>
         <span class="summary">{{ app.summary }}</span>
       </span>
-      <span class="pill" aria-hidden="true">View</span>
+      <span class="pill" aria-hidden="true">{{ t("common.view") }}</span>
     </span>
   </RouterLink>
 </template>

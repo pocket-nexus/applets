@@ -1,10 +1,23 @@
+<script setup lang="ts">
+import { Translation } from "vue-i18n";
+import { useLanguage, type MessageKey } from "../i18n/index.ts";
+
+const { t } = useLanguage();
+/** the one message drawn by its key, so the key is checked here */
+const CREDIT: MessageKey = "footer.credit";
+</script>
+
 <template>
   <footer>
     <div class="inner">
-      <p>© 2026 <a href="https://pocket.nexus/">Pocket Nexus</a>. Applets are built with <a href="https://pocketjs.dev/">PocketJS</a>.</p>
-      <nav aria-label="More">
-        <a href="https://github.com/pocket-nexus/applets">Source</a>
-        <a href="/v1/apps">API</a>
+      <!-- the sentence is the language's; the two names in it are links wherever it puts them -->
+      <Translation :keypath="CREDIT" tag="p" scope="global">
+        <template #nexus><a href="https://pocket.nexus/">Pocket Nexus</a></template>
+        <template #pocketjs><a href="https://pocketjs.dev/">PocketJS</a></template>
+      </Translation>
+      <nav :aria-label="t('footer.more')">
+        <a href="https://github.com/pocket-nexus/applets">{{ t("footer.source") }}</a>
+        <a href="/v1/apps">{{ t("footer.api") }}</a>
       </nav>
     </div>
   </footer>
