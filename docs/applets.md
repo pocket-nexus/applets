@@ -52,6 +52,23 @@ bun run typecheck:site
 
 **What a package says about itself is one level down**, in a sheet the page's "more" menu opens (`?details=compatibility`, `access`, `versions` or `package`), read from `/v1/manifests` and `/v1/apps/<id>/versions` when it opens: the device of each variant (`rg-ds-plus` is Omarchy Pocket, `tab5-home` the M5Stack Tab5, `3ds-dev` the Nintendo 3DS) with its host ABI, the capabilities the app needs and the ones it uses where a device has them, each with what it lets the app do, and the surface it lays out for; the hosts and services it reaches; every listed version with its package to download; and the id, publisher key, package hash, framework, applet API version and, for each build, its sections' sizes, build hash and profile hash.
 
+## Deploying
+
+**A merge to `main` that touches the store deploys it.** `.github/workflows/store.yml` runs on a change under `store/` or `lib/` (the Worker reads `lib/mock.ts`) and on the lockfile: it type-checks the website, runs the store's tests, applies whatever migrations in `store/migrations` the live database has not had, and deploys the Worker with its website. A pull request gets the checks and no deploy, and `main` takes changes through pull requests only, so nothing is deployed that was not one. The deploy needs the repository secrets `CLOUDFLARE_API_TOKEN` (Workers Scripts, Workers Routes and D1, edit) and `CLOUDFLARE_ACCOUNT_ID`; the workflow can be run by hand to deploy `main` again.
+
+**Migrations run before the Worker, with no one asked.** Between the two, the Worker that was live runs on the new tables, so a migration that travels with code should only add (a table, an index, a column with a default): the old Worker does not see what it does not ask for. One that takes something away (a `DROP`, a rename) breaks the live Worker for as long as the deploy takes if that Worker still uses it, so it goes in a later pull request than the code that stopped using it. Nothing checks this; it is the author's to get right.
+
+**When a deploy goes wrong it is put right by hand**, from a checkout with `wrangler` signed in (`CLOUDFLARE_ACCOUNT_ID` set when the sign-in reaches more than one account):
+
+```
+bunx wrangler deployments list                      # in store/: what is live, and what was before
+bunx wrangler rollback <version-id>                 # the Worker and its website back to that version
+bunx wrangler d1 time-travel info omarchy-pocket-store      # the database's bookmark now
+bunx wrangler d1 time-travel restore omarchy-pocket-store --bookmark=<bookmark>
+```
+
+A rollback does not undo a migration, and a restore takes the whole database back, what was published since included.
+
 ## Sample data, and an app in a browser
 
 An applet's every request goes through its worker's channels (`lib/net.ts`, records in `lib/net-wire.ts`), so one stand-in there runs it with no device, no worker and no network: `createMockWorker` in `lib/mock.ts` is the channel bridge a realm finds on `globalThis.__pocketWorkerChannels`, and it answers from **sample data** with the worker's rules (two requests at a time, the rest waiting; a head, the body in records and an end; one look at the response ring takes at most eight records). An applet keeps its sample data in `mock/mock.json` (format in `tools/mock.ts`):
