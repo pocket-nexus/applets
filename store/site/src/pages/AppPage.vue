@@ -4,16 +4,17 @@
 // settles that at install, and the curious find it one level down, in the
 // details sheet the "more" menu opens (?details=<section>).
 //
-// The button opens Pocket Hub on the app (hub.ts). A browser does not say
-// whether a link to another program opened one, so once the visitor has
-// followed it the page says what should have happened, and what is missing
-// when nothing did.
-import { computed, onBeforeUnmount, ref } from "vue";
+// The button opens Pocket Hub on the app (hub.ts). When nothing took its link,
+// as on a computer without Hub, the page asks whether the visitor has Hub yet
+// and offers Hub's download page, where the visitor gets Hub and comes back to
+// press the button again.
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { useLanguage } from "../i18n/index.ts";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { NotListed, authorPath, findApp, iconUrl, listApps } from "../api.ts";
 import { SECTIONS, sectionOf, type Section } from "../details.ts";
 import { size } from "../format.ts";
+import { HUB_DOWNLOAD } from "../hub.ts";
 import { useLoad } from "../load.ts";
 import { usePage } from "../page.ts";
 import AppGrid from "../components/AppGrid.vue";
@@ -68,8 +69,9 @@ function shut() {
   else void router.replace({ query: {} });
 }
 
-/** The visitor followed the button's link into Pocket Hub. */
-const followed = ref(false);
+/** The visitor followed the button's link, and nothing took it into Pocket Hub. */
+const missing = ref(false);
+watch(() => props.id, () => (missing.value = false));
 
 const copied = ref(false);
 let fading: ReturnType<typeof setTimeout> | undefined;
@@ -124,11 +126,14 @@ onBeforeUnmount(() => clearTimeout(fading));
               <span v-if="app.official" class="visually-hidden">{{ t("app.official") }}</span>
             </RouterLink>
             <div class="actions">
-              <InstallButton :app="app" @follow="followed = true" />
+              <InstallButton :app="app" @follow="missing = false" @missing="missing = true" />
               <MenuButton :label="t('app.more')" :items="menu" @choose="choose" />
             </div>
           </div>
-          <p v-if="followed" class="followed" role="status">{{ t("install.followed") }}</p>
+          <div v-if="missing" class="missing" role="status">
+            <p><strong>{{ t("install.missing.title") }}</strong>{{ t("install.missing.detail") }}</p>
+            <a class="pill" :href="HUB_DOWNLOAD">{{ t("install.missing.get") }}<UiIcon name="external" :size="16" /></a>
+          </div>
           <AppPlayer v-if="app.mock" :app="app" />
         </section>
 
@@ -284,20 +289,35 @@ h1 {
   margin-top: 30px;
 }
 
-/* What the page says once the button was followed goes in the row under the
+/* What the page says when Pocket Hub did not open goes in the row under the
    screen, like what the player opens there: the name above it does not move. */
-.followed {
+.missing {
   grid-area: 2 / 1;
   align-self: start;
+  display: grid;
+  justify-items: start;
+  gap: 12px;
   max-width: 31em;
+  animation: missing-in 0.3s var(--ease) both;
+}
+
+.missing p {
   font-size: 13.5px;
   line-height: 1.45;
   color: var(--text-2);
   text-wrap: pretty;
-  animation: followed-in 0.3s var(--ease) both;
 }
 
-@keyframes followed-in {
+/* the question on a line of its own, the answer under it */
+.missing strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+@keyframes missing-in {
   from {
     opacity: 0;
     transform: translateY(-4px);
@@ -463,7 +483,7 @@ h1 {
   }
 
   /* one column: under the buttons, nearer to them than to the screen */
-  .followed {
+  .missing {
     grid-area: auto;
     max-width: none;
     margin: -14px 0 16px;
