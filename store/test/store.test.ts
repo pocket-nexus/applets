@@ -163,7 +163,7 @@ test("the website's routes answer listed versions only", async () => {
   expect((await fetch(`${BASE}/v1/apps/no.such.app/versions`)).status).toBe(404);
 });
 
-test("a listed package's manifest and directory, and a version's sample data", async () => {
+test("a listed package's manifest and directory, its details, and a version's sample data", async () => {
   const sample = { mock: 1, store: { notes: { count: 2 } }, routes: [{ url: "https://example.com/*", text: "hi" }] };
   expect((await publish(official, manifest("dev.pocket-nexus.sampled", "1.0.0", { engine: { capabilities: { requires: ["net.http"] } } }), { author: "pocket-nexus", mock: { routes: "no" } })).status).toBe(400);
   const listed = await publish(official, manifest("dev.pocket-nexus.sampled", "1.0.0", { engine: { capabilities: { requires: ["net.http"] } } }), { author: "pocket-nexus", mock: sample });
@@ -171,6 +171,27 @@ test("a listed package's manifest and directory, and a version's sample data", a
   const described = (await (await fetch(`${BASE}/v1/manifests/${listed.hash}`)).json()) as { manifest: { engine: unknown }; variants: { target: string; hostAbi: number }[] };
   expect(described.manifest.engine).toEqual({ capabilities: { requires: ["net.http"] } });
   expect(described.variants[0]).toMatchObject({ target: "omarchy-pocket", hostAbi: 12 });
+
+  // the same package's details, read out of that manifest and directory by the store
+  const details = await fetch(`${BASE}/v1/details/${listed.hash}`);
+  expect(details.status).toBe(200);
+  expect(details.headers.get("access-control-allow-origin")).toBe("*");
+  expect(details.headers.get("cache-control")).not.toContain("immutable");
+  expect(await details.json()).toEqual({
+    devices: [{ target: "omarchy-pocket", name: "omarchy-pocket", build: described.variants[0] }],
+    needs: ["net.http"],
+    uses: [],
+    // every package these tests publish is an applet of API version 1
+    api: 1,
+  });
+  expect((await fetch(`${BASE}/v1/details/not-a-hash`)).status).toBe(400);
+  expect((await fetch(`${BASE}/v1/details/${"0".repeat(64)}`)).status).toBe(404);
+  // and by the app's id, for whoever has no listing of it: the same answer
+  const byId = () => fetch(`${BASE}/v1/apps/dev.pocket-nexus.sampled/details`);
+  const ofPackage = async (hash: string) => (await fetch(`${BASE}/v1/details/${hash}`)).json();
+  expect(await (await byId()).json()).toEqual(await ofPackage(listed.hash));
+  expect((await byId()).headers.get("access-control-allow-origin")).toBe("*");
+  expect((await fetch(`${BASE}/v1/apps/no.such.app/details`)).status).toBe(404);
   const entry = (await (await fetch(`${BASE}/v1/apps/dev.pocket-nexus.sampled`)).json()) as { mock: string | null; target: string };
   expect(entry.target).toBe("omarchy-pocket");
   expect(entry.mock).toMatch(/^[0-9a-f]{64}$/);
@@ -190,4 +211,13 @@ test("a listed package's manifest and directory, and a version's sample data", a
   // nothing unlisted is described
   const pending = await publish(newKey(), manifest("io.github.someone.thing"), { author: "someone" });
   expect((await fetch(`${BASE}/v1/manifests/${pending.hash}`)).status).toBe(404);
+  expect((await fetch(`${BASE}/v1/details/${pending.hash}`)).status).toBe(404);
+  expect((await fetch(`${BASE}/v1/apps/io.github.someone.thing/details`)).status).toBe(404);
+
+  // an id names the app's newest listed version; a package's hash names that version for good
+  const newer = await publish(official, manifest("dev.pocket-nexus.sampled", "1.1.0", { engine: { capabilities: { requires: ["net.http", "input.buttons"] } } }), { author: "pocket-nexus" });
+  expect(newer.status).toBe(201);
+  expect(((await (await byId()).json()) as { needs: string[] }).needs).toEqual(["net.http", "input.buttons"]);
+  expect(await (await byId()).json()).toEqual(await ofPackage(newer.hash));
+  expect(((await ofPackage(listed.hash)) as { needs: string[] }).needs).toEqual(["net.http"]);
 });

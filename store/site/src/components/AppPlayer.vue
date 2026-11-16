@@ -6,7 +6,7 @@
 // answered from the sample data, so nothing here reaches a device or an account.
 import { onBeforeUnmount, ref } from "vue";
 import { useLanguage } from "../i18n/index.ts";
-import { packageUrl, type StoreApp } from "../api.ts";
+import { readMock, readPackage, type StoreApp } from "../api.ts";
 import { shotOf } from "../shots.ts";
 import AmbientBackdrop from "./AmbientBackdrop.vue";
 import AppIcon from "./AppIcon.vue";
@@ -50,7 +50,8 @@ const total = ref(0);
 const listed = ref(false);
 const shot = shotOf(props.app.id);
 
-const bytes = (url: string) => fetch(url).then((answer) => (answer.ok ? answer.arrayBuffer() : Promise.reject(new Error(String(answer.status)))));
+/** PocketJS's core, which the site serves beside the player's frame. */
+const core = () => fetch("/play/pocketjs.wasm").then((answer) => (answer.ok ? answer.arrayBuffer() : Promise.reject(new Error(String(answer.status)))));
 
 function fail(why: { stopped?: string } = {}) {
   problem.value = why;
@@ -63,11 +64,7 @@ async function hear(event: MessageEvent<Heard | null>) {
   const heard = event.data ?? {};
   if (heard.type === "ready") {
     try {
-      const [pkg, wasm, mock] = await Promise.all([
-        bytes(packageUrl(props.app)),
-        bytes("/play/pocketjs.wasm"),
-        fetch(`/v1/mocks/${props.app.mock}`).then((answer) => (answer.ok ? answer.json() : Promise.reject(new Error(String(answer.status))))),
-      ]);
+      const [pkg, wasm, mock] = await Promise.all([readPackage(props.app), core(), readMock(props.app)]);
       // stopped, or started again, while they loaded
       if (frame.value?.contentWindow !== to) return;
       to.postMessage({ type: "boot", package: pkg, wasm, mock, size: SURFACE, target: TARGET }, "*", [pkg, wasm]);

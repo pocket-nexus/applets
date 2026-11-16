@@ -1,30 +1,17 @@
 <script setup lang="ts">
-// An app's details, one level under its page (details.ts): the devices its
-// package was built for and what it asks of them, what it reaches, its
-// versions, and the package itself. The package's manifest and the version
-// history are read when the sheet opens, not with the page.
+// An app's details, one level under its page: the devices its package was
+// built for and what it asks of them, what it reaches, its versions, and the
+// package itself. The sheet only draws them: what they are comes from
+// details.ts, which reads the package and the version history when the sheet
+// opens, not with the page.
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useLanguage } from "../i18n/index.ts";
-import { listVersions, packageName, packageUrl, readManifest, type StoreApp } from "../api.ts";
-import { SECTIONS, type Section } from "../details.ts";
+import { packageName, packageUrl, type StoreApp } from "../api.ts";
+import { SECTIONS, useDetails, useVersions, type Section } from "../details.ts";
 import { size } from "../format.ts";
-import { byDevice, deviceName, useLabels } from "../labels.ts";
-import { useLoad } from "../load.ts";
+import { useLabels } from "../labels.ts";
 import AppIcon from "./AppIcon.vue";
 import UiIcon from "./UiIcon.vue";
-
-/** The parts of a manifest this sheet reads (PocketJS contracts/spec). */
-interface Manifest {
-  name?: string;
-  version?: string;
-  app?: {
-    framework?: string;
-    modality?: { touch?: string };
-    surfaces?: { auxiliary?: { adaptive?: { min?: number[]; max?: number[] } } };
-  };
-  applet?: { version?: number };
-  engine?: { capabilities?: { requires?: string[]; enhances?: string[] } };
-}
 
 const props = defineProps<{ app: StoreApp; section: Section }>();
 const emit = defineEmits<{ close: []; show: [section: Section] }>();
@@ -45,23 +32,16 @@ function pressed(event: MouseEvent) {
   if (event.target === dialog.value) dialog.value?.close();
 }
 
-const described = useLoad(() => props.app.package, readManifest);
-const history = useLoad(() => props.app.id, listVersions);
+const { details, loading, error, reload } = useDetails(() => props.app);
+const history = useVersions(() => props.app);
 
-const manifest = computed(() => described.data.value?.manifest as Manifest | undefined);
-const builds = computed(() => byDevice(described.data.value?.variants ?? [], (variant) => variant.target));
-const devices = computed(() => byDevice(props.app.targets.length ? props.app.targets : [props.app.target], (target) => target)
-  .map((target) => ({ target, name: deviceName(target), abi: builds.value.find((build) => build.target === target)?.hostAbi })));
-const needs = computed(() => manifest.value?.engine?.capabilities?.requires ?? []);
-const uses = computed(() => manifest.value?.engine?.capabilities?.enhances ?? []);
 /** The surface the app lays itself out for, in a sentence. */
 const surface = computed(() => {
-  const adaptive = manifest.value?.app?.surfaces?.auxiliary?.adaptive;
-  const touch = manifest.value?.app?.modality?.touch ?? (needs.value.includes("input.touch.auxiliary") ? "auxiliary" : undefined);
-  if (!adaptive && !touch) return "";
-  const kind = touch === "auxiliary" ? "surfaceTouch" : "surfaceScreen";
-  return adaptive?.min && adaptive.max
-    ? t(`details.compatibility.${kind}Sized`, { min: adaptive.min.join(" × "), max: adaptive.max.join(" × ") })
+  const named = details.value.surface;
+  if (!named) return "";
+  const kind = named.touch ? "surfaceTouch" : "surfaceScreen";
+  return named.size
+    ? t(`details.compatibility.${kind}Sized`, { min: named.size.min.join(" × "), max: named.size.max.join(" × ") })
     : t(`details.compatibility.${kind}`);
 });
 const facts = computed(() => [
@@ -69,8 +49,8 @@ const facts = computed(() => [
   [t("details.package.publisher"), props.app.author],
   [t("details.package.key"), props.app.key],
   [t("details.package.sha"), props.app.package],
-  [t("details.package.framework"), manifest.value?.app?.framework],
-  [t("details.package.api"), manifest.value?.applet?.version === undefined ? undefined : `v${manifest.value.applet.version}`],
+  [t("details.package.framework"), details.value.framework],
+  [t("details.package.api"), details.value.api === undefined ? undefined : `v${details.value.api}`],
 ].filter((fact): fact is [string, string] => Boolean(fact[1])));
 </script>
 
@@ -95,24 +75,24 @@ const facts = computed(() => [
         <p class="lede">{{ t("details.compatibility.lede") }}</p>
         <h3>{{ t("details.compatibility.builtFor") }}</h3>
         <ul class="rows">
-          <li v-for="device in devices" :key="device.target">
+          <li v-for="device in details.devices" :key="device.target">
             <span class="what">{{ device.name }}<code>{{ device.target }}</code></span>
-            <span v-if="device.abi !== undefined" class="value">{{ t("details.compatibility.hostAbi", { abi: device.abi }) }}</span>
+            <span v-if="device.build" class="value">{{ t("details.compatibility.hostAbi", { abi: device.build.hostAbi }) }}</span>
           </li>
         </ul>
-        <p v-if="described.loading.value" class="quiet">{{ t("details.reading") }}</p>
-        <p v-else-if="described.error.value" class="quiet">{{ t("details.unreadable") }} <button class="link" type="button" @click="described.reload()">{{ t("common.tryAgain") }}</button></p>
+        <p v-if="loading" class="quiet">{{ t("details.reading") }}</p>
+        <p v-else-if="error" class="quiet">{{ t("details.unreadable") }} <button class="link" type="button" @click="reload()">{{ t("common.tryAgain") }}</button></p>
         <template v-else>
-          <template v-if="needs.length">
+          <template v-if="details.needs.length">
             <h3>{{ t("details.compatibility.needs") }}</h3>
             <ul class="rows">
-              <li v-for="id in needs" :key="id"><span class="what">{{ capabilityRole(id) }}<code>{{ id }}</code></span></li>
+              <li v-for="id in details.needs" :key="id"><span class="what">{{ capabilityRole(id) }}<code>{{ id }}</code></span></li>
             </ul>
           </template>
-          <template v-if="uses.length">
+          <template v-if="details.uses.length">
             <h3>{{ t("details.compatibility.uses") }}</h3>
             <ul class="rows">
-              <li v-for="id in uses" :key="id"><span class="what">{{ capabilityRole(id) }}<code>{{ id }}</code></span></li>
+              <li v-for="id in details.uses" :key="id"><span class="what">{{ capabilityRole(id) }}<code>{{ id }}</code></span></li>
             </ul>
           </template>
           <template v-if="surface">
@@ -158,16 +138,18 @@ const facts = computed(() => [
             <dd>{{ value }}</dd>
           </template>
         </dl>
-        <p v-if="described.loading.value" class="quiet">{{ t("details.reading") }}</p>
-        <template v-for="build in builds" :key="build.target">
-          <h3>{{ t("details.package.build", { device: deviceName(build.target) }) }}</h3>
-          <ul class="rows compact">
-            <li v-for="part in build.sections.filter((part) => part.name !== 'identity')" :key="part.kind">
-              <span class="what">{{ sectionName(part.name) }}</span><span class="value">{{ size(part.bytes) }}</span>
-            </li>
-            <li><span class="what">{{ t("details.package.hash") }}</span><code class="value">{{ build.hash }}</code></li>
-            <li><span class="what">{{ t("details.package.profile") }}</span><code class="value">{{ build.profile.slice(0, 16) }}</code></li>
-          </ul>
+        <p v-if="loading" class="quiet">{{ t("details.reading") }}</p>
+        <template v-for="{ target, name, build } in details.devices" :key="target">
+          <template v-if="build">
+            <h3>{{ t("details.package.build", { device: name }) }}</h3>
+            <ul class="rows compact">
+              <li v-for="part in build.sections.filter((part) => part.name !== 'identity')" :key="part.kind">
+                <span class="what">{{ sectionName(part.name) }}</span><span class="value">{{ size(part.bytes) }}</span>
+              </li>
+              <li><span class="what">{{ t("details.package.hash") }}</span><code class="value">{{ build.hash }}</code></li>
+              <li><span class="what">{{ t("details.package.profile") }}</span><code class="value">{{ build.profile.slice(0, 16) }}</code></li>
+            </ul>
+          </template>
         </template>
         <a class="pill download" :href="packageUrl(app)" :download="packageName(app)"><UiIcon name="download" :size="17" />{{ t("details.package.download", { size: size(app.bytes) }) }}</a>
       </template>

@@ -6,8 +6,10 @@
 //   GET  /v1/apps                    the newest listed version of every app, for the website
 //   GET  /v1/apps/<id>               one app's newest listed version
 //   GET  /v1/apps/<id>/versions      every listed version of one app, newest first
+//   GET  /v1/apps/<id>/details       the details of one app's newest listed version (/v1/details of its package)
 //   GET  /v1/packages/<sha256>       a listed version's package
 //   GET  /v1/manifests/<sha256>      a listed package's manifest and directory (variants, sections)
+//   GET  /v1/details/<sha256>        a listed package's details, read out of its manifest and directory
 //   GET  /v1/icons/<sha256>          a listed version's 128 px PNG
 //   GET  /v1/mocks/<sha256>          a listed version's sample data, for the website's player
 //   POST /v1/publish                 form: package, icon, key, signature, author, summary[, mock]
@@ -27,8 +29,9 @@
 import {
   DIRECTORY_HEAD, HANDLE, HOST, ICON_MAX, ICON_SIDE, ID, OPEN_SERVICES, PACKAGE_MAX, RESERVED_HANDLE, RESERVED_ID, SUMMARY_MAX, TITLE_MAX,
   describePackage, packageFacts, sha256, signatureValid, versionOrder,
-  type StoreEntry,
+  type PackageDescription, type StoreEntry,
 } from "./shared.ts";
+import { detailsOf } from "./details.ts";
 import { MOCK_MAX_BYTES, mockErrors } from "../../lib/mock.ts";
 
 export interface Env {
@@ -148,16 +151,38 @@ async function packageHead(env: Env, hash: string): Promise<Uint8Array | null> {
   return null;
 }
 
-/** A listed package's manifest and its directory: what it asks of a device. */
-async function manifest(env: Env, hash: string): Promise<Response> {
+/** A listed package's manifest and directory, or the refusal to answer with. */
+async function packageDescription(env: Env, hash: string): Promise<PackageDescription | Response> {
   if (!/^[0-9a-f]{64}$/.test(hash)) return refuse(400, "a package is named by its SHA-256");
   const listed = await env.DB.prepare("SELECT 1 FROM versions WHERE package = ?1 AND state = 'listed' LIMIT 1").bind(hash).first();
   if (!listed) return refuse(404, "no listed version has that package");
   const head = await packageHead(env, hash);
   if (!head) return refuse(404, "the package is missing");
-  const described = describePackage(head);
-  if (typeof described === "string" || "more" in described) return refuse(500, typeof described === "string" ? described : "the package's directory is too long");
-  return json(described, 200, { "cache-control": IMMUTABLE });
+  const read = describePackage(head);
+  if (typeof read === "string" || "more" in read) return refuse(500, typeof read === "string" ? read : "the package's directory is too long");
+  return read;
+}
+
+/** A listed package's manifest and its directory, as the package holds them. */
+async function manifest(env: Env, hash: string): Promise<Response> {
+  const read = await packageDescription(env, hash);
+  return read instanceof Response ? read : json(read, 200, { "cache-control": IMMUTABLE });
+}
+
+/** A listed package's details: what its manifest and directory say about the
+ *  app, read out (details.ts) for whoever shows it. The package never changes
+ *  but what the store reads out of one does (a new device gets its name), so
+ *  this is not kept for good as the manifest is. */
+async function details(env: Env, hash: string): Promise<Response> {
+  const read = await packageDescription(env, hash);
+  return read instanceof Response ? read : json(detailsOf(read), 200, { "cache-control": "public, max-age=60" });
+}
+
+/** The details of one app's newest listed version: what /v1/details answers
+ *  for that version's package, for whoever has the app's id and not its listing. */
+async function appDetails(env: Env, id: string): Promise<Response> {
+  const hash = await env.DB.prepare("SELECT package FROM versions WHERE id = ?1 AND state = 'listed' ORDER BY sort DESC LIMIT 1").bind(id).first<string>("package");
+  return hash ? details(env, hash) : refuse(404, "no listed app with that id");
 }
 
 /** Packed sample data as the store takes it, or the reason it does not. */
@@ -347,13 +372,14 @@ export default {
       if (request.method !== "GET" && request.method !== "HEAD") return refuse(405, "this route only reads");
       if (path === "/v1/catalog") return await catalog(env, url);
       if (path === "/v1/apps") return await everyApp(env);
-      const history = /^\/v1\/apps\/([^/]+)\/versions$/.exec(path);
-      if (history) return await versionsOf(env, history[1]!);
-      const named = /^\/v1\/(apps|packages|icons|mocks|manifests)\/([^/]+)$/.exec(path);
+      const under = /^\/v1\/apps\/([^/]+)\/(versions|details)$/.exec(path);
+      if (under) return under[2] === "versions" ? await versionsOf(env, under[1]!) : await appDetails(env, under[1]!);
+      const named = /^\/v1\/(apps|packages|icons|mocks|manifests|details)\/([^/]+)$/.exec(path);
       if (named) {
         const [, kind, name] = named;
         if (kind === "apps") return await app(env, name!);
         if (kind === "manifests") return await manifest(env, name!);
+        if (kind === "details") return await details(env, name!);
         return await file(env, kind === "icons" ? "icon" : kind === "mocks" ? "mock" : "package", name!);
       }
       if (path.startsWith("/v1/")) return refuse(404, "no such route");
