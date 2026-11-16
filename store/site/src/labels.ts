@@ -1,29 +1,9 @@
-// The words for what a package names by id: the devices its variants target,
-// the services and capabilities its manifest lists, the sections of a build.
-// They are read in an app's details sheet and nowhere else. A device's name is
-// its own in every language; the rest are said in the visitor's (i18n/, under
-// labels).
+// The words for what an app's details name by id (details.ts): the services
+// and capabilities its manifest lists, the sections of a build. They are said
+// in the visitor's language (i18n/, under labels). A device's name is its own
+// in every language, so the details carry it themselves.
 import en from "./i18n/en.ts";
 import { useLanguage } from "./i18n/index.ts";
-
-/** The device behind a variant's target id. */
-const DEVICES: Record<string, string> = {
-  "rg-ds-plus": "Omarchy Pocket",
-  "tab5-home": "M5Stack Tab5",
-  "3ds-dev": "Nintendo 3DS",
-};
-const DEVICE_ORDER = Object.keys(DEVICES);
-
-export const deviceName = (target: string) => DEVICES[target] ?? target;
-
-/** Targets in the order the store names devices, unknown ones last. */
-export function byDevice<T>(items: readonly T[], target: (item: T) => string): T[] {
-  const rank = (item: T) => {
-    const at = DEVICE_ORDER.indexOf(target(item));
-    return at < 0 ? DEVICE_ORDER.length : at;
-  };
-  return [...items].sort((a, b) => rank(a) - rank(b));
-}
 
 // An id comes out of a publisher's package, so whether the page has words for
 // it is asked of the list of ids it knows, never of the id as a path.
