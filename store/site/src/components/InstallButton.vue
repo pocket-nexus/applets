@@ -2,21 +2,30 @@
 // The way an app reaches a device: this button is a link that opens Pocket
 // Hub on the app (hub.ts), and Hub does the rest. The browser follows it like
 // any link to another program, asking the visitor first, and tells the page
-// nothing of what came of it, so the page is only told that it was followed.
-import { computed } from "vue";
+// nothing of what came of it; the button watches the page's focus for that
+// (watchHandOff), and tells the page when nothing took the link.
+import { computed, onBeforeUnmount } from "vue";
 import { useLanguage } from "../i18n/index.ts";
 import type { StoreApp } from "../api.ts";
-import { hubInstallLink } from "../hub.ts";
+import { hubInstallLink, watchHandOff } from "../hub.ts";
 import UiIcon from "./UiIcon.vue";
 
 const props = defineProps<{ app: StoreApp }>();
-defineEmits<{ follow: [] }>();
+const emit = defineEmits<{ follow: []; missing: [] }>();
 const link = computed(() => hubInstallLink(props.app));
 const { t } = useLanguage();
+
+let stop: (() => void) | undefined;
+function follow() {
+  stop?.();
+  emit("follow");
+  stop = watchHandOff(() => emit("missing"));
+}
+onBeforeUnmount(() => stop?.());
 </script>
 
 <template>
-  <a class="install" :href="link" @click="$emit('follow')">
+  <a class="install" :href="link" @click="follow">
     <UiIcon name="download" :size="22" />
     <strong>{{ t("install.withHub") }}</strong>
   </a>

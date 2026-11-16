@@ -61,7 +61,11 @@ export default {
   },
   install: {
     withHub: "Install with Pocket Hub",
-    followed: "Pocket Hub should open on this applet now. If nothing happens, this computer has no Pocket Hub: it is a Mac app, and it is not released yet.",
+    missing: {
+      title: "Don't have Pocket Hub yet?",
+      detail: "Install Pocket Hub, then try again.",
+      get: "Get Pocket Hub",
+    },
   },
   player: {
     firstScreen: "{title}'s first screen",
