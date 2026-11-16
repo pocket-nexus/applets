@@ -6,6 +6,7 @@
 //   GET  /v1/apps                    the newest listed version of every app, for the website
 //   GET  /v1/apps/<id>               one app's newest listed version
 //   GET  /v1/apps/<id>/versions      every listed version of one app, newest first
+//   GET  /v1/apps/<id>/details       the details of one app's newest listed version (/v1/details of its package)
 //   GET  /v1/packages/<sha256>       a listed version's package
 //   GET  /v1/manifests/<sha256>      a listed package's manifest and directory (variants, sections)
 //   GET  /v1/details/<sha256>        a listed package's details, read out of its manifest and directory
@@ -175,6 +176,13 @@ async function manifest(env: Env, hash: string): Promise<Response> {
 async function details(env: Env, hash: string): Promise<Response> {
   const read = await packageDescription(env, hash);
   return read instanceof Response ? read : json(detailsOf(read), 200, { "cache-control": "public, max-age=60" });
+}
+
+/** The details of one app's newest listed version: what /v1/details answers
+ *  for that version's package, for whoever has the app's id and not its listing. */
+async function appDetails(env: Env, id: string): Promise<Response> {
+  const hash = await env.DB.prepare("SELECT package FROM versions WHERE id = ?1 AND state = 'listed' ORDER BY sort DESC LIMIT 1").bind(id).first<string>("package");
+  return hash ? details(env, hash) : refuse(404, "no listed app with that id");
 }
 
 /** Packed sample data as the store takes it, or the reason it does not. */
@@ -364,8 +372,8 @@ export default {
       if (request.method !== "GET" && request.method !== "HEAD") return refuse(405, "this route only reads");
       if (path === "/v1/catalog") return await catalog(env, url);
       if (path === "/v1/apps") return await everyApp(env);
-      const history = /^\/v1\/apps\/([^/]+)\/versions$/.exec(path);
-      if (history) return await versionsOf(env, history[1]!);
+      const under = /^\/v1\/apps\/([^/]+)\/(versions|details)$/.exec(path);
+      if (under) return under[2] === "versions" ? await versionsOf(env, under[1]!) : await appDetails(env, under[1]!);
       const named = /^\/v1\/(apps|packages|icons|mocks|manifests|details)\/([^/]+)$/.exec(path);
       if (named) {
         const [, kind, name] = named;
