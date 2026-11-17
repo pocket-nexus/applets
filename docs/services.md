@@ -21,16 +21,31 @@ A service lives in its applet's directory and has the applet's name:
 
 ```
 spotify/
-  pocket.app.json          the applet; applet.services lists "spotify"
+  pocket.app.json          the app's one manifest: the applet, and the service in its `service` section
   contract.ts              what the service answers: the one file both halves read
   api.ts                   the applet's client of the contract
   mock/                    sample data that answers the contract in the store's player
-  service/
-    pocket.service.json    the service's manifest
-    main.ts                the service's entry
+  service.ts               the service's source: its entry, in TypeScript
+  service/                 only when one file is not enough: the modules service.ts imports
 ```
 
-**One applet has at most one service, and the service's name is the applet's directory.** An applet that uses a service lists it in `applet.services`, as today; any applet may list another app's service.
+**The source is TypeScript in as many files as it needs; what is built and published is one JavaScript file.** `service.ts` is always the entry. The build follows its imports and bundles them all into the service file (`<name>.service.js`, below), which is the only thing a store or a host ever sees. A service that fits in one file has no `service/` directory.
+
+**An app has one manifest and at most one service, and the service's name is the applet's directory.** An applet that uses a service lists it in `applet.services`, as today; any applet may list another app's service.
+
+## What ties the two halves
+
+An app's applet and its service are built into two files, and a device takes only the first. They stay one app in five places:
+
+| Where | What ties them |
+|---|---|
+| The manifest | **One `pocket.app.json` declares both**: `applet` says what the applet uses, `service` says what the app provides. There is no second manifest to keep in step, and the app's `id` and `version` are the service's |
+| The build | One build makes both from that manifest: the service file first, then the package, **whose manifest carries the service file's SHA-256** (`service.sha256`). A package names exactly one service file, and no other build of it |
+| The signature | The publisher signs the package's hash, as today. The package holds the manifest and the manifest names the service file, so the one signature covers both, and what is signed does not change |
+| The store | It takes a service file only with the package that names it, refuses a package that names one it was not given, and serves the file under that SHA-256 |
+| The host | From a package alone a host knows whether the app has a service and which file it is. It gets that file, checks the SHA-256, and installs the two together or neither |
+
+**A service's name belongs to one app**, the first to publish it, so `/<name>/…` leads to one installed app's service and never has two answers.
 
 ## The contract
 
@@ -39,37 +54,45 @@ spotify/
 - **Types only, and it imports nothing**, so either half, the mock and a host can `import type` it from anywhere.
 - A request and an answer are JSON, unless the route says bytes (a picture, a glyph atlas). A failure answers 4xx or 5xx with `{"error": "…"}`; a contract may add a `reason` the applet acts on.
 - A path that starts with `/_` is the host's (`/_setup`, below). A service defines none.
-- The applet's `api.ts` and the service's `main.ts` both take their types from it; neither declares a wire type of its own.
+- The applet's `api.ts` and the app's `service.ts` both take their types from it; neither declares a wire type of its own.
 
 ## The manifest
 
-`service/pocket.service.json` (the values here are made up to show the shape):
+The service is the `service` section of `pocket.app.json`, beside `applet` (the values here are made up to show the shape):
 
-```json
+```jsonc
 {
-  "service": 1,
-  "name": "spotify",
-  "entry": "spotify/service/main.ts",
-  "autostart": true,
-  "setup": {
-    "title": "Spotify",
-    "fields": [{ "id": "soloist-key", "label": "Soloist API key", "secret": true }],
-    "tools": [{ "id": "soloist", "title": "Soloist", "vendor": "Spotify", "terms": "https://…", "builds": { "linux-arm64": { "url": "https://…", "archive": "tar.gz", "binary": "soloist" } } }]
-  },
-  "commands": ["omarchy-pocket-spotify"]
+  "id": "dev.pocket-nexus.spotify",
+  "version": "0.1.1",
+  "applet": { "version": 1, "services": ["spotify", "images", "glyphs"] },
+  "service": {
+    "version": 1,
+    "name": "spotify",
+    "entry": "spotify/service.ts",
+    "autostart": true,
+    "setup": {
+      "title": "Spotify",
+      "fields": [{ "id": "soloist-key", "label": "Soloist API key", "secret": true }],
+      "tools": [{ "id": "soloist", "title": "Soloist", "vendor": "Spotify", "terms": "https://…", "builds": { "linux-arm64": { "url": "https://…", "archive": "tar.gz", "binary": "soloist" } } }]
+    },
+    "commands": ["omarchy-pocket-spotify"]
+  }
+  // engine, app, domains: as in any applet
 }
 ```
 
 | Key | What it says |
 |---|---|
-| `service` | the version of this standard the service is written to: the protocol below |
-| `name` | the service's name: the applet's directory, `^[a-z][a-z0-9-]{0,31}$` |
-| `entry` | the entry module, relative to this repository |
+| `version` | the version of this standard the service is written to: the protocol below |
+| `name` | the service's name: the applet's directory, `^[a-z][a-z0-9-]{0,31}$`. The app lists it in its own `applet.services` |
+| `entry` | the entry, relative to this repository: the applet's `service.ts` |
 | `autostart` | `true` for a service that runs from the moment its host does (a speaker a phone must find, a gateway that stays connected). Without it the service starts at the first request for it |
 | `setup` | what the service needs from its owner, as PocketJS's `SetupSpec` (`contracts/spec/owner-setup.ts`): fields the owner types once, and a vendor's own programs fetched on the owner's consent to the vendor's terms. **The host runs it**: it keeps the values, fetches the tools and answers `/<name>/_setup`, the same way for every service. Absent when the service needs nothing |
 | `commands` | the command-line programs the service runs, by name (`yt-dlp`, `ffmpeg`, `omarchy-pocket-spotify`). The service starts them itself; the host's computer has them, or the host says which are missing. Absent when it runs none |
 
-**The service has no version of its own.** It is published with the applet as one version of the app, under the applet's `id` and `version`.
+**The build adds two members to the manifest it packs**: `sha256`, the SHA-256 of the service file, and `bun`, the version in `.bun-version` the service was built and tested on.
+
+**The service has no id and no version of its own**: they are the app's.
 
 ## A service is a process, and the host brings the Bun
 
@@ -81,10 +104,10 @@ spotify/
 
 ## The entry
 
-`main.ts` hands `serve` what the service does:
+`service.ts` hands `serve` what the service does:
 
 ```ts
-import { serve } from "../../lib/service.ts";
+import { serve } from "../lib/service.ts";
 
 serve((context) => ({
   async handle(request) { … },   // every request under /<name>/, but /_…
@@ -102,7 +125,7 @@ A request is what a host hands a service today (`method`, `path` after the servi
 
 | Member | What it is |
 |---|---|
-| `service` | the version of this standard the host implements |
+| `version` | the version of this standard the host implements |
 | `host` | `{name, version, platform, computer}`: `pocket-hub` or `omarchy-pocketd`, and how the owner is told where the service runs ("your Mac", "this device") |
 | `dir` | the service's own directory (mode 0700), which is also where the process starts: everything it keeps is under it |
 | `log(line)` | a line in the host's log |
@@ -151,13 +174,13 @@ An applet's own request for a path under `/_` never reaches the service: `/_setu
 
 | Request | What it is |
 |---|---|
-| `GET /context` | `{service, host, setup: {values, tools}, offers}`: what `context` holds, the paths of the tools in place, and which of the optional members this host has |
+| `GET /context` | `{version, host, setup: {values, tools}, offers}`: what `context` holds, the paths of the tools in place, and which of the optional members this host has |
 | `POST /prompt` | a `SetupPrompt` to show at `/_setup`, or `null` to take it away |
 | one route for each optional member | set with the member |
 
 **Stopping.** The host sends SIGTERM, and SIGKILL 5 seconds later to whatever is left of the service's process group, so a program the service started never outlives it. A service that exits by itself is started again a second later, then twice as long each time, at most every 30 seconds.
 
-**The protocol grows by adding routes and members, and `service` stays 1.** A change that breaks a service written to it makes it 2.
+**The protocol grows by adding routes and members, and the version stays 1.** A change that breaks a service written to it makes it 2.
 
 ## What a service does not do
 
@@ -168,17 +191,12 @@ An applet's own request for a path under `/_` never reaches the service: `/_setu
 
 ## The service file
 
-`bun tools/build.ts` builds each applet's service beside its packages, as `dist/services/<name>.service.js`:
+`bun tools/build.ts` builds an app's service beside its packages, as `dist/services/<name>.service.js`, **once for the app and not once for a device**: every device's variant of the package carries the same manifest, so the same `service.sha256`.
 
-```
-//! pocket-service {"service":1,"name":"spotify","id":"dev.pocket-nexus.spotify","version":"0.1.1","bun":"1.4.2","setup":{…},"commands":[…]}
-…the bundle…
-```
-
-- **The first line is the manifest**: the prefix `//! pocket-service `, then the manifest as one line of JSON, without `entry`, with the applet's `id` and `version` and with `bun`, the version in `.bun-version` it was built and tested on. A store or a host reads what a service is from that line and runs nothing.
-- **The rest is one program for Bun** (`bun build --target=bun --format=esm`) with everything bundled: the only imports left are `node:*` and `bun`.
-- A host whose Bun is older than `bun`, or of another major version, does not run it.
-- At most **4 MiB**. Its identity is its SHA-256.
+- **It is one program for Bun** (`bun build --target=bun --format=esm`) with everything bundled: the only imports left are `node:*` and `bun`.
+- **It carries no manifest of its own.** What it is, is in the package that names it.
+- A host whose Bun is older than the manifest's `bun`, or of another major version, does not run it.
+- At most **4 MiB**.
 
 ## The store
 
@@ -186,21 +204,21 @@ An applet's own request for a path under `/_` never reaches the service: `/_setu
 
 | What | How |
 |---|---|
-| Publishing | `POST /v1/publish` takes a `service` file. `bun store/admin.ts publish <package> <icon> [summary] --service <file>` |
-| What the store checks | the first line parses; its `id` and `version` are the package's; its `name` is in the package's `applet.services` and is no host service's; the size |
-| The signature | a version with a service signs `omarchy-pocket-store/2`: the six fields of `/1`, then the service file's SHA-256. A version without one signs `/1` as today, so nothing published changes |
+| Publishing | `POST /v1/publish` takes a `service` file with a package whose manifest has a `service` section. `bun store/admin.ts publish <package> <icon> [summary] --service <file>` |
+| What the store checks | a package with a `service` section comes with a service file, and one without comes with none; the file's SHA-256 is the manifest's `service.sha256`; `service.name` is in the package's `applet.services`, is no host service's and belongs to no other app; the size |
+| The signature | unchanged. The signed package hash covers the manifest, and the manifest names the service file |
 | The file | `GET /v1/services/<sha256>`, immutable, for a listed version |
-| The listing | an app's entry gains `service` (the SHA-256, or `""`), and its details gain the service's name, what its setup asks for and the commands it runs |
+| The listing | an app's entry gains `service` (the manifest's `service.sha256`, or `""`), and its details gain the service's name, what its setup asks for and the commands it runs, all read from the manifest |
 
-**Only the official key publishes a service.** A service runs as the host's user on the owner's computer, with no sandbox. The store refuses a `service` file from any other key, and a host refuses to install one that the official key did not sign. An app from anyone else reaches `store`, `glyphs`, `maps` and `images`, as today.
+**Only the official key publishes a service.** A service runs as the host's user on the owner's computer, with no sandbox. The store refuses a package with a `service` section from any other key, and a host refuses to install one that the official key did not sign. An app from anyone else reaches `store`, `glyphs`, `maps` and `images`, as today.
 
 ## What a host does
 
-A service enters a host **one way: as a service file**, whether the host installs the app from the store or carries it in its own build (Omarchy Pocket's image, Pocket Hub's `--apps`), where the file sits beside the app's package.
+A service enters a host **one way: as a service file**, whether the host installs the app from the store or carries it in its own build (Omarchy Pocket's image, Pocket Hub's `--apps`), where the file sits beside the app's package and is checked against it the same way.
 
-1. **Install.** With an app that has a service: check the signature (`/2`) against the official key, fetch `/v1/services/<sha256>`, check the SHA-256, read the first line. Refuse it when `service` is newer than the host implements, when `bun` asks for more than the host's Bun, when `id` and `version` are not the package's, or when `name` is a host service's. Tell the owner which of its `commands` this computer lacks; how one gets there (the host's image, the host fetching it for the owner, the owner installing it) is the host's.
+1. **Install.** With a package whose manifest has a `service` section: check the publisher's signature as for any app, and that the key is the official one. Get the service file (`/v1/services/<service.sha256>`) and check its SHA-256 against the manifest. Refuse the app when `service.version` is newer than the host implements, when `service.bun` asks for more than the host's Bun, or when `service.name` is a host service's or another installed app's. **The package and the service file are installed together or not at all.** Tell the owner which of its `commands` this computer lacks; how one gets there (the host's image, the host fetching it for the owner, the owner installing it) is the host's.
 2. **Start.** With the host when the manifest says `autostart`, else at the first request for `/<name>/…`, as "The protocol" says. A host service's name is answered by the host, whatever was installed.
-3. **Answer.** `/<name>/_setup` from the manifest's `setup`; everything else is forwarded. An app is answered only when its own manifest lists the service in `applet.services`, as today. A service that is not running, or not ready in time, answers the applet 502.
+3. **Answer.** `/<name>/…` goes to the service of the installed app whose manifest provides `<name>`: `/<name>/_setup` is answered from that manifest's `setup`, and everything else is forwarded. An app is answered only when its own manifest lists the service in `applet.services`, as today. A service that is not running, or not ready in time, answers the applet 502.
 4. **Update.** Stop the service, put the new file in place, start it. `dir` stays: a sign-in outlives an update.
 5. **Remove.** Stop the service, then delete the service file and `dir`.
 
@@ -212,12 +230,14 @@ A service enters a host **one way: as a service file**, whether the host install
 
 ## Checks
 
-`bun run check` holds an applet with a `service/` directory to this:
+`bun run check` holds an applet whose manifest has a `service` section to this:
 
-- `pocket.service.json` is valid, `name` is the directory and is in the applet's `applet.services`, and no host service has it
-- `contract.ts` is there and imports nothing; `api.ts` and `service/main.ts` import their wire types from it
+- the `service` section is valid, `name` is the directory and is in the app's own `applet.services`, and no host service and no other applet here has it
+- the package built for each device carries the same `service.sha256`, and it is the SHA-256 of the service file built with them
+- `contract.ts` is there and imports nothing; `api.ts` and `service.ts` import their wire types from it
 - the service builds, the bundle's only imports are `node:*` and `bun`, and it is under 4 MiB
 - no source file of the service imports from outside this repository
+- the applet's own rules (QuickJS, no Node) skip `service.ts` and `service/`, and no file of the applet imports from them
 - the source starts a program only at a path `context.command` or `context.setup.tool` gave it: a spawn of a name or a path written in the source is an error
 - run under a stand-in host, the service file is ready within 10 seconds, answers `GET /_state` or 404, and exits within 5 seconds of SIGTERM
 
@@ -229,8 +249,9 @@ A service from a publisher other than the official key, and with it a sandbox an
 
 | | Today | With this standard |
 |---|---|---|
-| Where a service's source is | Pocket Hub (`tools/companion/services/*.ts`) for x, discord, youtube, podcasts, homeassistant; omarchy-pocket (`daemon/spotify.ts`) for spotify | this repository, `<applet>/service/` |
+| Where a service's source is | Pocket Hub (`tools/companion/services/*.ts`) for x, discord, youtube, podcasts, homeassistant; omarchy-pocket (`daemon/spotify.ts`) for spotify | this repository, `<applet>/service.ts` |
 | The contract | written down for Spotify alone (`spotify/contract.ts`); the others are what the service's code and the applet's `api.ts` each assume | `contract.ts` in every applet that has a service |
+| What ties an applet to its service | a name in `applet.services`, and a host that has a service of that name compiled in | the app's one manifest, and the service file's SHA-256 in the package |
 | How a host gets a service | compiled in: `SERVICE_FACTORIES` in Pocket Hub's `services.ts`; omarchy-pocketd imports that file by path from `vendor/pocket-hub` and assigns its own entries | a service file |
 | How a service runs | as an object inside the host's process | as a process of its own, run by the host's Bun |
 | What a service gets from its host | a `ServiceContext` of `storeDir` and `log`, plus imports of the host's modules (`OwnerSetup`, `Supervised`, `ManagedTools`, `writeSecret`) and options a host passes one service (`decodeAvatar`, `onMedia`) | `context`, over the protocol |
@@ -242,7 +263,7 @@ What each repository changes, in the order it can land:
 
 | Repository | Change |
 |---|---|
-| pocketjs | `contracts/spec/service.ts`: the manifest, the protocol's routes and headers, `context`, as types and constants that import nothing (beside `owner-setup.ts`) |
-| applets | `lib/service.ts`, the service's side of the protocol; `tools/build.ts` builds service files and `tools/check.ts` checks them; the store takes, signs for and serves a service file (one added column, `versions.service`); the six services move in, each with its `contract.ts` |
+| pocketjs | the app manifest gains the `service` section (`pocket-manifest.ts` refuses a key it does not know today), and `pocket compile` packs the manifest with the `sha256` and `bun` the build gives it; `contracts/spec/service.ts`: the section, the protocol's routes and headers, `context`, as types and constants that import nothing (beside `owner-setup.ts`) |
+| applets | `lib/service.ts`, the service's side of the protocol; `tools/build.ts` builds service files and `tools/check.ts` checks them; the store takes and serves a service file with the package that names it (one added column, `versions.service`); the six services move in, each with its `contract.ts` |
 | pocket-hub | Pocket Hub.app carries the Bun that runs services; its service host installs service files, runs each as a process and speaks the protocol; its tools directory (yt-dlp, ffmpeg) goes first on a service's `PATH`; the five app services leave `tools/companion/services/`; the host services stay |
-| omarchy-pocket | omarchy-pocketd runs service files through the same service host, with the device's Bun; `daemon/spotify.ts` moves to `spotify/service/` here; `omarchy-pocket-spotify` stays in the image, in the directory that goes first on a service's `PATH`; the image carries the service files beside the packages |
+| omarchy-pocket | omarchy-pocketd runs service files through the same service host, with the device's Bun; `daemon/spotify.ts` moves to `spotify/service.ts` here; `omarchy-pocket-spotify` stays in the image, in the directory that goes first on a service's `PATH`; the image carries the service files beside the packages |
