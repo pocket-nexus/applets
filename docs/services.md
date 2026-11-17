@@ -135,15 +135,15 @@ A request is what a host hands a service today (`method`, `path` after the servi
 
 **A service reads its setup once, when it starts.** When the owner changes a field, or a tool arrives, the host starts the service again. A command is looked up each time it is asked for, so one installed while the service runs is found.
 
-**A host may lack these**, so each is optional and a service that uses one works without it or answers why it cannot:
+**Three more members are every host's too**, though today each host has only some of them:
 
 | Member | What it is | Today |
 |---|---|---|
-| `decodeImage` | a picture's bytes as RGBA at a size | `sips` on a Mac, ffmpeg on Omarchy Pocket; passed to X as an option |
-| `webSignIn` | a sign-in window on the host's screen | Pocket Hub's `pocket-websignin` on a Mac, for X |
-| `nowPlaying` | tells the device what plays on it | omarchy-pocketd's `onMedia`, for Spotify |
+| `decodeImage` | a picture's bytes as RGBA at a size | Pocket Hub decodes X's avatars on a Mac (`sips`) and no other picture; omarchy-pocketd decodes any (ffmpeg) |
+| `webSignIn` | a sign-in window on the host's screen | Pocket Hub on a Mac alone (`pocket-websignin`, for X). Omarchy Pocket has none and is signed in with the session file a Mac made |
+| `nowPlaying` | tells the device what plays on it | omarchy-pocketd alone (`onMedia`, for Spotify) |
 
-Their shapes are set as the service that uses each one is ported.
+**No member is optional, and a service has no fallback.** A host implements all of `context`, wherever it runs: Pocket Hub on a computer beside the console, omarchy-pocketd on the device itself. A service calls what it needs and does not ask first whether the host has it. A call the host cannot carry out fails with its reason, as any call can, and the service answers the applet with that. The shapes of these three are set as the service that uses each is ported.
 
 ## The protocol
 
@@ -174,9 +174,9 @@ An applet's own request for a path under `/_` never reaches the service: `/_setu
 
 | Request | What it is |
 |---|---|
-| `GET /context` | `{version, host, setup: {values, tools}, offers}`: what `context` holds, the paths of the tools in place, and which of the optional members this host has |
+| `GET /context` | `{version, host, setup: {values, tools}}`: what `context` holds, and the paths of the tools in place |
 | `POST /prompt` | a `SetupPrompt` to show at `/_setup`, or `null` to take it away |
-| one route for each optional member | set with the member |
+| one route each for `decodeImage`, `webSignIn` and `nowPlaying` | set with the member's shape |
 
 **Stopping.** The host sends SIGTERM, and SIGKILL 5 seconds later to whatever is left of the service's process group, so a program the service started never outlives it. A service that exits by itself is started again a second later, then twice as long each time, at most every 30 seconds.
 
@@ -265,5 +265,5 @@ What each repository changes, in the order it can land:
 |---|---|
 | pocketjs | the app manifest gains the `service` section (`pocket-manifest.ts` refuses a key it does not know today), and `pocket compile` packs the manifest with the `sha256` and `bun` the build gives it; `contracts/spec/service.ts`: the section, the protocol's routes and headers, `context`, as types and constants that import nothing (beside `owner-setup.ts`) |
 | applets | `lib/service.ts`, the service's side of the protocol; `tools/build.ts` builds service files and `tools/check.ts` checks them; the store takes and serves a service file with the package that names it (one added column, `versions.service`); the six services move in, each with its `contract.ts` |
-| pocket-hub | Pocket Hub.app carries the Bun that runs services; its service host installs service files, runs each as a process and speaks the protocol; its tools directory (yt-dlp, ffmpeg) goes first on a service's `PATH`; the five app services leave `tools/companion/services/`; the host services stay |
-| omarchy-pocket | omarchy-pocketd runs service files through the same service host, with the device's Bun; `daemon/spotify.ts` moves to `spotify/service.ts` here; `omarchy-pocket-spotify` stays in the image, in the directory that goes first on a service's `PATH`; the image carries the service files beside the packages |
+| pocket-hub | Pocket Hub.app carries a `bun` executable and runs services with it; it gains `nowPlaying`, and `decodeImage` for any picture on any computer it runs on; its service host installs service files, runs each as a process and speaks the protocol; its tools directory (yt-dlp, ffmpeg) goes first on a service's `PATH`; the five app services leave `tools/companion/services/`; the host services stay |
+| omarchy-pocket | omarchy-pocketd runs service files through the same service host, with the device's Bun; it gains `webSignIn`, a sign-in window on the device; `daemon/spotify.ts` moves to `spotify/service.ts` here; `omarchy-pocket-spotify` stays in the image, in the directory that goes first on a service's `PATH`; the image carries the service files beside the packages |
