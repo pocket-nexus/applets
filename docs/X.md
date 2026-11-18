@@ -3,17 +3,22 @@
 The X applet (`x/`) reads the Following and For You timelines and
 post threads, and likes, reposts and replies. It reaches X through
 **Pocket Hub** on the Mac: the applet fetches `https://companion.pocket/x/…`, and
-the companion's x service (PocketJS `tools/companion/services/x.ts`) calls
-x.com with a session signed in on that Mac. The console never holds the
-session. On Omarchy Pocket the x service runs in omarchy-pocketd on the
-device itself (`ui/companion.ts`); the sign-in below is the Mac's.
+the companion's x service calls x.com with a session signed in on that Mac.
+The console never holds the session. On Omarchy Pocket the x service runs in
+omarchy-pocketd on the device itself (`ui/companion.ts`); the sign-in below
+is the Mac's.
 
 ## What it needs
 
 - Pocket Hub running on a Mac paired with the console (Settings > Mac on the
   console shows it linked). Pocket Hub is not released yet. Its X page signs
   in and out. The commands below do the same from a PocketJS checkout
-  (`bun tools/companion.ts …`); they talk to the running companion.
+  before `1d4fabbc` (`bun tools/companion.ts …`); they talk to the running
+  companion. **They are not in the PocketJS this repository builds with**:
+  they are Pocket Companion's, which was PocketJS's `tools/companion.ts` and
+  `tools/companion/` until PocketJS `1d4fabbc` (#672) moved the companion out
+  to Pocket Hub, and `vendor/pocket-shell/vendor/pocketjs` is after that
+  commit.
 - An X account signed in once on that Mac.
 
 ## Signing in

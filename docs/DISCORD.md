@@ -4,10 +4,9 @@ The Discord applet (`discord/`) lists servers and channels, shows
 messages as they arrive and sends messages. It reaches Discord through
 **Pocket Hub** on the Mac with a **bot**: the applet fetches
 `https://companion.pocket/discord/…`, and the companion's discord service
-(PocketJS `tools/companion/services/discord.ts`) calls Discord's API with the
-bot's token. The console never holds the token. On Omarchy Pocket the
-discord service runs in omarchy-pocketd on the device itself
-(`ui/companion.ts`); the setup below is the Mac's.
+calls Discord's API with the bot's token. The console never holds the token.
+On Omarchy Pocket the discord service runs in omarchy-pocketd on the device
+itself (`ui/companion.ts`); the setup below is the Mac's.
 
 ## What the bot can see
 
@@ -19,6 +18,12 @@ discord service runs in omarchy-pocketd on the device itself
 
 ## Setting it up
 
+**The `bun tools/companion.ts` commands below are not in the PocketJS this
+repository builds with.** They are Pocket Companion's, which was PocketJS's
+`tools/companion.ts` and `tools/companion/` until PocketJS `1d4fabbc` (#672)
+moved the companion out to Pocket Hub. A PocketJS checkout before that commit
+has them; `vendor/pocket-shell/vendor/pocketjs` does not.
+
 1. Open the Discord developer portal,
    <https://discord.com/developers/applications>, and choose **New
    Application**. Give it a name (the bot's name in your servers).
@@ -27,7 +32,8 @@ discord service runs in omarchy-pocketd on the device itself
 3. On the same page, under **Privileged Gateway Intents**, turn on **Message
    Content Intent** and save. Without it, messages arrive with empty text.
 4. Give the token to the companion: paste it on Pocket Hub's Discord page
-   (Pocket Hub is not released yet), or run this in a PocketJS checkout:
+   (Pocket Hub is not released yet), or run this in a PocketJS checkout
+   before `1d4fabbc`:
 
    ```sh
    bun tools/companion.ts service discord token <bot-token>

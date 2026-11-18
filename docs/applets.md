@@ -1,6 +1,6 @@
 # Applets, their sample data and the store
 
-An applet is a PocketJS package that declares the `applet` section (PocketJS `docs/APPLETS.md`): one touch surface that admits 320 × 240, an allowlist of capabilities, the companion services and hosts it reaches. Every applet here builds from one source for every device whose host contract admits it (README, "Building"), and the store at applets.pocket.nexus carries the packages.
+An applet is a Pocket app whose app contract (`pocket.app.json`) declares the `applet` section: one touch surface that admits 320 × 240, an allowlist of capabilities, the companion services and hosts it reaches. The Applet contract and its rules are Pocket Shell's `docs/APPLETS.md`, the app contract its `docs/APP-CONTRACT.md` and the `.pocket` package its `docs/POCKET-PACKAGE.md` (in this repository under `vendor/pocket-shell/`); `pocket-shell compile` (`cli/pocket-shell.ts` there) writes a package. Every applet here builds from one source for every device whose host contract admits it (README, "Building"), and the store at applets.pocket.nexus carries the packages.
 
 ## The store
 
