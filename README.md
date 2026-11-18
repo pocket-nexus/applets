@@ -40,7 +40,7 @@ Hacker News, X, YouTube, Discord and GitHub also declare the applet **full-scree
 | `ui/companion.ts` | Where an applet's services run, as its text names them: on the device itself on Omarchy Pocket, on the paired Mac elsewhere. |
 | `ui/art/icons/`, `ui/icons.tsx` | **The one icon family**, committed in Pocket Shell with the kit: every applet's icon and the launcher's own (Settings, Mac, Wi-Fi, Apps), baked at 24, 46 and 64 px and at `@2x`. `ui/icons.tsx` maps an app id to its icon and draws the tile; Pocket Shell's launcher imports it, applets never do, so no applet package carries the family. Each applet's `icon.png`, the picture the store lists and `pocket-shell compile` stores in the package, is a link to its `<name>-64@2x.png`. |
 
-The applets read the device from PocketJS (`@pocketjs/framework/applet`, `platform`, `link`, `osk`), so no file here is per device.
+The applets read the device from Pocket Shell's runtime modules (`@pocket-shell/runtime/applet`, `link`, `camera`) and from PocketJS (`@pocketjs/framework/platform`, `osk`), so no file here is per device.
 
 ## Building
 

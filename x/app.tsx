@@ -13,7 +13,7 @@
 // draws from glyph atlases the Mac renders (lib/glyphs.ts).
 
 import { createSignal, For, Show } from "solid-js";
-import { AppletSurface } from "@pocketjs/framework/applet";
+import { AppletSurface } from "@pocket-shell/runtime/applet";
 import { Text, View } from "@pocketjs/framework/components";
 import { createGesture } from "@pocketjs/framework/gesture";
 import { onButtonPress, onFrame } from "@pocketjs/framework/lifecycle";

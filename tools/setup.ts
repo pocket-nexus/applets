@@ -66,6 +66,21 @@ for (const [destination, source] of links) {
   symlinkSync(relative(dirname(link), target), link, "dir");
 }
 
+// The Runtime's guest modules (the applet surface, the link, the camera) are
+// Pocket Shell's: "@pocket-shell/runtime/applet" resolves through this link
+// to its runtime/ directory, and PocketJS's compiler walks a package linked
+// from its source tree, so the modules' classes and glyphs compile.
+{
+  const target = resolve(POCKET_SHELL, "runtime");
+  if (!existsSync(resolve(target, "package.json"))) {
+    throw new Error(`applets setup: missing ${target}; the pocket-shell checkout has no runtime/`);
+  }
+  const link = resolve(ROOT, "node_modules/@pocket-shell/runtime");
+  mkdirSync(dirname(link), { recursive: true });
+  rmSync(link, { recursive: true, force: true });
+  symlinkSync(relative(dirname(link), target), link, "dir");
+}
+
 // A PocketJS build writes the style table the framework imports, so a clean
 // checkout of the submodule does not have one and a typecheck fails on a
 // module that only exists after a build. An empty table is the honest state
