@@ -4,7 +4,7 @@
 // this window asks for.
 
 import { createSignal } from "solid-js";
-import { AppletSurface } from "@pocketjs/framework/applet";
+import { AppletSurface } from "@pocket-shell/runtime/applet";
 import { View } from "@pocketjs/framework/components";
 import { onButtonPress } from "@pocketjs/framework/lifecycle";
 import { createAlerts } from "../ui/alert.tsx";

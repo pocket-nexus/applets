@@ -14,6 +14,8 @@
       "@pocketjs/framework": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/index.ts"],
       "@pocketjs/framework/solid": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/index.ts"],
       "@pocketjs/framework/input": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/input-api.ts"],
+      "@pocketjs/framework/system-layers": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/system-layers-api.ts"],
+      "@pocketjs/framework/sim": ["./vendor/pocket-shell/vendor/pocketjs/programs/sim/sim.ts"],
       "@pocketjs/framework/*": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/*"]
     }
   },

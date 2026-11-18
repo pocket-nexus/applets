@@ -11,7 +11,7 @@
 // @pocketjs/framework/net; the console never holds the bot's token.
 
 import { createEffect, createSignal, For, Show } from "solid-js";
-import { AppletSurface } from "@pocketjs/framework/applet";
+import { AppletSurface } from "@pocket-shell/runtime/applet";
 import { Text, View } from "@pocketjs/framework/components";
 import { createGesture } from "@pocketjs/framework/gesture";
 import { onButtonPress } from "@pocketjs/framework/lifecycle";

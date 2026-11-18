@@ -11,7 +11,7 @@
 // view from the store service, both the device's companion's (ui/companion.ts).
 
 import { createSignal } from "solid-js";
-import { AppletSurface } from "@pocketjs/framework/applet";
+import { AppletSurface } from "@pocket-shell/runtime/applet";
 import { View } from "@pocketjs/framework/components";
 import { onButtonPress } from "@pocketjs/framework/lifecycle";
 import { createOsk, Osk, oskHeight } from "@pocketjs/framework/osk";

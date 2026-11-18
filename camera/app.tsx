@@ -6,7 +6,7 @@
 // preview spans the width over the bar.
 //
 // The preview is the camera module's texture (camera.photo,
-// @pocketjs/framework/camera). The shutter (A, R or the bar's button) asks
+// @pocket-shell/runtime/camera). The shutter (A, R or the bar's button) asks
 // the host for a 640x480 still; the host saves it as a JPEG under
 // sdmc:/DCIM/100POCKT and answers with a "saved" event, after which the
 // bar's thumbnail loads the new photo. X switches between the outer and the
@@ -15,7 +15,7 @@
 
 import { createSignal, onCleanup, Show } from "solid-js";
 import { animate, jump } from "@pocketjs/framework/animation";
-import { AppletSurface } from "@pocketjs/framework/applet";
+import { AppletSurface } from "@pocket-shell/runtime/applet";
 import { Image, Text, View } from "@pocketjs/framework/components";
 import {
   capturePhoto,
@@ -28,7 +28,7 @@ import {
   PHOTO_KIND,
   PHOTO_PENDING,
   photoEvents,
-} from "@pocketjs/framework/camera";
+} from "@pocket-shell/runtime/camera";
 import { BTN } from "@pocketjs/framework/input";
 import { onButtonPress, onFrame } from "@pocketjs/framework/lifecycle";
 import { registerTexture, type NodeMirror } from "@pocketjs/framework/renderer";

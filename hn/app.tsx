@@ -11,7 +11,7 @@
 // the linked Mac, two at a time.
 
 import { createSignal } from "solid-js";
-import { AppletSurface } from "@pocketjs/framework/applet";
+import { AppletSurface } from "@pocket-shell/runtime/applet";
 import { View } from "@pocketjs/framework/components";
 import { BTN } from "@pocketjs/framework/input";
 import { onButtonPress, onFrame } from "@pocketjs/framework/lifecycle";

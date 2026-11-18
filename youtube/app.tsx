@@ -12,7 +12,7 @@
 // plays the 160x90 PAL8 stream.
 
 import { createSignal } from "solid-js";
-import { AppletSurface } from "@pocketjs/framework/applet";
+import { AppletSurface } from "@pocket-shell/runtime/applet";
 import { View } from "@pocketjs/framework/components";
 import { BTN } from "@pocketjs/framework/input";
 import { onButtonPress } from "@pocketjs/framework/lifecycle";

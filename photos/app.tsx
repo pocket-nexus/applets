@@ -5,7 +5,7 @@
 // 3DS, as many as fit on a wider surface, centred); a photo full screen,
 // swiped left and right; delete with a confirmation.
 //
-// The host decodes on a worker (camera.photo, @pocketjs/framework/camera):
+// The host decodes on a worker (camera.photo, @pocket-shell/runtime/camera):
 // loadPhoto queues a decode and a "loaded" event hands back a texture. The
 // grid asks for the thumbnails of the rows near the visible band, keeps at
 // most THUMBS_KEPT of them and frees the ones furthest away; its rows are a
@@ -14,7 +14,7 @@
 
 import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, Show, type Accessor } from "solid-js";
 import { animate, jump } from "@pocketjs/framework/animation";
-import { AppletSurface } from "@pocketjs/framework/applet";
+import { AppletSurface } from "@pocket-shell/runtime/applet";
 import { Image, Text, View } from "@pocketjs/framework/components";
 import {
   deletePhoto,
@@ -25,7 +25,7 @@ import {
   PHOTO_PENDING,
   photoEvents,
   type PhotoEntry,
-} from "@pocketjs/framework/camera";
+} from "@pocket-shell/runtime/camera";
 import { getOps } from "@pocketjs/framework/host";
 import { BTN } from "@pocketjs/framework/input";
 import { onButtonPress, onFrame } from "@pocketjs/framework/lifecycle";
