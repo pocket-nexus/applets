@@ -3,15 +3,15 @@
 //
 // The guest is bundled by Pocket Shell's CLI and its pinned PocketJS but
 // resolved from THIS repository: an import of "solid-js" or
-// "@pocketjs/framework/components" in an applet walks up to ./node_modules,
-// not into a submodule. So the packages that
+// "@pocketjs/framework/components" in an applet, or in the kit ui/ links to,
+// walks up to ./node_modules, not into a submodule. So the packages that
 // PocketJS checkout already installed are linked here rather than installed a
 // second time, which also guarantees one copy of Solid — two would give the
 // app a reactive graph the framework does not own. Pocket Shell's own modules
 // under vendor/pocket-shell (the CLI, runtime/, devices/3ds) find
 // "@pocketjs/framework/*" through the same links.
 
-import { existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { POCKET_SHELL, POCKET_SHELL_CLI, POCKETJS, ROOT } from "./paths.ts";
 
@@ -30,6 +30,17 @@ if (bun !== pinned) {
 }
 if (Bun.version !== bun) {
   throw new Error(`applets setup: this checkout runs on Bun ${bun} (.bun-version); this is Bun ${Bun.version}`);
+}
+
+// The kit is Pocket Shell's ui/, and ui here is a link to the submodule's.
+// An applet imports it as ../ui/<module>, inside this tree, which the applet
+// rules require of every relative import.
+const kit = resolve(ROOT, "ui");
+if (!existsSync(resolve(kit, "nav.tsx"))) {
+  throw new Error("applets setup: ui/ does not reach the kit; it links to vendor/pocket-shell/ui, so initialize that submodule (git submodule update --init vendor/pocket-shell), or make vendor/pocket-shell a link to the checkout POCKET_SHELL_ROOT names");
+}
+if (realpathSync(kit) !== realpathSync(resolve(POCKET_SHELL, "ui"))) {
+  console.log(`applets setup: the kit at ui/ is ${realpathSync(kit)}, and the tools run from ${POCKET_SHELL} (POCKET_SHELL_ROOT); the two must be the same commit`);
 }
 
 // sources are inside the PocketJS checkout POCKETJS names (tools/paths.ts)

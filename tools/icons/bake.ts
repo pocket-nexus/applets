@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // tools/icons/bake.ts — turn icons.py's 512 px Blender renders into the
-// textures in ui/art/icons, and write a contact sheet.
+// textures of the icon family, and write a contact sheet.
 //
 //   bun tools/icons/bake.ts .pocket-build/icons/render [sheet dir] [out dir]
 //
-// ui/art/icons is the one copy of the family: Pocket Shell's launcher draws
-// these textures (ui/chrome.tsx `Tile`), and each applet's icon.png, the
-// picture the store lists and the package carries, is a link to its
-// `<name>-64@2x.png`.
+// The family's one copy is Pocket Shell's ui/art/icons, committed in
+// pocket-nexus/pocket-shell: the textures go into that checkout (POCKET_SHELL
+// in tools/paths.ts, by default the submodule vendor/pocket-shell, which ui/
+// here links into). Pocket Shell's launcher draws them (ui/chrome.tsx `Tile`),
+// and each applet's icon.png, the picture the store lists and the package
+// carries, is a link to its `<name>-64@2x.png`.
 //
 // Each icon is drawn at a few sizes (24 in table rows and the banner, 46 on
 // the springboard and the dock, 64 for the store's detail icon) and
@@ -29,7 +31,7 @@
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { POCKETJS, ROOT } from "../paths.ts";
+import { POCKET_SHELL, POCKETJS, ROOT } from "../paths.ts";
 
 const { decodePng } = await import(resolve(POCKETJS, "framework/compiler/pak.ts"));
 const { encodePNG } = await import(resolve(POCKETJS, "tools/png.ts"));
@@ -73,9 +75,9 @@ const ICONS: Record<string, number[]> = {
 };
 
 const RENDERS = resolve(process.argv[2] ?? resolve(ROOT, ".pocket-build/icons/render"));
-/** Where the textures go: this directory, or a 4th argument to review a
- *  bake before copying it in. */
-const OUT = process.argv[4] ? resolve(process.argv[4]) : resolve(ROOT, "ui/art/icons");
+/** Where the textures go: ui/art/icons of the Pocket Shell checkout, or a 4th
+ *  argument to review a bake before copying it in. */
+const OUT = process.argv[4] ? resolve(process.argv[4]) : resolve(POCKET_SHELL, "ui/art/icons");
 
 type Rgba = Float32Array; // straight alpha, 0..1
 
@@ -323,3 +325,4 @@ const sheetDir = resolve(process.argv[3] ?? resolve(ROOT, ".pocket-build/validat
 mkdirSync(sheetDir, { recursive: true });
 writeFileSync(join(sheetDir, "contact-sheet.png"), encodePNG(sheet, W, sheetH));
 console.log(`contact sheet -> ${join(sheetDir, "contact-sheet.png")}`);
+console.log(`textures -> ${OUT}`);
