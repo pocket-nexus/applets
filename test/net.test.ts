@@ -8,11 +8,11 @@
 
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { bindWorker, FactKind, ResourceStatus, type HostFact, type WorkerHost } from "@pocketjs/framework/worker";
-import { atlasFont, packAtlas, tofuCell, TOFU_CODEPOINT, type GlyphCell } from "../vendor/pocketjs/tools/companion/glyphs.ts";
+import { atlasFont, packAtlas, tofuCell, TOFU_CODEPOINT, type GlyphCell } from "./glyph-atlas.ts";
 import { atlasBodies, GLYPH_ATLAS_URL, GLYPH_TEXT, mergeAtlases } from "../lib/glyphs.ts";
 import { companionService, DESCRIPTOR_BYTES, requestBytes } from "../lib/net.ts";
 import { loadDocument, saveDocument, type StoreRequests } from "../lib/store.ts";
-import { resolveWorkerChannels } from "../vendor/pocketjs/contracts/spec/worker.ts";
+import { resolveWorkerChannels } from "../vendor/pocket-shell/vendor/pocketjs/contracts/spec/worker.ts";
 import { Answer, answerBytes, decodeAnswer, decodeEnd, encodeRequest, NET_WORKER, text, utf8 } from "../lib/net-wire.ts";
 
 /** The response ring of a host whose contract states 4 KiB records. */

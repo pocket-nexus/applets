@@ -4,12 +4,13 @@
 // they are. The frame that runs it has no origin, so neither may be a module
 // or a fetch.
 //
-//   bun store/build-player.ts     (the core comes from pocketjs: bun tools/wasm.ts there)
+//   bun store/build-player.ts     (the core comes from PocketJS, Pocket Shell's submodule
+//                                  vendor/pocket-shell/vendor/pocketjs: bun tools/wasm.ts there)
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dir, "..");
-const POCKETJS = join(ROOT, "vendor", "pocketjs");
+const POCKETJS = join(ROOT, "vendor", "pocket-shell", "vendor", "pocketjs");
 const OUT = join(ROOT, "store", "site", "public", "play");
 mkdirSync(OUT, { recursive: true });
 

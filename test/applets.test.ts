@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// test/applets.test.ts — every program here is a Pocket Applet (PocketJS
+// test/applets.test.ts — every program here is a Pocket Applet (Pocket Shell's
 // docs/APPLETS.md) and meets the applet rules: the manifest rules and the
-// source rules over its import graph. The bundle budgets run when each applet
+// source rules over its import graph (runtime/package/applet-check.ts there). The bundle budgets run when each applet
 // builds. An applet's network is the worker in lib/net-worker.ts, which every
 // applet with net.http declares alike.
 
 import { describe, expect, test } from "bun:test";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { resolve } from "node:path";
-import { validateAndResolveBuildPlan } from "../vendor/pocketjs/framework/src/manifest/resolve.ts";
-import { checkApplet, formatAppletDiagnostics } from "../vendor/pocketjs/tools/applet-check.ts";
+import { validateAndResolveBuildPlan } from "../vendor/pocket-shell/runtime/manifest/resolve.ts";
+import { checkApplet, formatAppletDiagnostics } from "../vendor/pocket-shell/runtime/package/applet-check.ts";
 import { APPS, appContract } from "../tools/apps.ts";
 import { ROOT } from "../tools/paths.ts";
 import { NET_WORKER } from "../lib/net-wire.ts";

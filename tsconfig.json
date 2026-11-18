@@ -11,10 +11,10 @@
     "resolveJsonModule": true,
     "types": ["bun-types"],
     "paths": {
-      "@pocketjs/framework": ["./vendor/pocketjs/framework/src/index.ts"],
-      "@pocketjs/framework/solid": ["./vendor/pocketjs/framework/src/index.ts"],
-      "@pocketjs/framework/input": ["./vendor/pocketjs/framework/src/input-api.ts"],
-      "@pocketjs/framework/*": ["./vendor/pocketjs/framework/src/*"]
+      "@pocketjs/framework": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/index.ts"],
+      "@pocketjs/framework/solid": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/index.ts"],
+      "@pocketjs/framework/input": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/input-api.ts"],
+      "@pocketjs/framework/*": ["./vendor/pocket-shell/vendor/pocketjs/framework/src/*"]
     }
   },
   "include": ["appstore", "camera", "discord", "github", "hn", "homeassistant", "maps", "notes", "photos", "podcasts", "spotify", "weather", "x", "youtube", "kit", "lib", "ui", "tools", "test"]

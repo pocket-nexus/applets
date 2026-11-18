@@ -2,9 +2,14 @@
 // The applets and their resolved build plans. Every directory here with a
 // pocket.app.json is an applet; its entry is relative to this repository,
 // the build's project root.
+//
+// Pocket Shell's scripts import this module from an applets checkout and read
+// ONLY (shells/3ds/scripts/apps.ts there), also in a checkout whose setup has
+// not run: the top level reads directories and loads nothing from a
+// submodule. What needs Pocket Shell's code (writePlan) imports it when called.
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { PLANS, ROOT, VENDOR } from "./paths.ts";
+import { PLANS, POCKET_SHELL, ROOT } from "./paths.ts";
 
 /** `app`'s app contract. */
 export function appContract(app: string): string {
@@ -41,11 +46,12 @@ export function readContract(app: string): AppContract {
   return JSON.parse(readFileSync(appContract(app), "utf8")) as AppContract;
 }
 
-/** Resolve `app`'s app contract against the 3ds-dev host contract and write
- *  the plan the 3DS toolchain reads (the sims build with it). */
+/** Resolve `app`'s app contract against the 3DS host contract (Pocket Shell's
+ *  devices/3ds/pocket.host.json, host id 3ds-dev) and write the plan its 3DS
+ *  build reads (the sims build with it). */
 export async function writePlan(app: string): Promise<{ path: string; output: string }> {
-  const { readPocketManifest } = await import(resolve(VENDOR, "framework/src/manifest/load.ts"));
-  const { resolve3dsBuildPlan } = await import(resolve(VENDOR, "tools/3ds-profile.ts"));
+  const { readPocketManifest } = await import(resolve(POCKET_SHELL, "runtime/manifest/load.ts"));
+  const { resolve3dsBuildPlan } = await import(resolve(POCKET_SHELL, "devices/3ds/tools/profile.ts"));
   const plan = resolve3dsBuildPlan(readPocketManifest(appContract(app)).manifest);
   const dir = resolve(PLANS, "3ds");
   mkdirSync(dir, { recursive: true });

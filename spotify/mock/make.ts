@@ -11,7 +11,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import opentype from "opentype.js";
-import { bakeSlot } from "../../vendor/pocketjs/framework/compiler/bake-font.ts";
+import { bakeSlot } from "../../vendor/pocket-shell/vendor/pocketjs/framework/compiler/bake-font.ts";
 import { COMPANION_ORIGIN } from "../../lib/net.ts";
 import { GLYPH_BOLD, GLYPH_TEXT } from "../../lib/glyphs.ts";
 import type { AlbumPage, ArtistPage, Device, Home, Item, Page, Player, PlaylistPage, Queue, Ref, Status } from "../contract.ts";
@@ -334,7 +334,7 @@ answer("POST", "/like", "like.json", { liked: true });
 // ---- glyph atlases: printable ASCII; the player draws the rest ---------------------
 
 mkdirSync(join(DIR, "glyphs"), { recursive: true });
-const FONTS = resolve(DIR, "../../vendor/pocketjs/assets/fonts");
+const FONTS = resolve(DIR, "../../vendor/pocket-shell/vendor/pocketjs/assets/fonts");
 const font = (file: string) => opentype.parse(readFileSync(join(FONTS, file)).buffer as ArrayBuffer);
 const ascii = Array.from({ length: 95 }, (_, i) => 0x20 + i);
 for (const [face, file, spec] of [["text", "Inter-Regular.ttf", GLYPH_TEXT], ["bold", "Inter-Bold.ttf", GLYPH_BOLD]] as const) {

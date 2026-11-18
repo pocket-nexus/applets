@@ -29,10 +29,10 @@
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { ROOT, VENDOR } from "../paths.ts";
+import { POCKETJS, ROOT } from "../paths.ts";
 
-const { decodePng } = await import(resolve(VENDOR, "framework/compiler/pak.ts"));
-const { encodePNG } = await import(resolve(VENDOR, "tools/png.ts"));
+const { decodePng } = await import(resolve(POCKETJS, "framework/compiler/pak.ts"));
+const { encodePNG } = await import(resolve(POCKETJS, "tools/png.ts"));
 
 /** Corner radius as a fraction of the side; ui/chrome.tsx draws plain tiles with it. */
 export const ICON_RADIUS = 0.2;

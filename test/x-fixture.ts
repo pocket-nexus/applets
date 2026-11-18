@@ -7,9 +7,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import opentype from "opentype.js";
-import { bakeSlot } from "../vendor/pocketjs/framework/compiler/bake-font.ts";
-import { encodeImageEntry } from "../vendor/pocketjs/framework/compiler/pak.ts";
-import { PSM } from "../vendor/pocketjs/contracts/spec/spec.ts";
+import { bakeSlot } from "../vendor/pocket-shell/vendor/pocketjs/framework/compiler/bake-font.ts";
+import { encodeImageEntry } from "../vendor/pocket-shell/vendor/pocketjs/framework/compiler/pak.ts";
+import { PSM } from "../vendor/pocket-shell/vendor/pocketjs/contracts/spec/spec.ts";
 import type { NetAnswer, NetRoute } from "./net-fake.ts";
 import type { Post } from "../x/api.ts";
 
@@ -67,7 +67,7 @@ export function xPosts(page: 1 | 2): Post[] {
   ];
 }
 
-const FONTS = join(import.meta.dir, "../vendor/pocketjs/assets/fonts");
+const FONTS = join(import.meta.dir, "../vendor/pocket-shell/vendor/pocketjs/assets/fonts");
 const face = (file: string) => opentype.parse(readFileSync(join(FONTS, file)).buffer as ArrayBuffer);
 let fonts: { regular: opentype.Font; bold: opentype.Font; cjk: opentype.Font } | null = null;
 

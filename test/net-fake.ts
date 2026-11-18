@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// test/net-fake.ts — an applet's worker for the sims. PocketJS's
-// sim runs no worker realm, so this is the channel bridge the UI bundle finds
-// on globalThis (`__pocketWorkerChannels`, framework/src/worker-channels.ts):
+// test/net-fake.ts — an applet's worker for the sims. Pocket Shell's 3DS
+// console sim (runtime/sim/console-3ds.ts) runs no worker realm, so this is
+// the channel bridge the UI bundle finds on globalThis
+// (`__pocketWorkerChannels`, PocketJS framework/src/worker-channels.ts):
 // it reads the UI's request records (ui/net-wire.ts) and answers them from
 // fixture routes, as ui/net-worker.ts answers them with the host's http node.
 //
@@ -12,7 +13,7 @@
 // time the UI observes the response ring, which ui/net.ts does once a frame.
 // Every route answers `delayTicks` ticks (default 1) after it starts.
 
-import { bootConsole3ds, type Console3ds, type Console3dsOptions } from "../vendor/pocketjs/programs/sim/console-3ds.ts";
+import { bootConsole3ds, type Console3ds, type Console3dsOptions } from "../vendor/pocket-shell/runtime/sim/console-3ds.ts";
 import { Answer, answerBytes, decodeRequest, encodeAnswer, encodeEnd, FLOOR_CHANNEL, NET_WORKER, NODE_REQUESTS, Status, utf8 } from "../lib/net-wire.ts";
 
 export interface NetRequest {

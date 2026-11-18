@@ -10,9 +10,9 @@
 //                    {type: "button", name: "back"}
 //   frame → parent   {type: "ready"} {type: "running", id, title}
 //                    {type: "request", method, url, answer, status} {type: "error", message}
-import { createWasmUi } from "../../vendor/pocketjs/platforms/web/wasm-ops.js";
-import { canvasRasterizer, installRuntimeGlyphs } from "../../vendor/pocketjs/platforms/web/runtime-glyphs.js";
-import { decodePocketPackage, findSection, POCKET_SECTION } from "../../vendor/pocketjs/contracts/spec/pocket-package.ts";
+import { createWasmUi } from "../../vendor/pocket-shell/vendor/pocketjs/platforms/web/wasm-ops.js";
+import { canvasRasterizer, installRuntimeGlyphs } from "../../vendor/pocket-shell/vendor/pocketjs/platforms/web/runtime-glyphs.js";
+import { decodePocketPackage, findSection, POCKET_SECTION } from "../../vendor/pocket-shell/runtime/spec/pocket-package.ts";
 import { createMockWorker, FLOOR_DEVICE, planDevice, type MockData } from "../../lib/mock.ts";
 
 const BTN = { SELECT: 0x0001, START: 0x0008, UP: 0x0010, RIGHT: 0x0020, DOWN: 0x0040, LEFT: 0x0080, TRIANGLE: 0x1000, CIRCLE: 0x2000, CROSS: 0x4000, SQUARE: 0x8000 };

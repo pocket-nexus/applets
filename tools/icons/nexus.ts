@@ -5,17 +5,17 @@
 //   bun tools/icons/nexus.ts <render dir>
 //
 // The mark is PocketJS's own drawing (the yellow shell, plum screen, pink
-// dot and cyan and pink keys; vendor/pocketjs/skills/pocketjs-video-outro/
-// assets/pocketjs-mark.svg), drawn flat at four fifths of the tile with a
+// dot and cyan and pink keys; skills/pocketjs-video-outro/assets/
+// pocketjs-mark.svg in PocketJS), drawn flat at four fifths of the tile with a
 // soft drop shadow, at the size of a Blender render, so bake.ts finishes it
 // like every other icon.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { createCanvas, Image } from "@napi-rs/canvas";
-import { ROOT, VENDOR } from "../paths.ts";
+import { POCKETJS, ROOT } from "../paths.ts";
 
-const MARK_SVG = resolve(VENDOR, "skills/pocketjs-video-outro/assets/pocketjs-mark.svg");
+const MARK_SVG = resolve(POCKETJS, "skills/pocketjs-video-outro/assets/pocketjs-mark.svg");
 const OUT = resolve(process.argv[2] ?? resolve(ROOT, ".pocket-build/icons/render"));
 const RES = 512;
 /** The mark's side as a fraction of the tile. */
