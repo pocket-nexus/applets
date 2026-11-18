@@ -19,7 +19,7 @@ import { createSignal } from "solid-js";
 import { getOps } from "@pocketjs/framework/host";
 import { platform } from "@pocketjs/framework/platform";
 import { companionService, fetch, NET_MAX_RESPONSE_BYTES, NetError, type NetResponse } from "../lib/net.ts";
-import { GLYPH_ATLAS_URL } from "../ui/glyphs.ts";
+import { GLYPH_ATLAS_URL } from "../lib/glyphs.ts";
 import type { AlbumPage, ArtistPage, Device, Failure, Home, Page, Player, PlaylistPage, PlayRequest, Queue, Status } from "./contract.ts";
 import { searchPath, withNext } from "./format.ts";
 
@@ -106,7 +106,7 @@ export interface SpotifyClient {
   repeat(mode: Player["repeat"]): Promise<Player>;
   transfer(deviceId: string, play?: boolean): Promise<Player>;
   like(uri: string, liked: boolean): Promise<{ liked: boolean }>;
-  /** A glyph atlas for `face`, in this queue (ui/glyphs.ts GlyphSend). */
+  /** A glyph atlas for `face`, in this queue (lib/glyphs.ts GlyphSend). */
   atlas(face: "text" | "bold", body: string): Promise<Uint8Array>;
   covers: Covers;
   /** Requests running now. */

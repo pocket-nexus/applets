@@ -14,11 +14,11 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { BTN, IMG_FLAG_LINEAR, PSM } from "../vendor/pocketjs/contracts/spec/spec.ts";
-import { encodeImageEntry } from "../vendor/pocketjs/framework/compiler/pak.ts";
-import type { Console3ds } from "../vendor/pocketjs/programs/sim/console-3ds.ts";
+import { BTN, IMG_FLAG_LINEAR, PSM } from "../vendor/pocket-shell/vendor/pocketjs/contracts/spec/spec.ts";
+import { encodeImageEntry } from "../vendor/pocket-shell/vendor/pocketjs/framework/compiler/pak.ts";
+import type { Console3ds } from "../vendor/pocket-shell/runtime/sim/console-3ds.ts";
 import { bootWithNet, type NetConsole, type NetRequest, type NetRoute } from "./net-fake.ts";
-import { encodePNG } from "../vendor/pocketjs/tools/png.ts";
+import { encodePNG } from "../vendor/pocket-shell/vendor/pocketjs/tools/png.ts";
 import { PORTRAIT, TAB5, tab5Shot } from "./tab5.ts";
 import { buildGuest } from "./build.ts";
 

@@ -87,7 +87,7 @@ The service is the `service` section of `pocket.app.json`, beside `applet` (the 
 | `name` | the service's name: the applet's directory, `^[a-z][a-z0-9-]{0,31}$`. The app lists it in its own `applet.services` |
 | `entry` | the entry, relative to this repository: the applet's `service.ts` |
 | `autostart` | `true` for a service that runs from the moment its host does (a speaker a phone must find, a gateway that stays connected). Without it the service starts at the first request for it |
-| `setup` | what the service needs from its owner, as PocketJS's `SetupSpec` (`contracts/spec/owner-setup.ts`): fields the owner types once, and a vendor's own programs fetched on the owner's consent to the vendor's terms. **The host runs it**: it keeps the values, fetches the tools and answers `/<name>/_setup`, the same way for every service. Absent when the service needs nothing |
+| `setup` | what the service needs from its owner, as Pocket Shell's `SetupSpec` (`runtime/spec/owner-setup.ts`): fields the owner types once, and a vendor's own programs fetched on the owner's consent to the vendor's terms. **The host runs it**: it keeps the values, fetches the tools and answers `/<name>/_setup`, the same way for every service. Absent when the service needs nothing |
 | `commands` | the command-line programs the service runs, by name (`yt-dlp`, `ffmpeg`, `omarchy-pocket-spotify`). The service starts them itself; the host's computer has them, or the host says which are missing. Absent when it runs none |
 
 **The build adds two members to the manifest it packs**: `sha256`, the SHA-256 of the service file, and `bun`, the version in `.bun-version` the service was built and tested on.
@@ -184,7 +184,7 @@ An applet's own request for a path under `/_` never reaches the service: `/_setu
 
 ## What a service does not do
 
-1. **It imports nothing from a host.** No path into pocket-hub or omarchy-pocket: what it needs from the host is in `context`. PocketJS's pure modules (the image entry encoder, the media stream server) are imported from `vendor/pocketjs` and end up in its bundle.
+1. **It imports nothing from a host.** No path into pocket-hub or omarchy-pocket: what it needs from the host is in `context`. PocketJS's pure modules (the image entry encoder, the media stream server) are imported from `vendor/pocket-shell/vendor/pocketjs` and end up in its bundle.
 2. **It starts no program but one its manifest names**: a command in `commands`, through `context.command`, or a `setup.tools` entry. Nothing it downloaded itself, nothing it wrote, and no path written in its source.
 3. **It keeps files only under `context.dir`**, and a secret there with mode 0600.
 4. **No credential leaves it**: not in an answer, not in `state()`, not in the log.
@@ -263,7 +263,7 @@ What each repository changes, in the order it can land:
 
 | Repository | Change |
 |---|---|
-| pocketjs | the app manifest gains the `service` section (`pocket-manifest.ts` refuses a key it does not know today), and `pocket compile` packs the manifest with the `sha256` and `bun` the build gives it; `contracts/spec/service.ts`: the section, the protocol's routes and headers, `context`, as types and constants that import nothing (beside `owner-setup.ts`) |
+| pocket-shell | the app contract gains the `service` section (`runtime/spec/pocket-manifest.ts` refuses a key it does not know today), and `pocket-shell compile` packs the app contract with the `sha256` and `bun` the build gives it; `runtime/spec/service.ts`: the section, the protocol's routes and headers, `context`, as types and constants that import nothing (beside `owner-setup.ts`) |
 | applets | `lib/service.ts`, the service's side of the protocol; `tools/build.ts` builds service files and `tools/check.ts` checks them; the store takes and serves a service file with the package that names it (one added column, `versions.service`); the six services move in, each with its `contract.ts` |
 | pocket-hub | Pocket Hub.app carries a `bun` executable and runs services with it; it gains `nowPlaying`, and `decodeImage` for any picture on any computer it runs on; its service host installs service files, runs each as a process and speaks the protocol; its tools directory (yt-dlp, ffmpeg) goes first on a service's `PATH`; the five app services leave `tools/companion/services/`; the host services stay |
 | omarchy-pocket | omarchy-pocketd runs service files through the same service host, with the device's Bun; it gains `webSignIn`, a sign-in window on the device; `daemon/spotify.ts` moves to `spotify/service.ts` here; `omarchy-pocket-spotify` stays in the image, in the directory that goes first on a service's `PATH`; the image carries the service files beside the packages |

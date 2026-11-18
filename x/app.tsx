@@ -10,7 +10,7 @@
 //
 // The X session lives on the linked Mac (Pocket Hub's x service); the
 // console asks it for pages over @pocketjs/framework/net. Text in any script
-// draws from glyph atlases the Mac renders (ui/glyphs.ts).
+// draws from glyph atlases the Mac renders (lib/glyphs.ts).
 
 import { createSignal, For, Show } from "solid-js";
 import { AppletSurface } from "@pocketjs/framework/applet";
@@ -19,7 +19,7 @@ import { createGesture } from "@pocketjs/framework/gesture";
 import { onButtonPress, onFrame } from "@pocketjs/framework/lifecycle";
 import { companionNow } from "../lib/net.ts";
 import { createOsk, Osk, oskHeight } from "@pocketjs/framework/osk";
-import { createGlyphs, GLYPH_BOLD, GLYPH_TEXT } from "../ui/glyphs.ts";
+import { createGlyphs, GLYPH_BOLD, GLYPH_TEXT } from "../lib/glyphs.ts";
 import { keep } from "../ui/keep.ts";
 import { createNavStack } from "../ui/nav.tsx";
 import { SCREEN_H, SCREEN_W, appletTouch, appletSurfaceId } from "../ui/screen.ts";
@@ -49,7 +49,7 @@ export default function X() {
   const [now, setNow] = createSignal(Math.floor(companionNow() / 60000) * 60000);
   let frames = 0;
   // The frame a list last moved (env.moved): glyph atlases are asked for and
-  // loaded once the lists have rested SETTLE_FRAMES frames (ui/glyphs.ts when).
+  // loaded once the lists have rested SETTLE_FRAMES frames (lib/glyphs.ts when).
   let movedAt = -SETTLE_FRAMES;
   onFrame(() => {
     if (++frames % 60 === 0) setNow(Math.floor(companionNow() / 60000) * 60000);

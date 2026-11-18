@@ -2,12 +2,12 @@
 // spotify/text.ts — titles and names in any script. Text in printable ASCII
 // (and the separator dot, a literal of the bundle, so the baked faces hold
 // it) draws from the baked faces at their sizes; anything else draws from
-// the glyph atlases the device renders (ui/glyphs.ts) once they cover it,
+// the glyph atlases the device renders (lib/glyphs.ts) once they cover it,
 // as skeleton bars while they are on their way (ui/skeleton.tsx), and
 // folded to ASCII when the glyphs service failed. A page reads
 // `faces.revision()` around its layout, so text is laid out again as glyphs
 // arrive. Music titles are often Japanese or Chinese.
-import { createGlyphs, GLYPH_BOLD, GLYPH_TEXT, richText, type Glyphs } from "../ui/glyphs.ts";
+import { createGlyphs, GLYPH_BOLD, GLYPH_TEXT, richText, type Glyphs } from "../lib/glyphs.ts";
 import { skeletonLines } from "../ui/skeleton.tsx";
 import { ellipsize, toAscii, wrap } from "../ui/text.ts";
 import type { SpotifyClient } from "./api.ts";

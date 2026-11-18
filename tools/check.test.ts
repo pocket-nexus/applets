@@ -36,6 +36,15 @@ describe("pocket-applet check", () => {
     expect(found[0]).toContain("listPage");
   });
 
+  test("../ui and the three modules of ../lib for applets drawn with it are refused", () => {
+    for (const module of ["../ui/nav.tsx", "../lib/glyphs.ts", "../lib/setup.tsx", "../lib/qr.tsx"]) {
+      expect([module, errors(applet({ "a.ts": `import {} from "${module}";\n` })).join()]).toEqual([module, expect.stringContaining("use ../kit")]);
+    }
+    for (const module of ["../ui/window.tsx", "../ui/keep.ts", "../lib/net.ts", "../lib/store.ts"]) {
+      expect([module, errors(applet({ "a.ts": `import {} from "${module}";\n` }))]).toEqual([module, []]);
+    }
+  });
+
   test("a file that says it draws its own pixels may", () => {
     const found = errors(applet({ "game.tsx": '// pocket-applet: draws its own pixels because it is a game\nimport { View } from "@pocketjs/framework/components";\nexport const A = () => <View style={{ insetL: 3 }} />;\n' }));
     expect(found).toEqual([]);

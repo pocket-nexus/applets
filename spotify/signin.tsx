@@ -13,7 +13,7 @@ import { BTN } from "@pocketjs/framework/input";
 import { onFrame } from "@pocketjs/framework/lifecycle";
 import { companionNow } from "../lib/net.ts";
 import { NAV_H } from "../ui/bar.tsx";
-import { Qr } from "../ui/qr.tsx";
+import { Qr } from "../lib/qr.tsx";
 import { viewHeight, type LayerContext, type PageSpec } from "../ui/nav.tsx";
 import { SCREEN_H, SCREEN_W } from "../ui/screen.ts";
 import { FONT, wrap } from "../ui/text.ts";

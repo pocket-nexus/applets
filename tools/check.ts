@@ -26,6 +26,7 @@ const LAYOUT: [RegExp, string][] = [
   [/\b(insetL|insetT|bgColor|textColor)\b|\bclass=/, ROWS],
   [/["'`]#[0-9a-fA-F]{3,8}["'`]/, "a colour of your own: pages take their colours from the kit (rows' tones, ICONS' colours); a pill's colour is hex without the #"],
   [/from\s+["']\.\.\/ui\/(?!window|keep)/, "../ui is what the kit is built from: use ../kit (only ../ui/window.tsx and ../ui/keep.ts are for apps)"],
+  [/from\s+["']\.\.\/lib\/(?:glyphs|setup|qr)\./, "../lib/glyphs.ts, ../lib/setup.tsx and ../lib/qr.tsx are for applets that draw with ../ui: use ../kit"],
   [/createNavStack|createTouchRouter|createPress\b|createOsk\b/, "createApp already has the stack, touch and keys; a typed value is app.compose (../kit/README.md)"],
 ];
 

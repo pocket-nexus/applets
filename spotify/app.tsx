@@ -21,7 +21,7 @@ import { createOsk, keyboardElsewhere, Osk, oskHeight } from "@pocketjs/framewor
 import { keep } from "../ui/keep.ts";
 import { Legend, legendWhileTyping } from "../ui/legend.tsx";
 import { createNavStack, viewHeight, type NavStack } from "../ui/nav.tsx";
-import { setupPage } from "../ui/setup.tsx";
+import { setupPage } from "../lib/setup.tsx";
 import { companionService } from "../lib/net.ts";
 import { appletSurfaceId, appletTouch, SCREEN_H, SCREEN_W } from "../ui/screen.ts";
 import { FONT, measure, wrap } from "../ui/text.ts";

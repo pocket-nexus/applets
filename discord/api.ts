@@ -10,7 +10,7 @@
 // poll of an open channel takes one slot for up to POLL_WAIT_S seconds.
 
 import { companionService, fetch, NetError, NET_MAX_RESPONSE_BYTES } from "../lib/net.ts";
-import { GLYPH_ATLAS_URL } from "../ui/glyphs.ts";
+import { GLYPH_ATLAS_URL } from "../lib/glyphs.ts";
 import { notLinked, serviceSetup, theComputer, yourComputer } from "../ui/companion.ts";
 
 export const MAX_INFLIGHT = 2;

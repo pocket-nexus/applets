@@ -1,32 +1,49 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // bun tools/setup.ts — link the runtime the applets build against.
 //
-// The guest is bundled by the vendored toolchain but resolved from THIS
-// repository: an import of "solid-js" or "@pocketjs/framework/components" in
-// an applet walks up to ./node_modules, not into the submodule. So the packages
-// vendor/pocketjs already installed are linked here rather than installed a
+// The guest is bundled by Pocket Shell's CLI and its pinned PocketJS but
+// resolved from THIS repository: an import of "solid-js" or
+// "@pocketjs/framework/components" in an applet, or in the kit ui/ links to,
+// walks up to ./node_modules, not into a submodule. So the packages that
+// PocketJS checkout already installed are linked here rather than installed a
 // second time, which also guarantees one copy of Solid — two would give the
-// app a reactive graph the framework does not own.
+// app a reactive graph the framework does not own. Pocket Shell's own modules
+// under vendor/pocket-shell (the CLI, runtime/, devices/3ds) find
+// "@pocketjs/framework/*" through the same links.
 
-import { existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
-import { ROOT, VENDOR } from "./paths.ts";
+import { POCKET_SHELL, POCKET_SHELL_CLI, POCKETJS, ROOT } from "./paths.ts";
 
-if (!existsSync(resolve(VENDOR, "package.json"))) {
-  throw new Error("applets setup: initialize vendor/pocketjs first (git submodule update --init)");
+if (!existsSync(POCKET_SHELL_CLI)) {
+  throw new Error(`applets setup: no Pocket Shell checkout at ${POCKET_SHELL}; initialize it first (git submodule update --init vendor/pocket-shell, or name one in POCKET_SHELL_ROOT)`);
+}
+if (!existsSync(resolve(POCKETJS, "package.json"))) {
+  throw new Error(`applets setup: no PocketJS at ${POCKETJS}; initialize Pocket Shell's submodule first (git -C ${POCKET_SHELL} submodule update --init vendor/pocketjs)`);
 }
 // The pinned PocketJS names the Bun it runs on (an older Bun cannot load a
 // host config), and .bun-version here, the one CI installs, names the same.
 const bun = readFileSync(resolve(ROOT, ".bun-version"), "utf8").trim();
-const pinned = readFileSync(resolve(VENDOR, ".bun-version"), "utf8").trim();
+const pinned = readFileSync(resolve(POCKETJS, ".bun-version"), "utf8").trim();
 if (bun !== pinned) {
-  throw new Error(`applets setup: .bun-version says Bun ${bun}; vendor/pocketjs runs on Bun ${pinned}`);
+  throw new Error(`applets setup: .bun-version says Bun ${bun}; the PocketJS at ${POCKETJS} runs on Bun ${pinned}`);
 }
 if (Bun.version !== bun) {
   throw new Error(`applets setup: this checkout runs on Bun ${bun} (.bun-version); this is Bun ${Bun.version}`);
 }
 
-// sources are inside the PocketJS checkout VENDOR names (tools/paths.ts)
+// The kit is Pocket Shell's ui/, and ui here is a link to the submodule's.
+// An applet imports it as ../ui/<module>, inside this tree, which the applet
+// rules require of every relative import.
+const kit = resolve(ROOT, "ui");
+if (!existsSync(resolve(kit, "nav.tsx"))) {
+  throw new Error("applets setup: ui/ does not reach the kit; it links to vendor/pocket-shell/ui, so initialize that submodule (git submodule update --init vendor/pocket-shell), or make vendor/pocket-shell a link to the checkout POCKET_SHELL_ROOT names");
+}
+if (realpathSync(kit) !== realpathSync(resolve(POCKET_SHELL, "ui"))) {
+  console.log(`applets setup: the kit at ui/ is ${realpathSync(kit)}, and the tools run from ${POCKET_SHELL} (POCKET_SHELL_ROOT); the two must be the same commit`);
+}
+
+// sources are inside the PocketJS checkout POCKETJS names (tools/paths.ts)
 const links = new Map<string, string>([
   ["node_modules/@pocketjs/framework", "."],
   ["node_modules/solid-js", "node_modules/solid-js"],
@@ -39,9 +56,9 @@ const links = new Map<string, string>([
 ]);
 
 for (const [destination, source] of links) {
-  const target = resolve(VENDOR, source);
+  const target = resolve(POCKETJS, source);
   if (!existsSync(target)) {
-    throw new Error(`applets setup: missing ${target}; run bun install in ${VENDOR}`);
+    throw new Error(`applets setup: missing ${target}; run bun install in ${POCKETJS}`);
   }
   const link = resolve(ROOT, destination);
   mkdirSync(dirname(link), { recursive: true });
@@ -53,7 +70,7 @@ for (const [destination, source] of links) {
 // checkout of the submodule does not have one and a typecheck fails on a
 // module that only exists after a build. An empty table is the honest state
 // before the first build and is replaced by it.
-const styles = resolve(VENDOR, "framework/src/styles.generated.ts");
+const styles = resolve(POCKETJS, "framework/src/styles.generated.ts");
 if (!existsSync(styles)) {
   writeFileSync(styles, "// Generated by PocketJS builds.\nexport const STYLE_IDS: Record<string, number> = {};\n");
 }

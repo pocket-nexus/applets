@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// test/glyphs-wrap.test.ts — runtime-glyph wrapping (ui/glyphs.ts
+// test/glyphs-wrap.test.ts — runtime-glyph wrapping (lib/glyphs.ts
 // wrapLines) reads by index the tokens a /u regex read before: one wide
 // character, a run of whitespace, a run of anything else. The reference
 // below is that regex wrap; both must break every text alike.
 
 import { describe, expect, test } from "bun:test";
-import { wrapLines } from "../ui/glyphs.ts";
+import { wrapLines } from "../lib/glyphs.ts";
 
 const CLOSING = new Set([0xff0c, 0x3002, 0xff01, 0xff1f, 0xff1a, 0xff1b, 0x3001, 0xff09, 0x300b, 0x300d, 0x300f, 0x201d, 0x2019, 0x2026, 0x2c, 0x2e, 0x21, 0x3f, 0x3a, 0x3b, 0x29, 0x5d]);
 
