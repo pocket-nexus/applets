@@ -173,7 +173,7 @@ export interface Rows {
 
 const ITEM_H: Record<Tone, number> = { chip: S.chipH, chipOn: S.chipH, button: S.buttonH, primary: S.buttonH, danger: S.buttonH, stat: 20 };
 
-/** The glyph faces' em (ui/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
+/** The glyph faces' em (lib/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
 const SKELETON_EM = 13;
 
 /** Bars for a fitted text drawn from (x, y), when its glyphs are on their way. */

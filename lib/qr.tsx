@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// ui/qr.tsx — a QR code for a URL as one picture: the modules drawn into a
+// lib/qr.tsx — a QR code for a URL as one picture: the modules drawn into a
 // texture of their own (kit/qr.ts encodes), white around them, sampled
 // nearest; the URL in words when it does not fit a code. A sign-in page and
-// the owner setup page (ui/setup.tsx) show one for a phone to open.
+// the owner setup page (lib/setup.tsx) show one for a phone to open.
 
 import { createEffect, createMemo, For, onCleanup, onMount, type Accessor } from "solid-js";
 import { Image, Text, View } from "@pocketjs/framework/components";
 import { getOps } from "@pocketjs/framework/host";
 import type { NodeMirror } from "@pocketjs/framework/renderer";
 import { encodeQr } from "../kit/qr.ts";
-import { FONT, wrap } from "./text.ts";
+import { FONT, wrap } from "../ui/text.ts";
 
 /** A QR code as one texture: a module a texel (or two), white around it,
  *  drawn with nearest sampling. Null when the text does not fit a code. */

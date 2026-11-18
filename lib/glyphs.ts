@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// ui/glyphs.ts — runtime text in any script, drawn from a font atlas the
+// lib/glyphs.ts — runtime text in any script, drawn from a font atlas the
 // companion's glyphs service renders (Pocket Hub on a console's Mac,
 // omarchy-pocketd on Omarchy Pocket).
 //
@@ -31,7 +31,7 @@ import { createSignal, type Accessor } from "solid-js";
 import { getOps } from "@pocketjs/framework/host";
 import { onFrame } from "@pocketjs/framework/lifecycle";
 import { platform } from "@pocketjs/framework/platform";
-import { companionService, DESCRIPTOR_BYTES, fetch, NET_MAX_RESPONSE_BYTES, requestBytes } from "../lib/net.ts";
+import { companionService, DESCRIPTOR_BYTES, fetch, NET_MAX_RESPONSE_BYTES, requestBytes } from "./net.ts";
 
 export interface GlyphFace {
   /** The font slot the atlas binds: 21 and 22 are free (19/20 are text-2xs,

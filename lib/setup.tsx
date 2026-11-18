@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// ui/setup.tsx — the owner setup page an applet drawn with ../ui shows for
+// lib/setup.tsx — the owner setup page an applet drawn with ../ui shows for
 // any companion service: what `/_setup` answers (ui/setup-state.ts, PocketJS
 // tools/companion/setup.ts), laid out top to bottom as positioned View and
 // Text in the palette the applet passes. An applet on ../kit cannot import it
@@ -30,14 +30,14 @@
 import { createMemo, createSignal, For, Show, type Accessor } from "solid-js";
 import { Image, Text, View } from "@pocketjs/framework/components";
 import { onFrame } from "@pocketjs/framework/lifecycle";
-import { fetch, NetError } from "../lib/net.ts";
-import type { BarColors } from "./bar.tsx";
-import type { LayerContext, PageContent, PageSpec } from "./nav.tsx";
+import { fetch, NetError } from "./net.ts";
+import type { BarColors } from "../ui/bar.tsx";
+import type { LayerContext, PageContent, PageSpec } from "../ui/nav.tsx";
 import { Qr } from "./qr.tsx";
-import { entryText, progressFraction, readSetup, shownUrl, stepsLeft, toolAction, toolStatus, type SetupChange, type SetupFieldState, type SetupState } from "./setup-state.ts";
-import { ellipsize, FONT, measure, toAscii, wrap } from "./text.ts";
-import { SCREEN_H } from "./screen.ts";
-import type { Press, Target } from "./touch.ts";
+import { entryText, progressFraction, readSetup, shownUrl, stepsLeft, toolAction, toolStatus, type SetupChange, type SetupFieldState, type SetupState } from "../ui/setup-state.ts";
+import { ellipsize, FONT, measure, toAscii, wrap } from "../ui/text.ts";
+import { SCREEN_H } from "../ui/screen.ts";
+import type { Press, Target } from "../ui/touch.ts";
 
 /** The page's colours. */
 export interface SetupPalette {

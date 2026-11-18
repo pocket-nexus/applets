@@ -7,7 +7,7 @@
 // (ui/slots.ts), as in Hacker News.
 //
 // Server, channel and author names and message text in any script draw from
-// font atlases the Mac renders (ui/glyphs.ts); a row whose glyphs are not in
+// font atlases the Mac renders (lib/glyphs.ts); a row whose glyphs are not in
 // yet draws folded to ASCII and is laid out again when they arrive. Page
 // titles stay in the bar's baked face.
 
@@ -24,7 +24,7 @@ import { viewHeight, type LayerContext, type NavStack, type PageContent, type Pa
 import { COMPACT, SCREEN_H, SCREEN_W } from "../ui/screen.ts";
 import { ellipsize, FONT, measure, toAscii, wrap } from "../ui/text.ts";
 import { barsFor, lazyBars, skeletonLines, SkeletonBars, type Bar } from "../ui/skeleton.tsx";
-import { richText, type Glyphs } from "../ui/glyphs.ts";
+import { richText, type Glyphs } from "../lib/glyphs.ts";
 import { createSlotPool, paintText, type SlotPool } from "../ui/slots.ts";
 import type { Press, Target } from "../ui/touch.ts";
 import type { Channel, Guild, Message } from "./api.ts";
@@ -549,7 +549,7 @@ export interface MessageRow {
   bars: Bar[];
 }
 
-/** The glyph faces' em (ui/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
+/** The glyph faces' em (lib/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
 const GLYPH_EM = 13;
 
 const bodyCache = new Map<string, { content: string; stamp: number; lines: string[] }>();

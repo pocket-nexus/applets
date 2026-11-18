@@ -13,7 +13,7 @@ import { join, resolve } from "node:path";
 import opentype from "opentype.js";
 import { bakeSlot } from "../../vendor/pocketjs/framework/compiler/bake-font.ts";
 import { COMPANION_ORIGIN } from "../../lib/net.ts";
-import { GLYPH_BOLD, GLYPH_TEXT } from "../../ui/glyphs.ts";
+import { GLYPH_BOLD, GLYPH_TEXT } from "../../lib/glyphs.ts";
 import type { AlbumPage, ArtistPage, Device, Home, Item, Page, Player, PlaylistPage, Queue, Ref, Status } from "../contract.ts";
 import type { SetupState } from "../../ui/setup-state.ts";
 

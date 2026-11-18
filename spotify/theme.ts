@@ -2,7 +2,7 @@
 // spotify/theme.ts — Spotify's dark palette and the sizes the pages share.
 // A page names what a thing is (C.muted, C.raised); the hex values live here.
 import type { BarColors } from "../ui/bar.tsx";
-import type { SetupPalette } from "../ui/setup.tsx";
+import type { SetupPalette } from "../lib/setup.tsx";
 
 export const C = {
   bg: "#121212",
@@ -39,7 +39,7 @@ export const BAR: BarColors = {
   back: "art/spotify/back-white-16.svg",
 };
 
-/** The owner setup page (ui/setup.tsx) in these colours. */
+/** The owner setup page (lib/setup.tsx) in these colours. */
 export const SETUP: SetupPalette = {
   bg: C.bg,
   surface: C.surface,
@@ -61,7 +61,7 @@ export const S = {
   gap: 8,
 } as const;
 
-/** Baked font slots (ui/text.ts FONT) and the glyph atlases' (ui/glyphs.ts). */
+/** Baked font slots (ui/text.ts FONT) and the glyph atlases' (lib/glyphs.ts). */
 export const F = {
   small: 0,
   body: 1,

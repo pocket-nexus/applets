@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // kit/text.ts — text from the network in any script. ASCII draws from
 // the baked faces at their sizes; anything else draws from the glyph atlases
-// (ui/glyphs.ts) once they cover it, as skeleton bars while they are on their
+// (lib/glyphs.ts) once they cover it, as skeleton bars while they are on their
 // way (ui/skeleton.tsx), and folded to ASCII when the glyphs service failed.
 // Whoever builds rows reads `faces.revision()`, so a row is laid out again as
 // glyphs arrive.
-import { createGlyphs, GLYPH_BOLD, GLYPH_TEXT, richText, type Glyphs } from "../ui/glyphs.ts";
+import { createGlyphs, GLYPH_BOLD, GLYPH_TEXT, richText, type Glyphs } from "../lib/glyphs.ts";
 import { skeletonLines } from "../ui/skeleton.tsx";
 import { ellipsize, measure, toAscii, wrap } from "../ui/text.ts";
 import { F } from "./theme.ts";

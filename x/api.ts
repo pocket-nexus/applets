@@ -9,7 +9,7 @@
 // MAX_INFLIGHT, the NET module's limit; avatars wait behind pages.
 
 import { companionService, fetch, NET_MAX_RESPONSE_BYTES, NetError } from "../lib/net.ts";
-import { GLYPH_ATLAS_URL } from "../ui/glyphs.ts";
+import { GLYPH_ATLAS_URL } from "../lib/glyphs.ts";
 import { notLinked, theComputer, yourComputer } from "../ui/companion.ts";
 
 export const MAX_INFLIGHT = 2;

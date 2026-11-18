@@ -6,7 +6,7 @@
 // band (ui/slots.ts), as in Hacker News.
 //
 // Names and text in any script draw from font atlases the Mac renders
-// (ui/glyphs.ts): a row whose text the loaded atlases cover draws from them,
+// (lib/glyphs.ts): a row whose text the loaded atlases cover draws from them,
 // one that is not covered yet draws folded to ASCII in the baked face and
 // is laid out again when its glyphs arrive. Each row ends in reply, repost
 // and like buttons with their counts.
@@ -23,7 +23,7 @@ import type { NavButton } from "../ui/bar.tsx";
 import { viewHeight, type LayerContext, type NavStack, type PageContent, type PageSpec } from "../ui/nav.tsx";
 import { COMPACT, SCREEN_W } from "../ui/screen.ts";
 import { ellipsize, FONT, measure, toAscii, wrap } from "../ui/text.ts";
-import { richText, type Glyphs } from "../ui/glyphs.ts";
+import { richText, type Glyphs } from "../lib/glyphs.ts";
 import { barsFor, lazyBars, skeletonLines, SkeletonBars, type Bar } from "../ui/skeleton.tsx";
 import { createSlotPool, paintText, type SlotPool } from "../ui/slots.ts";
 import type { Press, Target } from "../ui/touch.ts";
@@ -237,11 +237,11 @@ function rowFace(post: Post, glyphs: GlyphPair | null): Face {
   return "baked";
 }
 
-/** The glyph faces' em (ui/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
+/** The glyph faces' em (lib/glyphs.ts GLYPH_TEXT and GLYPH_BOLD px). */
 const GLYPH_EM = 13;
 
 /** Tell the app when the list scrolls: glyph atlases wait for it to rest
- *  (ui/glyphs.ts when). A post that changes face changes height and
+ *  (lib/glyphs.ts when). A post that changes face changes height and
  *  moves every row below it, which under a moving list reads as a jump. */
 function reportMotion(env: XEnv, offset: () => number) {
   let last = Number.NaN;
@@ -497,7 +497,7 @@ function metaLine(post: Post, shape: RowShape, now: number): string {
 }
 
 /** The font slots a row's texts draw from: the baked faces, or the glyph
- *  atlases (ui/glyphs.ts GLYPH_TEXT 21, GLYPH_BOLD 22). */
+ *  atlases (lib/glyphs.ts GLYPH_TEXT 21, GLYPH_BOLD 22). */
 const BAKED_SLOTS = { head: FONT.smBold, body: FONT.sm, quote: FONT.xs, repost: FONT.xsBold, letters: FONT.xsBold };
 const RICH_SLOTS = { head: 22, body: 21, quote: 21, repost: 22, letters: 22 };
 
@@ -749,7 +749,7 @@ function wantGlyphs(env: XEnv, rows: () => readonly PostRow[], offset: () => num
   let doneRows: readonly PostRow[] | null = null;
   let doneBand = Number.NaN;
   let doneWants = -1;
-  // Asked for while the lists rest, when the requests go out too (ui/glyphs.ts
+  // Asked for while the lists rest, when the requests go out too (lib/glyphs.ts
   // when): in motion the band moves every few frames, and the scan and the
   // codepoints of new posts cost a frame.
   onFrame(() => {
