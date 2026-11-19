@@ -6,7 +6,7 @@
 // window's tile changes.
 //
 // The host plays a companion media stream (`globalThis.media`,
-// @pocketjs/framework/media): `start` asks the service for a stream from a
+// @pocket-shell/runtime/media): `start` asks the service for a stream from a
 // position and opens it; a seek is a new stream at the new position, as
 // YouTube's player does. `poll`, called every sixth frame by the app, reads
 // the worker's status into the phase and the position, and writes where
@@ -14,7 +14,7 @@
 // the episode resumes there next time.
 
 import { createSignal, type Accessor } from "solid-js";
-import { mediaPlayer, type MediaStatus } from "@pocketjs/framework/media";
+import { mediaPlayer, type MediaStatus } from "@pocket-shell/runtime/media";
 import type { PodcastClient } from "./api.ts";
 import type { Playing, PodcastModel } from "./model.ts";
 

@@ -18,7 +18,7 @@ import { Image, Text, View } from "@pocketjs/framework/components";
 import { getOps } from "@pocketjs/framework/host";
 import { BTN } from "@pocketjs/framework/input";
 import { onFrame } from "@pocketjs/framework/lifecycle";
-import { createMediaScrubber } from "@pocketjs/framework/media";
+import { createMediaScrubber } from "@pocket-shell/runtime/media";
 import { glyph } from "@pocketjs/framework/modality";
 import type { NodeMirror } from "@pocketjs/framework/renderer";
 import { companionNow } from "../lib/net.ts";
