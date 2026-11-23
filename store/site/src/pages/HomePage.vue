@@ -1,5 +1,7 @@
 <script setup lang="ts">
-// The front of the store, or the answer to a search (?q=).
+// The front of the store, or the answer to a search (?q=). The front can be
+// scoped to one device (?device=<target>, src/devices): its fan shows that
+// device's screens and its shelf only what runs there.
 import { computed } from "vue";
 import { useLanguage } from "../i18n/index.ts";
 import { RouterLink, useRoute } from "vue-router";
@@ -9,6 +11,8 @@ import { usePage } from "../page.ts";
 import { shotOf } from "../shots.ts";
 import AppGrid from "../components/AppGrid.vue";
 import FeaturedFan from "../components/FeaturedFan.vue";
+import DeviceLine from "../devices/DeviceLine.vue";
+import { stillOn, useScopedDevice } from "../devices/devices.ts";
 
 /** How many apps the front features at once, as a fan of cards (components/FeaturedFan.vue). */
 const FEATURED = 5;
@@ -46,14 +50,21 @@ const found = computed(() => {
     .map((answer) => answer.app);
 });
 
-/** The apps with a still to show, a different one in front each day. */
+/** The device the front is scoped to, and the apps that run on it. */
+const scoped = useScopedDevice(apps);
+const inScope = computed(() => (scoped.value ? apps.value?.filter((app) => app.targets.includes(scoped.value!.target)) : apps.value));
+
+/** The apps with a still to show, a different one in front each day: on a
+ *  device the front is scoped to, a still of that device's screen. */
 const featured = computed(() => {
-  const shown = apps.value?.filter((app) => shotOf(app.id)) ?? [];
+  const still = (app: StoreApp) => (scoped.value ? stillOn(scoped.value.target, app.id) : shotOf(app.id));
+  const shown = inScope.value?.filter(still) ?? [];
   const first = shown.length ? Math.floor(Date.now() / 86_400_000) % shown.length : 0;
   return [...shown.slice(first), ...shown.slice(0, first)].slice(0, FEATURED);
 });
 
 const shelves = computed(() => {
+  if (scoped.value) return [{ title: t("devices.forDevice", { device: scoped.value.name }), apps: inScope.value ?? [] }];
   const official = apps.value?.filter((app) => app.official) ?? [];
   const community = apps.value?.filter((app) => !app.official) ?? [];
   const all: { title: string; apps: StoreApp[] }[] = [];
@@ -62,7 +73,7 @@ const shelves = computed(() => {
   return all;
 });
 
-usePage(() => (asked.value ? `“${asked.value}”` : undefined));
+usePage(() => (asked.value ? `“${asked.value}”` : scoped.value ? t("devices.forDevice", { device: scoped.value.name }) : undefined));
 </script>
 
 <template>
@@ -88,9 +99,11 @@ usePage(() => (asked.value ? `“${asked.value}”` : undefined));
 
     <template v-else>
       <h1 class="intro">{{ t("home.headline") }}</h1>
+      <DeviceLine :apps="apps ?? []" :scoped="scoped?.target" />
 
       <div v-if="!apps" class="stage" aria-hidden="true"><span class="skeleton" /></div>
-      <FeaturedFan v-else-if="featured.length" :apps="featured" />
+      <!-- a new scope deals a new hand -->
+      <FeaturedFan v-else-if="featured.length" :key="scoped?.target ?? ''" :apps="featured" :device="scoped?.target" />
 
       <section v-if="!apps" class="shelf" aria-busy="true">
         <div class="section-head"><h2>{{ t("common.allApplets") }}</h2></div>

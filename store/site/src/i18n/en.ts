@@ -42,6 +42,10 @@ export default {
     fromCommunity: "From the community",
     empty: "No applets here yet.",
   },
+  devices: {
+    runsOn: "Runs on",
+    forDevice: "Applets for {device}",
+  },
   app: {
     notListed: "Not in the store.",
     notListedDetail: "There is no listed applet called {id}.",

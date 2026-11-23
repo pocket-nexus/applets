@@ -10,6 +10,8 @@ import { appPath, iconUrl, type StoreApp } from "../api.ts";
 import { shotOf } from "../shots.ts";
 import AppIcon from "./AppIcon.vue";
 import UiIcon from "./UiIcon.vue";
+import DeviceFrame from "../devices/DeviceFrame.vue";
+import { stillOn } from "../devices/devices.ts";
 
 /** Cards fanned to each side of the one in front; any more wait behind, unseen. */
 const REACH = 2;
@@ -18,7 +20,8 @@ const TURN_MS = 6000;
 /** A drag this far sideways turns the fan. */
 const SWIPE = 40;
 
-const props = defineProps<{ apps: StoreApp[] }>();
+/** `device`: each card is that device, its screen the app's first screen there (src/devices). */
+const props = defineProps<{ apps: StoreApp[]; device?: string }>();
 const { t } = useLanguage();
 
 const hand = ref<HTMLElement>();
@@ -117,8 +120,9 @@ watch(() => props.apps.length, () => show(0));
     <ul ref="hand" class="cards" @pointerdown="down" @pointerup="up" @pointercancel="from = undefined">
       <li v-for="(app, index) in apps" :key="app.id" class="card" :class="{ front: index === front, unseen: Math.abs(place(index)) > REACH }" :style="card(index)">
         <RouterLink v-slot="{ href, navigate }" :to="appPath(app)" custom>
-          <a :href="href" :tabindex="index === front ? 0 : -1" :aria-hidden="index !== front" :aria-label="`${app.title}: ${app.summary}`" draggable="false" @click="press($event, index, navigate)">
-            <img :src="shotOf(app.id)" alt="" width="1024" height="768" decoding="async" draggable="false">
+          <a :href="href" :class="{ framed: device }" :tabindex="index === front ? 0 : -1" :aria-hidden="index !== front" :aria-label="`${app.title}: ${app.summary}`" draggable="false" @click="press($event, index, navigate)">
+            <DeviceFrame v-if="device" :target="device" :src="stillOn(device, app.id)" eager />
+            <img v-else :src="shotOf(app.id)" alt="" width="1024" height="768" decoding="async" draggable="false">
           </a>
         </RouterLink>
       </li>
@@ -238,6 +242,19 @@ watch(() => props.apps.length, () => show(0));
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+}
+
+/* a card that is a device: the device's own bezel and shadow, standing in the card's middle */
+.card a.framed {
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  background: none;
+  box-shadow: none;
+}
+
+.card a.framed::after {
+  display: none;
 }
 
 /* a card further back fades toward the page behind it */
