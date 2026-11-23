@@ -40,6 +40,10 @@ const zhCN: Wording = {
     fromCommunity: "来自社区",
     empty: "这里还没有 Applet。",
   },
+  devices: {
+    runsOn: "可运行于",
+    forDevice: "适用于 {device} 的 Applet",
+  },
   app: {
     notListed: "商店里没有这个 Applet。",
     notListedDetail: "没有名为 {id} 的上架 Applet。",
